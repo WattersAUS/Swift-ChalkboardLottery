@@ -13,6 +13,7 @@
 		BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FC1D88B3A100E3EA28 /* Assets.xcassets */; };
 		BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FE1D88B3A100E3EA28 /* LaunchScreen.storyboard */; };
 		BF48AA0B1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */; };
+		BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A951DCF881300B71F3F /* Lottery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		BF48AA061D88B3A100E3EA28 /* ChalkboardLotteryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChalkboardLotteryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkboardLotteryTests.swift; sourceTree = "<group>"; };
 		BF48AA0C1D88B3A100E3EA28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFDB3A951DCF881300B71F3F /* Lottery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lottery.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		BF48A9F41D88B3A100E3EA28 /* ChalkboardLottery */ = {
 			isa = PBXGroup;
 			children = (
+				BFDB3A941DCF87F100B71F3F /* Classes */,
 				BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */,
 				BF48A9F71D88B3A100E3EA28 /* ViewController.swift */,
 				BF48A9F91D88B3A100E3EA28 /* Main.storyboard */,
@@ -94,6 +97,14 @@
 				BF48AA0C1D88B3A100E3EA28 /* Info.plist */,
 			);
 			path = ChalkboardLotteryTests;
+			sourceTree = "<group>";
+		};
+		BFDB3A941DCF87F100B71F3F /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				BFDB3A951DCF881300B71F3F /* Lottery.swift */,
+			);
+			name = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,
+				BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */,
 				BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +424,7 @@
 				BF48AA111D88B3A100E3EA28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF48AA121D88B3A100E3EA28 /* Build configuration list for PBXNativeTarget "ChalkboardLotteryTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +433,7 @@
 				BF48AA141D88B3A100E3EA28 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
