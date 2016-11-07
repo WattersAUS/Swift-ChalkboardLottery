@@ -1,0 +1,7 @@
+//
+//
+//
+
+1. Start test class ChalkBoardLotteryTests
+2. Renamed struct Range to NumberRange (to prevent clash with swift type already there)
+

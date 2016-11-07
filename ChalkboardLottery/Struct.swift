@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Range {
+struct NumberRange {
     var upper: Int
     var lower: Int
     
@@ -21,9 +21,9 @@ struct Range {
 
 struct Numbers {
     var value: [Int] = []
-    var range: Range
+    var range: NumberRange
     
-    init(size: Int, limits: Range) {
+    init(size: Int, limits: NumberRange) {
         for _: Int in 0..<size {
             value.append(limits.lower - 1)
         }

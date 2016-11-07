@@ -33,4 +33,14 @@ class ChalkboardLotteryTests: XCTestCase {
         }
     }
     
+    //----------------------------------------------------------------------------
+    // Class: Lottery
+    //----------------------------------------------------------------------------
+    func testSudokuCellSizeOverriddenCorrectly() {
+//        let nbrLimit: NumberRange = NumberRange(upperLimit: 50, lowerLimit: 1)
+//        let spcLimits: NumberRange
+//        var testLottery: Lottery = Lottery(nbrs: 5, nbrRange: Range(upperLimit: 50, lowerlimit: 1), spcs: 2, spcRange: 11)
+        return
+    }
+
 }
