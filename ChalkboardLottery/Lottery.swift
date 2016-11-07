@@ -8,14 +8,68 @@
 
 import Foundation
 
-class Lottery: NSObject {
+class Lottery {
     
     private var number:  Numbers
     private var special: Numbers
     
-    init (nbrs: Int, nbrRange: Range, spcs: Int, spcRange: Range) {
+    //
+    // when we generate a new lottery combo, use this
+    //
+    init(nbrs: Int, nbrRange: NumberRange, spcs: Int, spcRange: NumberRange) {
         self.number  = Numbers(size: nbrs, limits: nbrRange)
         self.special = Numbers(size: spcs, limits: spcRange)
+        return
+    }
+    
+    //
+    // used when we load historic draws (used as part of the 'Draws' class)
+    //
+    init(nbrs: [Int], nbrRange: NumberRange, spcs: [Int], spcRange: NumberRange) {
+        self.number  = Numbers(size: nbrs.count, limits: nbrRange)
+        for i: Int in 0..<nbrs.count {
+            self.number.value[i] = nbrs[i]
+        }
+        self.special = Numbers(size: spcs.count, limits: spcRange)
+        for i: Int in 0..<spcs.count {
+            self.special.value[i] = spcs[i]
+        }
+        return
+    }
+    
+    //
+    // private function to generate numbers
+    //
+    private func generateValues(input: inout Numbers) {
+        guard input.value.count > 0 else {
+            return
+        }
+        
+        func getUniqueNumber() -> Int {
+            func randomNumber() -> Int {
+                return (Int(arc4random_uniform(UInt32(input.range.upper - input.range.lower + 1)))) + input.range.lower
+            }
+
+            var unique: Int = randomNumber()
+            while input.value.contains(unique) {
+                unique = randomNumber()
+            }
+            return unique
+        }
+
+        for i: Int in 0 ..< input.value.count {
+            input.value[i] = getUniqueNumber()
+        }
+        input.value.sort()
+        return
+    }
+    
+    //
+    // public interface to generate numbers / special
+    //
+    func generateLotteryNumbers() {
+        self.generateValues(input: &number)
+        self.generateValues(input: &special)
         return
     }
     
@@ -51,5 +105,4 @@ class Lottery: NSObject {
         }
         return array
     }
-    
 }

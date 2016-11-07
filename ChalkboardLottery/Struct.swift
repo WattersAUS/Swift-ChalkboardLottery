@@ -12,7 +12,7 @@ struct NumberRange {
     var upper: Int
     var lower: Int
     
-    init (upperLimit: Int, lowerLimit: Int) {
+    init(upperLimit: Int, lowerLimit: Int) {
         upper = upperLimit
         lower = lowerLimit
         return
@@ -28,5 +28,6 @@ struct Numbers {
             value.append(limits.lower - 1)
         }
         range = limits
+        return
     }
 }
