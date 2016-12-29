@@ -8,26 +8,26 @@
 
 import Foundation
 
-struct NumberRange {
-    var upper: Int
-    var lower: Int
-    
-    init(upperLimit: Int, lowerLimit: Int) {
-        upper = upperLimit
-        lower = lowerLimit
-        return
-    }
+struct Draw {
+    var draw:       Int
+    var drawDate:   String
+    var numbers:    [Int] = []
+    var specials:   [Int] = []
 }
 
-struct Numbers {
-    var value: [Int] = []
-    var range: NumberRange
-    
-    init(size: Int, limits: NumberRange) {
-        for _: Int in 0..<size {
-            value.append(limits.lower - 1)
-        }
-        range = limits
-        return
-    }
+struct LotteryDraw {
+    var ident:          Int
+    var description:    String
+    var numbers:        Int
+    var upperNumber:    Int
+    var specials:       Int
+    var upperSpecial:   Int
+    var lastModified:   String
+    var countOfDraws:   Int
+    var firstDraw:      Int
+    var firstDrawDate:  String
+    var lastDraw:       Int
+    var lastDrawDate:   String
+    var draws:          [Draw]   = []
 }
+

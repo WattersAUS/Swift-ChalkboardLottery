@@ -1,55 +1,23 @@
-enum lotteryDraws: Int {
-case EuroMillions = 1
-case Lotto = 2
-case Thunderball = 3
-}
+// Checking we are connected to the InterWebs!
 
-enum lotteryDictionary {
-case Ident = "ident"
-case Description = "description"
-case Numbers = "numbers"
-case UpperNumber = "upper_number"
-case Specials = "specials"
-case UpperSpecial = "upper_special"
-case LastModified = "last_modified"
-case CountOfDraws = "count_of_draws"
-case FirstDraw = "first_draw"
-case FirstDrawDate = "first_draw_date"
-case LastDraw = "last_draw"
-case LastDrawDate = "last_draw_date"
-case Draws = "draws"
-}
+NSURL *scriptUrl = [NSURL URLWithString:@"http://apps.wegenerlabs.com/hi.html"];
+NSData *data = [NSData dataWithContentsOfURL:scriptUrl];
+if (data)
+NSLog(@"Device is connected to the internet");
+    else
+NSLog(@"Device is not connected to the internet");
 
-enum drawsDictionary {
-case Draw = "draw"
-case DrawDate = "draw_date"
-case Numbers = "numbers"
-case Specials = "specials"
-}
+Simple page
 
-enum valueDictionary {
-case Value = "value"
-}
+<HTML><HEAD><TITLE>r2d2</TITLE></HEAD><BODY>rocks</BODY></HTML>
 
-struct Draw {
-var draw: Int
-var drawDate: String
-var numbers: [Int] = []
-var specials: [Int] = []
+if let url = URL(string: "https://www.hackingwithswift.com") {
+do {
+let contents = try String(contentsOf: url)
+print(contents)
+} catch {
+// contents could not be loaded
 }
-
-struct Lottery {
-var ident:  ident
-var description:  String
-var numbers:  Int
-var upperNumber:  Int
-var specials: Int
-var upperSpecial: Int
-var lastModified: String
-var countOfDraws: Int
-var firstDraw: Int
-var firstDrawDate: String
-var lastDraw: Int
-var lastDrawDate: String
-var draws: [Draw] = []
+} else {
+// the URL was bad!
 }

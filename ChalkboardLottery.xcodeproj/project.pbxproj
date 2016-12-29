@@ -17,8 +17,9 @@
 		BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A951DCF881300B71F3F /* Lottery.swift */; };
 		BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A971DCF8B0D00B71F3F /* Struct.swift */; };
 		BFFA05B41E1550D500AC4E68 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B31E1550D500AC4E68 /* Notes */; };
-		BFFA05B71E15512100AC4E68 /* enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* enumeration.swift */; };
+		BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* Enumeration.swift */; };
 		BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */; };
+		BFFA05BC1E15556100AC4E68 /* LotteryJsonHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05BB1E15556100AC4E68 /* LotteryJsonHandler.swift */; };
 		BFFF6DDE1DD0D15B00D41175 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFF6DDD1DD0D15B00D41175 /* Notes */; };
 /* End PBXBuildFile section */
 
@@ -47,8 +48,9 @@
 		BFDB3A951DCF881300B71F3F /* Lottery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lottery.swift; sourceTree = "<group>"; };
 		BFDB3A971DCF8B0D00B71F3F /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		BFFA05B31E1550D500AC4E68 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
-		BFFA05B61E15512100AC4E68 /* enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = enumeration.swift; sourceTree = "<group>"; };
+		BFFA05B61E15512100AC4E68 /* Enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumeration.swift; sourceTree = "<group>"; };
 		BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery.json; sourceTree = "<group>"; };
+		BFFA05BB1E15556100AC4E68 /* LotteryJsonHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotteryJsonHandler.swift; sourceTree = "<group>"; };
 		BFFF6DDD1DD0D15B00D41175 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				BFFA05B51E1550F000AC4E68 /* Defaults */,
+				BFFA05BA1E15550B00AC4E68 /* Protocol Handlers */,
 				BFDB3A941DCF87F100B71F3F /* Classes */,
 				BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */,
 				BF48A9F71D88B3A100E3EA28 /* ViewController.swift */,
@@ -118,7 +121,6 @@
 			isa = PBXGroup;
 			children = (
 				BFDB3A951DCF881300B71F3F /* Lottery.swift */,
-				BFDB3A971DCF8B0D00B71F3F /* Struct.swift */,
 				BFD185B11DD12F68007DA773 /* Draws.swift */,
 			);
 			name = Classes;
@@ -136,9 +138,18 @@
 		BFFA05B51E1550F000AC4E68 /* Defaults */ = {
 			isa = PBXGroup;
 			children = (
-				BFFA05B61E15512100AC4E68 /* enumeration.swift */,
+				BFFA05B61E15512100AC4E68 /* Enumeration.swift */,
+				BFDB3A971DCF8B0D00B71F3F /* Struct.swift */,
 			);
 			name = Defaults;
+			sourceTree = "<group>";
+		};
+		BFFA05BA1E15550B00AC4E68 /* Protocol Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA05BB1E15556100AC4E68 /* LotteryJsonHandler.swift */,
+			);
+			name = "Protocol Handlers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -252,7 +263,8 @@
 				BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */,
 				BFD185B21DD12F68007DA773 /* Draws.swift in Sources */,
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,
-				BFFA05B71E15512100AC4E68 /* enumeration.swift in Sources */,
+				BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */,
+				BFFA05BC1E15556100AC4E68 /* LotteryJsonHandler.swift in Sources */,
 				BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */,
 				BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */,
 			);
