@@ -16,6 +16,9 @@
 		BFD185B21DD12F68007DA773 /* Draws.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD185B11DD12F68007DA773 /* Draws.swift */; };
 		BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A951DCF881300B71F3F /* Lottery.swift */; };
 		BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A971DCF8B0D00B71F3F /* Struct.swift */; };
+		BFFA05B41E1550D500AC4E68 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B31E1550D500AC4E68 /* Notes */; };
+		BFFA05B71E15512100AC4E68 /* enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* enumeration.swift */; };
+		BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */; };
 		BFFF6DDE1DD0D15B00D41175 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFF6DDD1DD0D15B00D41175 /* Notes */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +46,9 @@
 		BFD185B11DD12F68007DA773 /* Draws.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Draws.swift; sourceTree = "<group>"; };
 		BFDB3A951DCF881300B71F3F /* Lottery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lottery.swift; sourceTree = "<group>"; };
 		BFDB3A971DCF8B0D00B71F3F /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
+		BFFA05B31E1550D500AC4E68 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
+		BFFA05B61E15512100AC4E68 /* enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = enumeration.swift; sourceTree = "<group>"; };
+		BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery.json; sourceTree = "<group>"; };
 		BFFF6DDD1DD0D15B00D41175 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,6 +73,7 @@
 		BF48A9E91D88B3A100E3EA28 = {
 			isa = PBXGroup;
 			children = (
+				BFFA05B21E1550AD00AC4E68 /* Docs */,
 				BF48A9F41D88B3A100E3EA28 /* ChalkboardLottery */,
 				BF48AA091D88B3A100E3EA28 /* ChalkboardLotteryTests */,
 				BF48A9F31D88B3A100E3EA28 /* Products */,
@@ -85,6 +92,7 @@
 		BF48A9F41D88B3A100E3EA28 /* ChalkboardLottery */ = {
 			isa = PBXGroup;
 			children = (
+				BFFA05B51E1550F000AC4E68 /* Defaults */,
 				BFDB3A941DCF87F100B71F3F /* Classes */,
 				BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */,
 				BF48A9F71D88B3A100E3EA28 /* ViewController.swift */,
@@ -114,6 +122,23 @@
 				BFD185B11DD12F68007DA773 /* Draws.swift */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		BFFA05B21E1550AD00AC4E68 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA05B31E1550D500AC4E68 /* Notes */,
+				BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */,
+			);
+			name = Docs;
+			sourceTree = "<group>";
+		};
+		BFFA05B51E1550F000AC4E68 /* Defaults */ = {
+			isa = PBXGroup;
+			children = (
+				BFFA05B61E15512100AC4E68 /* enumeration.swift */,
+			);
+			name = Defaults;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +227,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */,
+				BFFA05B41E1550D500AC4E68 /* Notes in Resources */,
+				BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */,
 				BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */,
 				BFFF6DDE1DD0D15B00D41175 /* Notes in Resources */,
 				BF48A9FB1D88B3A100E3EA28 /* Main.storyboard in Resources */,
@@ -225,6 +252,7 @@
 				BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */,
 				BFD185B21DD12F68007DA773 /* Draws.swift in Sources */,
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,
+				BFFA05B71E15512100AC4E68 /* enumeration.swift in Sources */,
 				BFDB3A961DCF881300B71F3F /* Lottery.swift in Sources */,
 				BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */,
 			);

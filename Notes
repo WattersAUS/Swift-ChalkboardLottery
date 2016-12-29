@@ -1,0 +1,55 @@
+enum lotteryDraws: Int {
+case EuroMillions = 1
+case Lotto = 2
+case Thunderball = 3
+}
+
+enum lotteryDictionary {
+case Ident = "ident"
+case Description = "description"
+case Numbers = "numbers"
+case UpperNumber = "upper_number"
+case Specials = "specials"
+case UpperSpecial = "upper_special"
+case LastModified = "last_modified"
+case CountOfDraws = "count_of_draws"
+case FirstDraw = "first_draw"
+case FirstDrawDate = "first_draw_date"
+case LastDraw = "last_draw"
+case LastDrawDate = "last_draw_date"
+case Draws = "draws"
+}
+
+enum drawsDictionary {
+case Draw = "draw"
+case DrawDate = "draw_date"
+case Numbers = "numbers"
+case Specials = "specials"
+}
+
+enum valueDictionary {
+case Value = "value"
+}
+
+struct Draw {
+var draw: Int
+var drawDate: String
+var numbers: [Int] = []
+var specials: [Int] = []
+}
+
+struct Lottery {
+var ident:  ident
+var description:  String
+var numbers:  Int
+var upperNumber:  Int
+var specials: Int
+var upperSpecial: Int
+var lastModified: String
+var countOfDraws: Int
+var firstDraw: Int
+var firstDrawDate: String
+var lastDraw: Int
+var lastDrawDate: String
+var draws: [Draw] = []
+}
