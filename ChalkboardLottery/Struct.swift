@@ -8,26 +8,28 @@
 
 import Foundation
 
-struct Draw {
-    var draw:       Int
-    var drawDate:   String
-    var numbers:    [Int] = []
-    var specials:   [Int] = []
-}
+struct LotteryHistory {
 
-struct LotteryDraw {
-    var ident:          Int
-    var description:    String
-    var numbers:        Int
-    var upperNumber:    Int
-    var specials:       Int
-    var upperSpecial:   Int
-    var lastModified:   String
-    var countOfDraws:   Int
-    var firstDraw:      Int
-    var firstDrawDate:  String
-    var lastDraw:       Int
-    var lastDrawDate:   String
-    var draws:          [Draw]   = []
-}
+    struct LotteryDraw {
 
+        struct Draw {
+            var draw:       Int
+            var drawDate:   String
+            var numbers:    [Int] = []
+            var specials:   [Int] = []
+        }
+
+        var ident:          Int
+        var description:    String
+        var numbers:        Int
+        var upperNumber:    Int
+        var specials:       Int
+        var upperSpecial:   Int
+        var lastModified:   String
+        var draws:          [Draw]   = []
+    }
+    
+    var lotteries:  [LotteryDraw] = []
+    var generated:  String
+    var version:    String
+}
