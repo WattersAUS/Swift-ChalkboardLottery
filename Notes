@@ -11,13 +11,21 @@ Simple page
 
 <HTML><HEAD><TITLE>r2d2</TITLE></HEAD><BODY>rocks</BODY></HTML>
 
-if let url = URL(string: "https://www.hackingwithswift.com") {
-do {
-let contents = try String(contentsOf: url)
-print(contents)
-} catch {
-// contents could not be loaded
-}
+if let url = URL(string: "http://www.shiny-ideas.tech/hb/hb.html") {
+    do {
+        let contents = try String(contentsOf: url)
+        print(contents)
+    } catch {
+        print("Cannot access URL")
+    }
 } else {
-// the URL was bad!
+    print("Bad URL supplied")
+}
+
+
+// send a req to te global q
+
+let globalQueue = DispatchQueue.global(qos: .userInitiated)
+DispatchQueue.main.async {
+// Do something
 }
