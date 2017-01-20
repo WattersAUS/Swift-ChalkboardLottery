@@ -13,6 +13,7 @@
 		BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FC1D88B3A100E3EA28 /* Assets.xcassets */; };
 		BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FE1D88B3A100E3EA28 /* LaunchScreen.storyboard */; };
 		BF48AA0B1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */; };
+		BFC31A771E32577500536DF3 /* LotteryGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC31A761E32577500536DF3 /* LotteryGenerator.swift */; };
 		BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A971DCF8B0D00B71F3F /* Struct.swift */; };
 		BFFA05B41E1550D500AC4E68 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B31E1550D500AC4E68 /* Notes */; };
 		BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* Enumeration.swift */; };
@@ -42,6 +43,7 @@
 		BF48AA061D88B3A100E3EA28 /* ChalkboardLotteryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChalkboardLotteryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkboardLotteryTests.swift; sourceTree = "<group>"; };
 		BF48AA0C1D88B3A100E3EA28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFC31A761E32577500536DF3 /* LotteryGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotteryGenerator.swift; sourceTree = "<group>"; };
 		BFDB3A971DCF8B0D00B71F3F /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		BFFA05B31E1550D500AC4E68 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 		BFFA05B61E15512100AC4E68 /* Enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumeration.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		BFDB3A941DCF87F100B71F3F /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				BFC31A761E32577500536DF3 /* LotteryGenerator.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */,
+				BFC31A771E32577500536DF3 /* LotteryGenerator.swift in Sources */,
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,
 				BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */,
 				BFFA05BC1E15556100AC4E68 /* LotteryJsonHandler.swift in Sources */,

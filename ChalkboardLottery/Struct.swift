@@ -8,6 +8,9 @@
 
 import Foundation
 
+//
+// structures to support the 'historic' storage
+//
 struct Draw {
     var draw:     Int
     var drawDate: String
@@ -56,3 +59,17 @@ struct History {
     }
 }
 
+//
+// generic struct to support Numbers / Specials as both are arrays and have a max value
+//
+struct Numbers {
+    var numbers: [Int] = []
+    var upper:    Int
+
+    init(number: Int, range: Int) {
+        for _: Int in 0 ..< ((number == 0) ? 1 : number) {
+            numbers.append(0)
+        }
+        upper = ((range == 0) ? 1 : range)
+    }
+}

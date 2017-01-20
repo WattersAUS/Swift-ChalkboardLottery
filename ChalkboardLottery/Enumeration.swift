@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum lotteryDraws: Int {
+enum lotteryIdent: Int {
     case EuroMillions = 1
     case Lotto        = 2
     case Thunderball  = 3

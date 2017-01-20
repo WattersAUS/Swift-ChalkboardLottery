@@ -119,6 +119,7 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
         loadedDraws.generated = self.extractJSONValue(keyValue: jsonDictionary.GenDate)
         loadedDraws.version   = self.extractJSONValue(keyValue: jsonDictionary.Version)
         loadedDraws.lotteries.append(contentsOf: decodeLotteriesFromObjectArray(array: self.extractJSONValue(keyValue: jsonDictionary.Lottery)))
+        print ("Done...")
         return
     }
     
@@ -138,25 +139,9 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
     // pick out the dictionary 'keys/value' when we load the results
     // if we don't yet have a value return a default
     //-------------------------------------------------------------------------------
-//    private func extractJSONValue(keyValue: jsonDictionary) -> Int {
-//        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? 0 : self.loadedJSONData[keyValue.rawValue] as! Int
-//    }
-    
     private func extractJSONValue(keyValue: jsonDictionary) -> String {
         return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? "" : self.loadedJSONData[keyValue.rawValue] as! String
     }
-    
-//    private func extractJSONValue(keyValue: jsonDictionary) -> [String: Int] {
-//        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([:]) : self.loadedJSONData[keyValue.rawValue] as! [String : Int]
-//    }
-//    
-//    private func extractJSONValue(keyValue: jsonDictionary) -> [[String: Int]] {
-//        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.loadedJSONData[keyValue.rawValue] as! [[String : Int]]
-//    }
-//    
-//    private func extractJSONValue(keyValue: jsonDictionary) -> [String: String] {
-//        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([:]) : self.loadedJSONData[keyValue.rawValue] as! [String : String]
-//    }
     
     private func extractJSONValue(keyValue: jsonDictionary) -> [[String: AnyObject]] {
         return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.loadedJSONData[keyValue.rawValue] as! [[String : AnyObject]]
