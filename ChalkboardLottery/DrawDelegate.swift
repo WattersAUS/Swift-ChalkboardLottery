@@ -137,6 +137,18 @@ class DrawHandler: NSObject, DrawDelegate {
         return true
     }
     
+    func loadUserResults() -> Bool {
+        do {
+            let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/lotteryresults.json")!)
+            let fileData: Data = jsonFile.data(using: String.Encoding.utf8, allowLossyConversion: false)!
+            self.loadedJSONData = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
+            self.loadLotteryHistoryFromJSON()
+        } catch {
+            return false
+        }
+        return true
+    }
+    
     //-------------------------------------------------------------------------------
     // pick out the dictionary 'keys/value' when we load the results
     // if we don't yet have a value return a default

@@ -21,7 +21,6 @@ class ViewController: UIViewController {
     // sounds
     //
     var drawSound:  AVAudioPlayer!
-    var useSound:   Bool = false
     
     //
     // prefs
@@ -91,7 +90,7 @@ class ViewController: UIViewController {
     }
     
     func playGenerateSound() {
-        guard self.drawSound != nil && self.useSound == true else {
+        guard self.drawSound != nil && self.userPrefs.soundOn == true else {
             return
         }
         self.drawSound.play()

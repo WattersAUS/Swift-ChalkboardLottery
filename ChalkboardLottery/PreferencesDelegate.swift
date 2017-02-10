@@ -10,6 +10,9 @@
 // delegate the responsibility of keeping the defaults updated and including
 // ensuring they are updated through the NSUserDefaults interface
 //----------------------------------------------------------------------------
+// no previous defaults is detected by using 'firstTime'
+// using this we can set prefs for the first run of the app
+//----------------------------------------------------------------------------
 
 import Foundation
 
@@ -21,20 +24,26 @@ protocol PreferencesDelegate: class {
 }
 
 class PreferencesHandler: NSObject, PreferencesDelegate {
-    var soundOn:                   Bool = true
-    var drawFunctions:   [(Void) -> ()] = []
-    var saveFunctions:   [(Void) -> ()] = []
+    var firstTime:               Bool = false
+    var soundOn:                 Bool = false
+    var saveFunctions: [(Void) -> ()] = []
     
     let userDefaults: UserDefaults = UserDefaults.standard
     
     override init() {
         super.init()
-        self.soundOn = self.userDefaults.bool(forKey: "soundOn")
+        self.firstTime   = self.userDefaults.bool(forKey: "firstTime")
+        if self.firstTime == false {
+            self.soundOn = self.userDefaults.bool(forKey: "soundOn")
+        } else {
+            self.soundOn = true
+        }
         self.saveFunctions = [ self.savePreferences ]
         return
     }
     
     func savePreferences() -> (Void) {
+        self.userDefaults.set(true,         forKey: "firstTime")
         self.userDefaults.set(self.soundOn, forKey: "soundOn")
         return
     }
