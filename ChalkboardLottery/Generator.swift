@@ -1,17 +1,17 @@
 //
-//  LotteryGenerator.swift
+//  Generator.swift
 //  ChalkboardLottery
 //
-//  Created by Graham on 20/01/2017.
+//  Created by Graham on 10/02/2017.
 //  Copyright © 2017 Graham Watson. All rights reserved.
 //
 
 import Foundation
 
-class LotteryGenerator {
+class Generator {
     private var numbers:  Numbers
     private var specials: Numbers
-
+    
     //
     // when we setup the generator obj, we need arrays of the right size and limits set
     //
@@ -20,7 +20,7 @@ class LotteryGenerator {
         self.specials = Numbers(number: special, range: maxSpecial)
         return
     }
-
+    
     //
     // get the range for numbers (may be deprecated)
     //
@@ -36,7 +36,7 @@ class LotteryGenerator {
     // generate numbers randomly
     //
     func generateRandomNumbers() {
-
+        
         return
     }
 }

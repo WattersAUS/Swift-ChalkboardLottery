@@ -1,10 +1,13 @@
 //
-//  LotteryJsonHandler.swift
+//  DrawDelegate.swift
 //  ChalkboardLottery
 //
-//  Created by Graham on 29/12/2016.
-//  Copyright © 2016 Graham Watson. All rights reserved.
+//  Created by Graham on 10/02/2017.
+//  Copyright © 2017 Graham Watson. All rights reserved.
 //
+
+import Foundation
+
 //----------------------------------------------------------------------------
 // this class defines the 'protocol' used to allow the settings dialog to
 // delegate the responsibility of keeping the defaults updated and including
@@ -13,12 +16,12 @@
 
 import Foundation
 
-protocol LotteryDrawDelegate: class {
+protocol DrawDelegate: class {
     var loadedDraws: History! { get set }
 }
 
-class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
-
+class DrawHandler: NSObject, DrawDelegate {
+    
     private var loadedJSONData: [String: AnyObject]!
     internal var   loadedDraws: History!
     
@@ -28,7 +31,7 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
         self.loadedDraws    = History()
         return
     }
-
+    
     func loadLotteryHistoryFromJSON() {
         
         func decodeValuesFromObjectArray(array: [[String: AnyObject]]) -> [Int] {
@@ -48,7 +51,7 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
             }
             return values
         }
-
+        
         func decodeDrawsFromObjectArray(array: [[String: AnyObject]]) -> [Draw] {
             var draws: [Draw] = []
             for draw: [String: AnyObject] in array {
@@ -75,7 +78,7 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
             }
             return draws
         }
-
+        
         func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [LotteryInstance] {
             var lotteries: [LotteryInstance] = []
             for lottery: [String: AnyObject] in array {
@@ -111,7 +114,7 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
                     }
                 }
                 lotteries.append(instance)
-            
+                
             }
             return lotteries
         }
@@ -119,11 +122,10 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
         loadedDraws.generated = self.extractJSONValue(keyValue: jsonDictionary.GenDate)
         loadedDraws.version   = self.extractJSONValue(keyValue: jsonDictionary.Version)
         loadedDraws.lotteries.append(contentsOf: decodeLotteriesFromObjectArray(array: self.extractJSONValue(keyValue: jsonDictionary.Lottery)))
-        print ("Done...")
         return
     }
     
-    func loadLotteryResults() -> Bool {
+    func loadOnlineResults() -> Bool {
         do {
             let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/lotteryresults.json")!)
             let fileData: Data = jsonFile.data(using: String.Encoding.utf8, allowLossyConversion: false)!
@@ -148,4 +150,3 @@ class LotteryDrawHandler: NSObject, LotteryDrawDelegate {
     }
     
 }
-
