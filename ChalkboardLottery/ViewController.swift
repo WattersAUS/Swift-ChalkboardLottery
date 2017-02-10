@@ -7,24 +7,100 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
+    //
+    // onlne lottery history retrieval
+    //
     var history:    DrawHandler!
     var useHistory: Bool = false
+    
+    //
+    // sounds
+    //
+    var drawSound:  AVAudioPlayer!
+    var useSound:   Bool = false
+    
+    //
+    // prefs
+    //
+    var userPrefs: PreferencesHandler!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.history = DrawHandler()
+        self.userPrefs  = PreferencesHandler()
+        //
+        // get the online JSON file with Lottery Results
+        //
+        self.history    = DrawHandler()
         self.useHistory = self.history.loadOnlineResults()
-        
+        //
+        // load sounds
+        //
+        self.drawSound  = self.loadSound(soundName: "DrawNumbers_001")
+        //
+        // register routines for app transiting to b/g (used in saving game state etc)
+        //
+        self.setupApplicationNotifications()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    //----------------------------------------------------------------------------
+    // app transition events
+    //----------------------------------------------------------------------------
+    func setupApplicationNotifications() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationToClose),            name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        return
+    }
+    
+    func applicationToClose() {
+        return
+    }
+    
+    func applicationMovingToForeground() {
+        return
+    }
+    
+    func applicationMovingToBackground() {
+        return
+    }
+    
+    //----------------------------------------------------------------------------
+    // Sound handling
+    //----------------------------------------------------------------------------
+    func loadSound(soundName: String) -> AVAudioPlayer! {
+        var value: AVAudioPlayer! = nil
+        if let loadAsset: NSDataAsset = NSDataAsset(name: soundName) {
+            do {
+                value = try AVAudioPlayer(data: loadAsset.data, fileTypeHint: AVFileTypeAIFF)
+            } catch {
+                return nil
+            }
+        }
+        return value
+    }
+    
+    func playGenerateSound() {
+        guard self.drawSound != nil && self.useSound == true else {
+            return
+        }
+        self.drawSound.play()
+        return
+    }
+    
+    //----------------------------------------------------------------------------
+    // View placement
+    //----------------------------------------------------------------------------
 
 }
 
