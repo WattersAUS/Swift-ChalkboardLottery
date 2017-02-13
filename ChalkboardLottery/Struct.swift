@@ -67,9 +67,9 @@ struct Numbers {
     var upper:    Int
 
     init(number: Int, range: Int) {
-        for _: Int in 0 ..< ((number == 0) ? 1 : number) {
+        for _: Int in 0 ..< ((number < 1) ? 1 : number) {
             numbers.append(0)
         }
-        upper = ((range == 0) ? 1 : range)
+        upper = ((range < number) ? number : range)
     }
 }
