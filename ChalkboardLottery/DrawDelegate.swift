@@ -34,23 +34,24 @@ class DrawHandler: NSObject, DrawDelegate {
     
     func loadLotteryHistoryFromJSON() {
         
-        func decodeValuesFromObjectArray(array: [[String: AnyObject]]) -> [Int] {
-            var values: [Int] = []
-            for nos: [String: AnyObject] in array {
-                var number: Int = 0
-                for (key,value) in nos {
-                    switch key {
-                    case jsonDictionary.Value.rawValue:
-                        number = Int(value as! String)!
-                        break
-                    default:
-                        break
-                    }
-                }
-                values.append(number)
-            }
-            return values
-        }
+//        func decodeValuesFromObjectArray(array: [Int]) -> [Int] {
+//            var values: [Int] = []
+//            for nos: [String: AnyObject] in array {
+//                var number: Int = 0
+//                for (key,value) in nos {
+//                    switch key {
+//                    case jsonDictionary.Value.rawValue:
+//                        number = Int(value as! String)!
+//                        break
+//                    default:
+//                        break
+//                    }
+//                }
+//                values.append(number)
+//            }
+//            return values
+            //            return values
+//        }
         
         func decodeDrawsFromObjectArray(array: [[String: AnyObject]]) -> [Draw] {
             var draws: [Draw] = []
@@ -59,16 +60,16 @@ class DrawHandler: NSObject, DrawDelegate {
                 for (key,value) in draw {
                     switch key {
                     case jsonDictionary.Draw.rawValue:
-                        instance.draw = Int(value as! String)!
+                        instance.draw = value as! Int
                         break
                     case jsonDictionary.DrawDate.rawValue:
                         instance.drawDate = value as! String
                         break
                     case jsonDictionary.Numbers.rawValue:
-                        instance.numbers.append(contentsOf: decodeValuesFromObjectArray(array: value as! [[String: AnyObject]]))
+                        instance.numbers.append(contentsOf: value as! [Int])
                         break
                     case jsonDictionary.Specials.rawValue:
-                        instance.specials.append(contentsOf: decodeValuesFromObjectArray(array: value as! [[String: AnyObject]]))
+                        instance.specials.append(contentsOf: value as! [Int])
                         break
                     default:
                         break
@@ -86,22 +87,22 @@ class DrawHandler: NSObject, DrawDelegate {
                 for (key,value) in lottery {
                     switch key {
                     case jsonDictionary.Ident.rawValue:
-                        instance.ident = Int(value as! String)!
+                        instance.ident = value as! Int
                         break
                     case jsonDictionary.Description.rawValue:
                         instance.description = value as! String
                         break
                     case jsonDictionary.Numbers.rawValue:
-                        instance.numbers = Int(value as! String)!
+                        instance.numbers = value as! Int
                         break
                     case jsonDictionary.UpperNumber.rawValue:
-                        instance.upperNumber = Int(value as! String)!
+                        instance.upperNumber = value as! Int
                         break
                     case jsonDictionary.Specials.rawValue:
-                        instance.specials = Int(value as! String)!
+                        instance.specials = value as! Int
                         break
                     case jsonDictionary.UpperSpecial.rawValue:
-                        instance.upperSpecial = Int(value as! String)!
+                        instance.upperSpecial = value as! Int
                         break
                     case jsonDictionary.LastModified.rawValue:
                         instance.lastModified = value as! String

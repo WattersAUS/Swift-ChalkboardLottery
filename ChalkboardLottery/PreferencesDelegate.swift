@@ -16,27 +16,50 @@
 
 import Foundation
 
+//
+// Stores:
+//
+// Sound Off/On
+// How many draws for the user will we store
+// JSON string defining the draws the app will support
+// - including Lotto, euro, Thunderball (ident 1-3) shipped and user configured draws (ident > 3)
+// Allow retrieval of draw history (shiny-idea JSON)
+// - this allows draw cfg to stay updated
+//
+
 protocol PreferencesDelegate: class {
+    //
     // what we use to populate the pref dialog
-    var soundOn:                   Bool { get set }
+    //
+    var soundOn:   Bool { get set }
+    var keep:      Int  { get set }
+    var draws:   String { get set }
+    //
     // allow a user to be able to save the prefs into the delegate via a helper function
+    //
     var saveFunctions: [(Void) -> ()] { get set }
 }
 
 class PreferencesHandler: NSObject, PreferencesDelegate {
-    var firstTime:               Bool = false
     var soundOn:                 Bool = false
+    var keep:                     Int = 50
+    var draws:                 String = ""
     var saveFunctions: [(Void) -> ()] = []
-    
-    let userDefaults: UserDefaults = UserDefaults.standard
+    //
+    var firstTime:               Bool = false
+    let userDefaults:    UserDefaults = UserDefaults.standard
     
     override init() {
         super.init()
         self.firstTime   = self.userDefaults.bool(forKey: "firstTime")
-        if self.firstTime == false {
-            self.soundOn = self.userDefaults.bool(forKey: "soundOn")
-        } else {
+        if self.firstTime == true {
             self.soundOn = true
+            self.keep    = 50
+            self.draws   = ""
+        } else {
+            self.soundOn = self.userDefaults.bool(forKey: "soundOn")
+            self.keep    = self.userDefaults.integer(forKey: "keep")
+// COME BACK TO THIS!!!            self.draws   = self.userDefaults.string(forKey: "draws")!
         }
         self.saveFunctions = [ self.savePreferences ]
         return
@@ -45,9 +68,9 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
     func savePreferences() -> (Void) {
         self.userDefaults.set(true,         forKey: "firstTime")
         self.userDefaults.set(self.soundOn, forKey: "soundOn")
+        self.userDefaults.set(self.keep,    forKey: "keep")
+        self.userDefaults.set(self.draws,   forKey: "draws")
         return
     }
     
 }
-
-

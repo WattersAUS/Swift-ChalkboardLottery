@@ -28,5 +28,4 @@ enum jsonDictionary: String {
     case Draws        = "draws"
     case Draw         = "draw"
     case DrawDate     = "date"
-    case Value        = "v"
 }
