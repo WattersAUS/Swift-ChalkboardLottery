@@ -54,6 +54,26 @@ class JSONConfigDelegateHandler: NSObject, JSONConfigDelegate {
             }
             return draws
         }
+
+        
+        
+//        case Ident        = "id"
+//        case Description  = "desc"
+//        case Numbers      = "nos"
+//        case UpperNumber  = "upper_nos"
+//        case Specials     = "spc"
+//        case UpperSpecial = "upper_spc"
+//        case Bonus        = "bonus"
+//        case Days         = "days"
+//        case Limit        = "limit"
+//        case Start        = "start"
+//        case Readonly     = "readonly"
+//        case Active       = "active"
+
+        
+        
+        
+        
         
         func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [ConfigLotteryInstance] {
             var lotteries: [ConfigLotteryInstance] = []
@@ -79,11 +99,23 @@ class JSONConfigDelegateHandler: NSObject, JSONConfigDelegate {
                     case jsonConfigDictionary.UpperSpecial.rawValue:
                         instance.upperSpecial = value as! Int
                         break
-                    case jsonConfigDictionary.LastModified.rawValue:
-                        instance.lastModified = value as! String
+                    case jsonConfigDictionary.Bonus.rawValue:
+                        instance.bonus = value as! Int
                         break
-                    case jsonConfigDictionary.Draws.rawValue:
-                        instance.draws = decodeDrawsFromObjectArray(array: value as! [[String: AnyObject]])
+                    case jsonConfigDictionary.Days.rawValue:
+                        instance.days.append(contentsOf: value as! [Int])
+                        break
+                    case jsonConfigDictionary.Limit.rawValue:
+                        instance.limit = value as! Int
+                        break
+                    case jsonConfigDictionary.Start.rawValue:
+                        instance.start = value as! String
+                        break
+                    case jsonConfigDictionary.Readonly.rawValue:
+                        instance.readonly = value as! Bool
+                        break
+                    case jsonConfigDictionary.Active.rawValue:
+                        instance.active = value as! Bool
                         break
                     default:
                         break
@@ -99,7 +131,7 @@ class JSONConfigDelegateHandler: NSObject, JSONConfigDelegate {
         return
     }
     
-    func loadUserResults(source: String) -> Bool {
+    func loadUserResults(userPrefsJSON: String, userDrawJSON: String) -> Bool {
         do {
             let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/lotteryresults.json")!)
             let fileData: Data = jsonFile.data(using: String.Encoding.utf8, allowLossyConversion: false)!
