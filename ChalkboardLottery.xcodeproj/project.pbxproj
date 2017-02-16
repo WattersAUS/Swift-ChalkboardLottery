@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		BF0C79251E4DDF2A00FAD3C1 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0C79241E4DDF2A00FAD3C1 /* Generator.swift */; };
-		BF0C79271E4DDF7300FAD3C1 /* DrawDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0C79261E4DDF7300FAD3C1 /* DrawDelegate.swift */; };
 		BF151B871E54A458007A6182 /* chalkboardlottery_config.json in Resources */ = {isa = PBXBuildFile; fileRef = BF151B861E54A458007A6182 /* chalkboardlottery_config.json */; };
 		BF38F83E1E4DFB7300DC1F28 /* PreferencesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF38F83D1E4DFB7300DC1F28 /* PreferencesDelegate.swift */; };
 		BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */; };
@@ -17,6 +16,10 @@
 		BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FC1D88B3A100E3EA28 /* Assets.xcassets */; };
 		BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9FE1D88B3A100E3EA28 /* LaunchScreen.storyboard */; };
 		BF48AA0B1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */; };
+		BF5C674A1E55C51E00EEC6F8 /* JSONOnlineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C67491E55C51E00EEC6F8 /* JSONOnlineDelegate.swift */; };
+		BF5C674C1E55C59600EEC6F8 /* JSONConfigDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C674B1E55C59600EEC6F8 /* JSONConfigDelegate.swift */; };
+		BF5C674E1E55C5BF00EEC6F8 /* JSONHistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C674D1E55C5BF00EEC6F8 /* JSONHistoryDelegate.swift */; };
+		BF5C67501E55FA2B00EEC6F8 /* chalkboardlottery_userdraw.json in Resources */ = {isa = PBXBuildFile; fileRef = BF5C674F1E55FA2B00EEC6F8 /* chalkboardlottery_userdraw.json */; };
 		BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A971DCF8B0D00B71F3F /* Struct.swift */; };
 		BFFA05B41E1550D500AC4E68 /* Notes in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B31E1550D500AC4E68 /* Notes */; };
 		BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* Enumeration.swift */; };
@@ -36,7 +39,6 @@
 
 /* Begin PBXFileReference section */
 		BF0C79241E4DDF2A00FAD3C1 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
-		BF0C79261E4DDF7300FAD3C1 /* DrawDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawDelegate.swift; sourceTree = "<group>"; };
 		BF151B861E54A458007A6182 /* chalkboardlottery_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery_config.json; sourceTree = "<group>"; };
 		BF38F83D1E4DFB7300DC1F28 /* PreferencesDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesDelegate.swift; sourceTree = "<group>"; };
 		BF48A9F21D88B3A100E3EA28 /* ChalkboardLottery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChalkboardLottery.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,6 +51,10 @@
 		BF48AA061D88B3A100E3EA28 /* ChalkboardLotteryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChalkboardLotteryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF48AA0A1D88B3A100E3EA28 /* ChalkboardLotteryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChalkboardLotteryTests.swift; sourceTree = "<group>"; };
 		BF48AA0C1D88B3A100E3EA28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF5C67491E55C51E00EEC6F8 /* JSONOnlineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONOnlineDelegate.swift; sourceTree = "<group>"; };
+		BF5C674B1E55C59600EEC6F8 /* JSONConfigDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONConfigDelegate.swift; sourceTree = "<group>"; };
+		BF5C674D1E55C5BF00EEC6F8 /* JSONHistoryDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONHistoryDelegate.swift; sourceTree = "<group>"; };
+		BF5C674F1E55FA2B00EEC6F8 /* chalkboardlottery_userdraw.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery_userdraw.json; sourceTree = "<group>"; };
 		BFDB3A971DCF8B0D00B71F3F /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		BFFA05B31E1550D500AC4E68 /* Notes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 		BFFA05B61E15512100AC4E68 /* Enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumeration.swift; sourceTree = "<group>"; };
@@ -133,6 +139,7 @@
 				BFFA05B31E1550D500AC4E68 /* Notes */,
 				BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */,
 				BF151B861E54A458007A6182 /* chalkboardlottery_config.json */,
+				BF5C674F1E55FA2B00EEC6F8 /* chalkboardlottery_userdraw.json */,
 			);
 			name = Docs;
 			sourceTree = "<group>";
@@ -149,8 +156,10 @@
 		BFFA05BA1E15550B00AC4E68 /* Protocol Handlers */ = {
 			isa = PBXGroup;
 			children = (
-				BF0C79261E4DDF7300FAD3C1 /* DrawDelegate.swift */,
 				BF38F83D1E4DFB7300DC1F28 /* PreferencesDelegate.swift */,
+				BF5C67491E55C51E00EEC6F8 /* JSONOnlineDelegate.swift */,
+				BF5C674B1E55C59600EEC6F8 /* JSONConfigDelegate.swift */,
+				BF5C674D1E55C5BF00EEC6F8 /* JSONHistoryDelegate.swift */,
 			);
 			name = "Protocol Handlers";
 			sourceTree = "<group>";
@@ -241,6 +250,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */,
+				BF5C67501E55FA2B00EEC6F8 /* chalkboardlottery_userdraw.json in Resources */,
 				BFFA05B41E1550D500AC4E68 /* Notes in Resources */,
 				BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */,
 				BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */,
@@ -265,11 +275,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */,
+				BF5C674E1E55C5BF00EEC6F8 /* JSONHistoryDelegate.swift in Sources */,
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,
-				BF0C79271E4DDF7300FAD3C1 /* DrawDelegate.swift in Sources */,
 				BF38F83E1E4DFB7300DC1F28 /* PreferencesDelegate.swift in Sources */,
 				BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */,
+				BF5C674A1E55C51E00EEC6F8 /* JSONOnlineDelegate.swift in Sources */,
 				BF0C79251E4DDF2A00FAD3C1 /* Generator.swift in Sources */,
+				BF5C674C1E55C59600EEC6F8 /* JSONConfigDelegate.swift in Sources */,
 				BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

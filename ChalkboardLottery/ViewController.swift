@@ -14,13 +14,13 @@ class ViewController: UIViewController {
     //
     // onlne lottery history retrieval
     //
-    var history:    DrawHandler!
-    var useHistory: Bool = false
+    var jsonOnline:        JSONOnlineDelegateHandler!
+    var useOnlineResults:  Bool = false
     
     //
     // sounds
     //
-    var drawSound:  AVAudioPlayer!
+    var drawSound: AVAudioPlayer!
     
     //
     // prefs
@@ -32,14 +32,15 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.userPrefs  = PreferencesHandler()
         //
-        // get the online JSON file with Lottery Results
+        // get the online JSON file with Lottery Results (if we can)
+        // and store whether we were able to or not
         //
-        self.history    = DrawHandler()
-        self.useHistory = self.history.loadOnlineResults()
+        self.jsonOnline       = JSONOnlineDelegateHandler()
+        self.useOnlineResults = self.jsonOnline.loadOnlineResults()
         //
         // load sounds
         //
-        self.drawSound  = self.loadSound(soundName: "DrawNumbers_001")
+        self.drawSound        = self.loadSound(soundName: "DrawNumbers_001")
         //
         // register routines for app transiting to b/g (used in saving game state etc)
         //

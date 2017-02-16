@@ -9,9 +9,71 @@
 import Foundation
 
 //
-// structures to support the 'historic' storage
+// generic struct to support Numbers / Specials as both are arrays and have a max value
 //
-struct Draw {
+struct Numbers {
+    var numbers: [Int] = []
+    var upper:    Int
+    
+    init(number: Int, range: Int) {
+        for _: Int in 0 ..< ((number < 1) ? 1 : number) {
+            numbers.append(0)
+        }
+        upper = ((range < number) ? number : range)
+    }
+}
+
+//
+// config structs
+//
+struct UserDraw {
+    var drawDate: String
+    var numbers:  [Int]
+    var specials: [Int]
+    
+    init() {
+        drawDate = ""
+        numbers  = []
+        specials = []
+    }
+}
+
+struct ConfigLotteryInstance {
+    var ident:        Int
+    var description:  String
+    var numbers:      Int
+    var upperNumber:  Int
+    var specials:     Int
+    var upperSpecial: Int
+    var bonus:        Int
+    var days:         [Int]
+    var limit:        Int
+    var start:        String
+    var readonly:     Bool
+    var active:       Bool
+    var draws:        [UserDraw]
+    
+    init() {
+        ident        = 0
+        description  = ""
+        numbers      = 0
+        upperNumber  = 0
+        specials     = 0
+        upperSpecial = 0
+        bonus        = 0
+        days         = []
+        limit        = 0
+        start        = ""
+        readonly     = true
+        active       = true
+        draws        = []
+    }
+}
+
+//
+// structures to support the 'historic' online storage
+//
+struct OnlineDraw {
     var draw:     Int
     var drawDate: String
     var numbers:  [Int]
@@ -25,7 +87,7 @@ struct Draw {
     }
 }
 
-struct LotteryInstance {
+struct OnlineLotteryInstance {
     var ident:        Int
     var description:  String
     var numbers:      Int
@@ -33,7 +95,7 @@ struct LotteryInstance {
     var specials:     Int
     var upperSpecial: Int
     var lastModified: String
-    var draws:        [Draw]
+    var draws:        [OnlineDraw]
     
     init() {
         ident        = 0
@@ -47,29 +109,14 @@ struct LotteryInstance {
     }
 }
 
-struct History {
-    var lotteries: [LotteryInstance]
-    var generated: String
+struct OnlineHistory {
     var version:   String
+    var generated: String
+    var lotteries: [OnlineLotteryInstance]
     
     init() {
-        lotteries = []
-        generated = ""
         version   = ""
-    }
-}
-
-//
-// generic struct to support Numbers / Specials as both are arrays and have a max value
-//
-struct Numbers {
-    var numbers: [Int] = []
-    var upper:    Int
-
-    init(number: Int, range: Int) {
-        for _: Int in 0 ..< ((number < 1) ? 1 : number) {
-            numbers.append(0)
-        }
-        upper = ((range < number) ? number : range)
+        generated = ""
+        lotteries = []
     }
 }

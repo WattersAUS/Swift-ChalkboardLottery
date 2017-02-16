@@ -1,43 +1,55 @@
 {
-    "version": "v1.03",
     "lottery": [{
         "id": 1,
         "desc": "Euro Millions",
         "nos": 5,
-        "u_nos": 50,
+        "upper_nos": 50,
         "spc": 2,
-        "u_spc": 12,
-        "bon": 0,
-        "days": [0,0,1,0,0,1,0],
-        "lmt": 50,
+        "upper_spc": 12,
+        "bonus": 0,
+        "days": [2,5],
+        "limit": 50,
         "start": "2017-02-07",
-        "rw": 0,
-        "act": 1
+        "readonly": 1,
+        "active": 1
     },{
         "id": 2,
         "desc": "Lotto",
         "nos": 6,
-        "u_nos": 59,
+        "upper_nos": 59,
         "spc": 1,
-        "u_spc": 59,
-        "bon": 1,
-        "days": [0,0,0,1,0,0,1],
-        "lmt": 50,
+        "upper_spc": 59,
+        "bonus": 1,
+        "days": [3,6],
+        "limit": 50,
         "start": "2017-02-01",
-        "rw": 0,
-        "act": 1
+        "readonly": 1,
+        "active": 1
     },{
         "id": 3,
         "desc": "Thunderball",
         "nos": 5,
-        "u_nos": 39,
+        "upper_nos": 39,
         "spc": 1,
-        "u_spc": 14,
-        "bon": 0,
-        "days": [0,0,0,1,0,1,1],
-        "lmt": 50,
+        "upper_spc": 14,
+        "bonus": 0,
+        "days": [3,5,6],
+        "limit": 50,
         "start": "2017-02-01",
-        "rw": 0,
-        "act": 1
+        "readonly": 1,
+        "active": 1
+    },{
+        "id": 4,
+        "desc": "Test 1",
+        "nos": 4,
+        "upper_nos": 39,
+        "spc": 3,
+        "upper_spc": 14,
+        "bonus": 0,
+        "days": [3,5,6],
+        "limit": 50,
+        "start": "2017-02-01",
+        "readonly": 0,
+        "active": 1
     }]
 }
