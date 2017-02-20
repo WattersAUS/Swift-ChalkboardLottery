@@ -45,7 +45,7 @@ struct ConfigLotteryInstance {
     var upperNumber:  Int
     var specials:     Int
     var upperSpecial: Int
-    var bonus:        Int
+    var bonus:        Bool
     var days:         [Int]
     var limit:        Int
     var start:        String
@@ -60,12 +60,46 @@ struct ConfigLotteryInstance {
         upperNumber  = 0
         specials     = 0
         upperSpecial = 0
-        bonus        = 0
+        bonus        = false
         days         = []
         limit        = 0
         start        = ""
         readonly     = true
         active       = true
+        draws        = []
+    }
+
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String) {
+        ident        = newIdent
+        description  = newDescription
+        numbers      = newNumbers
+        upperNumber  = newUpperNumber
+        specials     = newSpecials
+        upperSpecial = newUpperSpecial
+        bonus        = newBonus
+        days         = []
+        days.append(contentsOf: newDays)
+        limit        = newLimit
+        start        = newStart
+        readonly     = false
+        active       = true
+        draws        = []
+    }
+
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String, newReadOnly: Bool, newActive: Bool) {
+        ident        = newIdent
+        description  = newDescription
+        numbers      = newNumbers
+        upperNumber  = newUpperNumber
+        specials     = newSpecials
+        upperSpecial = newUpperSpecial
+        bonus        = newBonus
+        days         = []
+        days.append(contentsOf: newDays)
+        limit        = newLimit
+        start        = newStart
+        readonly     = newReadOnly
+        active       = newActive
         draws        = []
     }
 }

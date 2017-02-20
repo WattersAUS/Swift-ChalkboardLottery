@@ -22,6 +22,7 @@ enum lotteryIdent: Int {
 // This will be stored as a string within UserPreferences
 //
 enum jsonConfigDictionary: String {
+    case Lottery      = "lottery"
     case Ident        = "id"
     case Description  = "desc"
     case Numbers      = "nos"
