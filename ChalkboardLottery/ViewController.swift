@@ -23,6 +23,12 @@ class ViewController: UIViewController {
     var drawSound: AVAudioPlayer!
     
     //
+    // place holders for the UILabels we'll use for the display (made up of 'numbers' and 'specials' arrays)
+    //
+    
+    // ** needs a class to hold then???? **
+    
+    //
     // prefs
     //
     var userPrefs: PreferencesHandler!

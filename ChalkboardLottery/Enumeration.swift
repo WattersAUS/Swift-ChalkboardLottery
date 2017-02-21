@@ -9,12 +9,14 @@
 import Foundation
 
 //
-// Draws configured by default in the system, user configured draws will be id > 3
+// Draws configured by default in the system, user configured draws will be id => 4
 //
 enum lotteryIdent: Int {
+    case Undefined    = 0
     case EuroMillions = 1
     case Lotto        = 2
     case Thunderball  = 3
+    case UserDefined  = 4
 }
 
 //
@@ -66,4 +68,13 @@ enum jsonHistoryDictionary: String {
     case DrawDate     = "date"
     case Numbers      = "nos"
     case Specials     = "spc"
+}
+
+//
+// types of numbers we will display on the interface
+//
+enum numberDisplayType: Int {
+    case Number  = 1
+    case Special = 2
+    case Bonus   = 3
 }
