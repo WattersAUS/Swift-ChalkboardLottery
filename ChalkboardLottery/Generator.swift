@@ -23,6 +23,9 @@ class Generator {
         return
     }
     
+    //
+    // alternate where no specials required (ie Lotto)
+    //
     init(number: Int, maxNumber: Int) {
         self.numbers  = Numbers(number: number,  range: maxNumber)
         self.specials = Numbers(number: 0,       range: 0)
@@ -61,7 +64,6 @@ class Generator {
     //----------------------------------------------------------------------------
     // Class: Public functions
     //----------------------------------------------------------------------------
-    //
     // build up the array, which should contain unique numbers through it
     //
     func generateNewLotteryNumbers() {
@@ -71,13 +73,13 @@ class Generator {
     }
     
     //
-    // get the range for numbers (may be deprecated)
+    // get the range for numbers
     //
-    func getMaxNumber() -> Int {
+    func getPossibleMaximumNumber() -> Int {
         return self.numbers.upper
     }
     
-    func getMaxSpecial() -> Int {
+    func getPossibleMaximumSpecial() -> Int {
         return self.specials.upper
     }
     

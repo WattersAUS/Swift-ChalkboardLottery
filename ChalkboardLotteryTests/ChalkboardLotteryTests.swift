@@ -79,7 +79,7 @@ class ChalkboardLotteryTests: XCTestCase {
     }
     
     //----------------------------------------------------------------------------
-    // Class: Generator
+    // Class: Generator - used to generate array of numbers
     //----------------------------------------------------------------------------
     func testGeneratorConstructor_1() {
         let gen: Generator = Generator(number: 3, maxNumber: 3, special: 2, maxSpecial: 2)
@@ -97,9 +97,42 @@ class ChalkboardLotteryTests: XCTestCase {
         //
         XCTAssertEqual(gen.getGeneratedNumber(index:  3), 0, "Incorrect number initialisation reported!")
         XCTAssertEqual(gen.getGeneratedSpecial(index: 2), 0, "Incorrect special initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedNumber(index:  0), 0, "Incorrect number initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedSpecial(index: 0), 0, "Incorrect special initialisation reported!")
         //
-        // generate the lottery numbers
+        // test upper limits set appropriately
         //
+        XCTAssertEqual(gen.getPossibleMaximumNumber(),  3, "Incorrect maximum number limit reported!")
+        XCTAssertEqual(gen.getPossibleMaximumSpecial(), 2, "Incorrect maximum special limit reported!")
+        return
+    }
+
+    func testGeneratorConstructor_2() {
+        let gen: Generator = Generator(number: 3, maxNumber: 3)
+        //
+        // First all possible numbers / specials must be initialised
+        //
+        XCTAssertEqual(gen.getGeneratedNumber(index:  0), 0, "Incorrect number initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedNumber(index:  1), 0, "Incorrect number initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedNumber(index:  2), 0, "Incorrect number initialisation reported!")
+        //
+        XCTAssertEqual(gen.getGeneratedSpecial(index: 0), 0, "Incorrect special initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedSpecial(index: 1), 0, "Incorrect special initialisation reported!")
+        //
+        // an out of range index should report 0
+        //
+        XCTAssertEqual(gen.getGeneratedNumber(index:  3), 0, "Incorrect number initialisation reported!")
+        XCTAssertEqual(gen.getGeneratedSpecial(index: 2), 0, "Incorrect special initialisation reported!")
+        //
+        // test upper limits set appropriately
+        //
+        XCTAssertEqual(gen.getPossibleMaximumNumber(),  3, "Incorrect maximum number limit reported!")
+        XCTAssertEqual(gen.getPossibleMaximumSpecial(), 0, "Incorrect maximum special limit reported!")
+        return
+    }
+    
+    func testGeneratorGenerate() {
+        let gen: Generator = Generator(number: 3, maxNumber: 3)
         gen.generateNewLotteryNumbers()
         //
         // check all within acceptable range
@@ -111,32 +144,52 @@ class ChalkboardLotteryTests: XCTestCase {
         // don't forget the specials
         //
         XCTAssertTrue(((1..<3) ~= gen.getGeneratedSpecial(index: 0)), "Generated number is out of range!")
-        XCTAssertTrue(((1..<3) ~= gen.getGeneratedSpecial(index: 1)), "Generated number is out of range!")
+        XCTAssertEqual(gen.getGeneratedSpecial(index: 1), 0, "Incorrect special initialisation reported!")
         return
     }
     
-//    //----------------------------------------------------------------------------
-//    // Struct: Numbers
-//    //----------------------------------------------------------------------------
-//    func testNumbersStruct() {
-//        let nr: Numbers = Numbers(size: 5, limits: NumberRange(upperLimit: 65, lowerLimit: 3))
-//        XCTAssertEqual(nr.value.count,  5, "Incorrect number of entries reported!")
-//        XCTAssertEqual(nr.range.upper, 65, "Incorrect upper limit reported!")
-//        XCTAssertEqual(nr.range.lower,  3, "Incorrect upper limit reported!")
-//        return
-//    }
-//    
-//    //----------------------------------------------------------------------------
-//    // Class: Lottery
-//    //----------------------------------------------------------------------------
-//    func testLotteryClass() {
-//        let ltry: Lottery = Lottery(nbrs: 5, nbrRange: NumberRange(upperLimit: 5, lowerLimit: 1), spcs: 3, spcRange: NumberRange(upperLimit: 3, lowerLimit: 1))
-//        XCTAssertEqual(ltry.getNumber(position: 0), 1, "Incorrect value at 5th position!")
-//        XCTAssertEqual(ltry.getNumber(position: 1), 2, "Incorrect value at 4th position!")
-//        XCTAssertEqual(ltry.getNumber(position: 2), 3, "Incorrect value at 3rd position!")
-//        XCTAssertEqual(ltry.getNumber(position: 3), 4, "Incorrect value at 2nd position!")
-//        XCTAssertEqual(ltry.getNumber(position: 4), 5, "Incorrect value at 1st position!")
-//        return
-//    }
+    //----------------------------------------------------------------------------
+    // Struct: Content
+    //----------------------------------------------------------------------------
+    func testContentConstructor() {
+        let con: Content = Content(displayNumber: 4, displayType: numberDisplayType.Number)
+        XCTAssertEqual(con.displayNumber,                      4, "Incorrect displayNumber initialisation reported!")
+        XCTAssertEqual(con.displayType, numberDisplayType.Number, "Incorrect displayType initialisation reported!")
+        return
+    }
+    
+    //----------------------------------------------------------------------------
+    // Class: LotteryDisplay (contains 'Content'
+    //----------------------------------------------------------------------------
+    func testLotteryDisplayConstructor_1() {
+        let ldg: LotteryDisplay = LotteryDisplay()
+        XCTAssertEqual(ldg.ident, lotteryIdent.Undefined, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,              0, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,             0, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonuses.count,              0, "Incorrect initial bonuses array size reported!")
+        XCTAssertEqual(ldg.active,                 false, "Incorrect initial active flag reported!")
+        return
+    }
 
+    func testLotteryDisplayConstructor_2() {
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12], specials: [2, 14], bonus: [43], active: true)
+        XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,              5, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,             2, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonuses.count,              1, "Incorrect initial bonuses array size reported!")
+        XCTAssertEqual(ldg.active,                  true, "Incorrect initial active flag reported!")
+        //
+        XCTAssertEqual(ldg.numbers[0].displayNumber,   1, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,   4, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,   7, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,   8, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber,  12, "Incorrect number reported for array position!")
+        //
+        XCTAssertEqual(ldg.specials[0].displayNumber,  2, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber, 14, "Incorrect special reported for array position!")
+        //
+        XCTAssertEqual(ldg.bonuses[0].displayNumber,  43, "Incorrect bonus reported for array position!")
+        return
+    }
+    
 }

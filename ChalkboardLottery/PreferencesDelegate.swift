@@ -73,7 +73,7 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             //
             // should include all configured lotteries 1-3 default, plus any user defined
             //
-            self.lotteries.append(contentsOf: self.parseUserConfig(userPrefsJSON: self.userDefaults.string(forKey: "lotteries")!))
+            //self.lotteries.append(contentsOf: self.parseUserConfig(userPrefsJSON: self.userDefaults.string(forKey: "lotteries")!))
         }
         self.saveFunctions = [ self.savePreferences ]
         return
