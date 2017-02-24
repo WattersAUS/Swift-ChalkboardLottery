@@ -29,3 +29,14 @@ let globalQueue = DispatchQueue.global(qos: .userInitiated)
 DispatchQueue.main.async {
 // Do something
 }
+
+
+//
+
+1. As majority of screen objects will be dynamic will control via a 'tap' control list, only excluded from this will be prefs/history and forward and back tab traversal
+    a) capture the 'tap' on a parent UIView and scan through list to determine action
+    b) store a callback function for appropriate objects to allow processing (ie user number select, or activate hidden tab etc and hide currently active)
+
+2. Save date from last json import into config, and use to determine if on reload the json is needed to be downloaded automatically again
+    a) Allow user override via dialog?
+

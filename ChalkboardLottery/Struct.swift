@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import UIKit
 
 //
-// generic struct to support Numbers / Specials as both are arrays and have a max value
+// generic struct to support Numbers / Specials in both User and Online draws
 //
 struct Numbers {
     var numbers: [Int] = []
@@ -24,9 +25,27 @@ struct Numbers {
 }
 
 //
-// config structs
+// extend from these base protocols
 //
-struct UserDraw {
+protocol Draw {
+    var drawDate: String { get set }
+    var numbers:  [Int]  { get set }
+    var specials: [Int]  { get set }
+}
+
+protocol Lottery {
+    var ident:        Int     { get set }
+    var description:  String  { get set }
+    var numbers:      Int     { get set }
+    var upperNumber:  Int     { get set }
+    var specials:     Int     { get set }
+    var upperSpecial: Int     { get set }
+}
+
+//
+// define default draw struct
+//
+struct UserDraw: Draw {
     var drawDate: String
     var numbers:  [Int]
     var specials: [Int]
@@ -38,7 +57,10 @@ struct UserDraw {
     }
 }
 
-struct ConfigLotteryInstance {
+//
+// lottery config to support data stored in prefs
+//
+struct ConfigLottery: Lottery {
     var ident:        Int
     var description:  String
     var numbers:      Int
@@ -102,16 +124,32 @@ struct ConfigLotteryInstance {
         active       = newActive
         draws        = []
     }
+    
+    mutating func clearLotteryDraws() {
+        draws = []
+        return
+    }
+    
+    mutating func addLotteryDraw(draw: UserDraw) {
+        draws.append(draw)
+        return
+    }
+
+    mutating func addLotteryDraws(drawArray: [UserDraw]) {
+        draws.append(contentsOf: drawArray)
+        return
+    }
 }
 
 //
-// structures to support the 'historic' online storage
+// structures to support the 'historic' online lottery/draw storage
 //
-struct OnlineDraw {
-    var draw:     Int
+struct OnlineDraw: Draw {
     var drawDate: String
     var numbers:  [Int]
     var specials: [Int]
+
+    var draw:     Int
     
     init() {
         draw     = 0
@@ -121,7 +159,7 @@ struct OnlineDraw {
     }
 }
 
-struct OnlineLotteryInstance {
+struct OnlineLottery: Lottery {
     var ident:        Int
     var description:  String
     var numbers:      Int
@@ -141,16 +179,94 @@ struct OnlineLotteryInstance {
         lastModified = ""
         draws        = []
     }
+
+    mutating func clearLotteryDraws() {
+        draws = []
+        return
+    }
+    
+    mutating func addLotteryDraw(draw: OnlineDraw) {
+        draws.append(draw)
+        return
+    }
+    
+    mutating func addLotteryDraws(drawArray: [OnlineDraw]) {
+        draws.append(contentsOf: drawArray)
+        return
+    }
 }
 
 struct OnlineHistory {
     var version:   String
     var generated: String
-    var lotteries: [OnlineLotteryInstance]
+    var lotteries: [OnlineLottery]
     
     init() {
         version   = ""
         generated = ""
         lotteries = []
     }
+    
+    mutating func clearLotterie() {
+        lotteries = []
+        return
+    }
+    
+    mutating func addLotteryDraw(lottery: OnlineLottery) {
+        lotteries.append(lottery)
+        return
+    }
+    
+    mutating func addLotteryDraws(lotteryArray: [OnlineLottery]) {
+        lotteries.append(contentsOf: lotteryArray)
+        return
+    }
 }
+
+//
+// traverse this list to determine what the user 'tapped' on the screen
+//
+struct TapDetect {
+    var typeObj:   tapObject
+    var location:  CGPoint
+    var function:  (Void) -> ()
+    var activeObj: Bool
+    
+    init(type: tapObject, loc: CGPoint, funct: @escaping (Void) -> (), active: Bool) {
+        typeObj  = type
+        location = loc
+        function = funct
+        activeObj = active
+        return
+    }
+}
+
+struct ControlList {
+    var objs:      [TapDetect]
+    var activeObj: Int
+    
+    init () {
+        objs      = []
+        activeObj = -1
+        return
+    }
+    
+    mutating func clearLotterie() {
+        objs = []
+        return
+    }
+    
+    mutating func addTapObject(tapObj: TapDetect) {
+        objs.append(tapObj)
+        return
+    }
+    
+    mutating func addTapObjects(tapObjs: [TapDetect]) {
+        objs.append(contentsOf: tapObjs)
+        return
+    }
+}
+
+//
+// eol
+//

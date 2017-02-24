@@ -38,6 +38,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.userPrefs  = PreferencesHandler()
         //
+        // load the user selected draws etc
+        //
+        
+        //
         // get the online JSON file with Lottery Results (if we can)
         // and store whether we were able to or not
         //
@@ -107,6 +111,81 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // View placement
     //----------------------------------------------------------------------------
+    func placementOfNumberLabels() {
+        return
+    }
+    
+    func placementOfSpecialsLabels() {
+        return
+    }
+    
+    func placementOfOptionsImages() {
+        
+    }
+    
+    func placemenOfTabLabels() {
+        return
+    }
+    
+    //----------------------------------------------------------------------------
+    // Touch Setup / detection
+    //----------------------------------------------------------------------------
+    func processUserTapOnMainScreen(location: CGPoint) -> (row: Int, column: Int) {
+//        for y: Int in 0 ..< self.controlPanelImages.getRows() {
+//            for x: Int in 0 ..< self.controlPanelImages.getColumns() {
+//                if self.isTapWithinImage(location: location, image: self.controlPanelImages.contents[y][x].imageView) == true {
+//                    return(y, x)
+//                }
+//            }
+//        }
+        
+        func foundTapInTabsMenu() -> Bool {
+            // 1. run thro array of labels and does tap fall in boundaries of one of the labels
+            // 2. use the 'index' into the array
+            return false
+        }
+        
+        func foundTapInNumbers() -> Bool {
+            return false
+        }
+        
+        func foundTapInSpecials() -> Bool {
+            return false
+        }
+        
+        func foundTapInOptions() -> Bool {
+            return false
+        }
+        
+        if foundTapInTabsMenu() == false {
+            if foundTapInNumbers() == false {
+                if foundTapInSpecials() == false {
+                    if foundTapInOptions() == true {
+                        
+                    }
+                }
+            }
+        }
+        return(-1, -1)
+    }
+    
+    func isTapWithinImage(location: CGPoint, image: UIImageView) -> Bool {
+        if (location.x >= image.frame.origin.x) && (location.x <= (image.frame.origin.x + image.frame.width)) {
+            if (location.y >= image.frame.origin.y) && (location.y <= (image.frame.origin.y + image.frame.height)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func isTapWithinLabel(location: CGPoint, label: UILabel) -> Bool {
+        if (location.x >= label.frame.origin.x) && (location.x <= (label.frame.origin.x + label.frame.width)) {
+            if (location.y >= label.frame.origin.y) && (location.y <= (label.frame.origin.y + label.frame.height)) {
+                return true
+            }
+        }
+        return false
+    }
 
 }
 

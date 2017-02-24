@@ -31,9 +31,9 @@ protocol PreferencesDelegate: class {
     //
     // what we use to populate the pref dialog
     //
-    var soundOn:                      Bool { get set }
-    var keepDraws:                    Int  { get set }
-    var lotteries: [ConfigLotteryInstance] { get set }
+    var soundOn:              Bool { get set }
+    var keepDraws:            Int  { get set }
+    var lotteries: [ConfigLottery] { get set }
     //
     // allow a user to be able to save the prefs into the delegate via a helper function
     //
@@ -41,17 +41,17 @@ protocol PreferencesDelegate: class {
 }
 
 class PreferencesHandler: NSObject, PreferencesDelegate {
-    var soundOn:                      Bool = false
-    var keepDraws:                     Int = 50
-    var lotteries: [ConfigLotteryInstance] = []
-    var saveFunctions: [(Void) -> ()]      = []
+    var soundOn:                 Bool = false
+    var keepDraws:                Int = 50
+    var lotteries:    [ConfigLottery] = []
+    var saveFunctions: [(Void) -> ()] = []
     //
     var firstTime:               Bool = false
     let userDefaults:    UserDefaults = UserDefaults.standard
     //
     // JSON string is extracted from the preferences and converted to dictionary from where we extract the setup of the draws
     //
-    var loadedConfigs:  [ConfigLotteryInstance]!
+    var loadedConfigs:  [ConfigLottery]!
 
     override init() {
         super.init()
@@ -63,9 +63,9 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             //
             // for first time load, we need to mock up set for initial draws. Euro = 1, Lotto = 2, ThunderBall = 3
             //
-            self.lotteries.append(ConfigLotteryInstance(newIdent: 1, newDescription: "Euro Millions", newNumbers: 5, newUpperNumber: 50, newSpecials: 2, newUpperSpecial: 12, newBonus: false, newDays: [2, 5], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
-            self.lotteries.append(ConfigLotteryInstance(newIdent: 2, newDescription: "Lotto", newNumbers: 6, newUpperNumber: 59, newSpecials: 1, newUpperSpecial: 59, newBonus: true, newDays: [3, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
-            self.lotteries.append(ConfigLotteryInstance(newIdent: 3, newDescription: "Thunderball", newNumbers: 5, newUpperNumber: 39, newSpecials: 1, newUpperSpecial: 14, newBonus: false, newDays: [3, 5, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 1, newDescription: "Euro Millions", newNumbers: 5, newUpperNumber: 50, newSpecials: 2, newUpperSpecial: 12, newBonus: false, newDays: [2, 5], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 2, newDescription: "Lotto", newNumbers: 6, newUpperNumber: 59, newSpecials: 1, newUpperSpecial: 59, newBonus: true, newDays: [3, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 3, newDescription: "Thunderball", newNumbers: 5, newUpperNumber: 39, newSpecials: 1, newUpperSpecial: 14, newBonus: false, newDays: [3, 5, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
         } else {
             self.soundOn   = self.userDefaults.bool(forKey: "soundOn")
             self.keepDraws = self.userDefaults.integer(forKey: "keepDraws")
@@ -89,10 +89,10 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
     //-------------------------------------------------------------------------------
     // we store setup for the individual lottery draws in a JSON string within a pref
     //-------------------------------------------------------------------------------
-    func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [ConfigLotteryInstance] {
-        var lotteries: [ConfigLotteryInstance] = []
+    func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [ConfigLottery] {
+        var lotteries: [ConfigLottery] = []
         for lottery: [String: AnyObject] in array {
-            var instance: ConfigLotteryInstance = ConfigLotteryInstance()
+            var instance: ConfigLottery = ConfigLottery()
             for (key,value) in lottery {
                 switch key {
                 case jsonConfigDictionary.Ident.rawValue:
@@ -141,7 +141,7 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
         return lotteries
     }
     
-    func parseUserConfig(userPrefsJSON: String) -> [ConfigLotteryInstance] {
+    func parseUserConfig(userPrefsJSON: String) -> [ConfigLottery] {
         var loadedJSONData: [String: AnyObject]!
 
         func extractJSONValue(keyValue: jsonConfigDictionary) -> [[String: AnyObject]] {

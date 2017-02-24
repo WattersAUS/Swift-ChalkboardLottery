@@ -78,3 +78,13 @@ enum numberDisplayType: Int {
     case Special = 2
     case Bonus   = 3
 }
+
+//
+// what objs can we support within the Tap Detection struct
+//
+enum tapObject: Int {
+    case tab   = 1
+    case label = 2
+    case image = 3
+}
+

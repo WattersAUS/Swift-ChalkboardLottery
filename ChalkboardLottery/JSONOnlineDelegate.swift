@@ -6,7 +6,7 @@
 //  Copyright © 2017 Graham Watson. All rights reserved.
 //
 //----------------------------------------------------------------------------
-// defines the 'protocol' used to allow access to the downloaded results
+// online downloaded results
 //----------------------------------------------------------------------------
 
 import Foundation
@@ -56,10 +56,10 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
             return draws
         }
         
-        func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [OnlineLotteryInstance] {
-            var lotteries: [OnlineLotteryInstance] = []
+        func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [OnlineLottery] {
+            var lotteries: [OnlineLottery] = []
             for lottery: [String: AnyObject] in array {
-                var instance: OnlineLotteryInstance = OnlineLotteryInstance()
+                var instance: OnlineLottery = OnlineLottery()
                 for (key,value) in lottery {
                     switch key {
                     case jsonOnlineDictionary.Ident.rawValue:

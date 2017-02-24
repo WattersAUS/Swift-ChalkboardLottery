@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct Content {
+struct LabelContent {
     var displayLabel:  UILabel!
     var displayNumber: Int
     var displayType:   numberDisplayType
@@ -29,9 +29,9 @@ struct Content {
 
 class LotteryDisplay {
     var ident:    lotteryIdent
-    var numbers:  [Content] = []
-    var specials: [Content] = []
-    var bonuses:  [Content] = []
+    var numbers:  [LabelContent] = []
+    var specials: [LabelContent] = []
+    var bonuses:  [LabelContent] = []
     var active:   Bool
 
     //----------------------------------------------------------------------------
@@ -50,15 +50,15 @@ class LotteryDisplay {
         self.ident  = ident
         self.numbers = []
         for no: Int in numbers {
-            self.numbers.append(Content(displayNumber: no, displayType: numberDisplayType.Number))
+            self.numbers.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Number))
         }
         self.specials = []
         for no: Int in specials {
-            self.specials.append(Content(displayNumber: no, displayType: numberDisplayType.Special))
+            self.specials.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Special))
         }
         self.bonuses = []
         for no: Int in bonus {
-            self.bonuses.append(Content(displayNumber: no, displayType: numberDisplayType.Bonus))
+            self.bonuses.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Bonus))
         }
         self.active = active
         return

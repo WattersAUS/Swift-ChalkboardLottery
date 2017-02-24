@@ -152,14 +152,14 @@ class ChalkboardLotteryTests: XCTestCase {
     // Struct: Content
     //----------------------------------------------------------------------------
     func testContentConstructor() {
-        let con: Content = Content(displayNumber: 4, displayType: numberDisplayType.Number)
+        let con: LabelContent = LabelContent(displayNumber: 4, displayType: numberDisplayType.Number)
         XCTAssertEqual(con.displayNumber,                      4, "Incorrect displayNumber initialisation reported!")
         XCTAssertEqual(con.displayType, numberDisplayType.Number, "Incorrect displayType initialisation reported!")
         return
     }
     
     //----------------------------------------------------------------------------
-    // Class: LotteryDisplay (contains 'Content'
+    // Class: LotteryDisplay (contains 'Content')
     //----------------------------------------------------------------------------
     func testLotteryDisplayConstructor_1() {
         let ldg: LotteryDisplay = LotteryDisplay()
@@ -189,6 +189,123 @@ class ChalkboardLotteryTests: XCTestCase {
         XCTAssertEqual(ldg.specials[1].displayNumber, 14, "Incorrect special reported for array position!")
         //
         XCTAssertEqual(ldg.bonuses[0].displayNumber,  43, "Incorrect bonus reported for array position!")
+        return
+    }
+    
+    func testLotteryDisplayClearFunctions() {
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12], specials: [2, 14], bonus: [43], active: true)
+        XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,              5, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,             2, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonuses.count,              1, "Incorrect initial bonuses array size reported!")
+        XCTAssertEqual(ldg.active,                  true, "Incorrect initial active flag reported!")
+        //
+        XCTAssertEqual(ldg.numbers[0].displayNumber,   1, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,   4, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,   7, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,   8, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber,  12, "Incorrect number reported for array position!")
+        //
+        XCTAssertEqual(ldg.specials[0].displayNumber,  2, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber, 14, "Incorrect special reported for array position!")
+        //
+        XCTAssertEqual(ldg.bonuses[0].displayNumber,  43, "Incorrect bonus reported for array position!")
+        //
+        // once set correctly now test the clear functions
+        //
+        ldg.clearNumbers()
+        //
+        XCTAssertEqual(ldg.numbers[0].displayNumber, 0, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber, 0, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber, 0, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber, 0, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber, 0, "Incorrect number reported for array position!")
+        //
+        ldg.clearSpecials()
+        XCTAssertEqual(ldg.specials[0].displayNumber, 0, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber, 0, "Incorrect special reported for array position!")
+        //
+        ldg.clearBonuses()
+        XCTAssertEqual(ldg.bonuses[0].displayNumber,  0, "Incorrect bonus reported for array position!")
+        return
+    }
+    
+    func testLotteryDisplayPopulateFunctions() {
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12, 34], specials: [2, 14, 33], bonus: [43, 50], active: true)
+        XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,              6, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,             3, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonuses.count,              2, "Incorrect initial bonuses array size reported!")
+        XCTAssertEqual(ldg.active,                  true, "Incorrect initial active flag reported!")
+        //
+        XCTAssertEqual(ldg.numbers[0].displayNumber,   1, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,   4, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,   7, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,   8, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber,  12, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[5].displayNumber,  34, "Incorrect number reported for array position!")
+        //
+        XCTAssertEqual(ldg.specials[0].displayNumber,  2, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber, 14, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[2].displayNumber, 33, "Incorrect special reported for array position!")
+        //
+        XCTAssertEqual(ldg.bonuses[0].displayNumber,  43, "Incorrect bonus reported for array position!")
+        XCTAssertEqual(ldg.bonuses[1].displayNumber,  50, "Incorrect bonus reported for array position!")
+        //
+        // once set correctly now test the populate functions
+        //
+        ldg.populateNumbers(numbers: [2, 3, 6, 9, 55, 60])
+        XCTAssertEqual(ldg.numbers[0].displayNumber,  2, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,  3, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,  6, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,  9, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber, 55, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[5].displayNumber, 60, "Incorrect number reported for array position!")
+        //
+        ldg.populateSpecials(specials: [1, 3, 11])
+        XCTAssertEqual(ldg.specials[0].displayNumber,  1, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber,  3, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[2].displayNumber, 11, "Incorrect special reported for array position!")
+        //
+        ldg.populateBonuses(bonuses: [1, 9])
+        XCTAssertEqual(ldg.bonuses[0].displayNumber, 1, "Incorrect bonus reported for array position!")
+        XCTAssertEqual(ldg.bonuses[1].displayNumber, 9, "Incorrect bonus reported for array position!")
+        //
+        // test out of range functions (leave results as set if wrong size array sent to replace)
+        //
+        ldg.populateNumbers(numbers: [1, 4, 7, 25, 31, 54, 71])
+        XCTAssertEqual(ldg.numbers[0].displayNumber,  2, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,  3, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,  6, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,  9, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber, 55, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[5].displayNumber, 60, "Incorrect number reported for array position!")
+        //
+        ldg.populateNumbers(numbers: [1, 4, 7, 25])
+        XCTAssertEqual(ldg.numbers[0].displayNumber,  2, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[1].displayNumber,  3, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[2].displayNumber,  6, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[3].displayNumber,  9, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[4].displayNumber, 55, "Incorrect number reported for array position!")
+        XCTAssertEqual(ldg.numbers[5].displayNumber, 60, "Incorrect number reported for array position!")
+        //
+        ldg.populateSpecials(specials: [5, 12, 19, 34])
+        XCTAssertEqual(ldg.specials[0].displayNumber,  1, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber,  3, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[2].displayNumber, 11, "Incorrect special reported for array position!")
+        //
+        ldg.populateSpecials(specials: [5, 12])
+        XCTAssertEqual(ldg.specials[0].displayNumber,  1, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[1].displayNumber,  3, "Incorrect special reported for array position!")
+        XCTAssertEqual(ldg.specials[2].displayNumber, 11, "Incorrect special reported for array position!")
+        //
+        ldg.populateBonuses(bonuses: [6, 33, 35])
+        XCTAssertEqual(ldg.bonuses[0].displayNumber, 1, "Incorrect bonus reported for array position!")
+        XCTAssertEqual(ldg.bonuses[1].displayNumber, 9, "Incorrect bonus reported for array position!")
+        //
+        ldg.populateBonuses(bonuses: [6])
+        XCTAssertEqual(ldg.bonuses[0].displayNumber, 1, "Incorrect bonus reported for array position!")
+        XCTAssertEqual(ldg.bonuses[1].displayNumber, 9, "Incorrect bonus reported for array position!")
         return
     }
     
