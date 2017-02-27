@@ -41,13 +41,17 @@ protocol PreferencesDelegate: class {
 }
 
 class PreferencesHandler: NSObject, PreferencesDelegate {
-    var soundOn:                 Bool = false
-    var keepDraws:                Int = 50
-    var lotteries:    [ConfigLottery] = []
-    var saveFunctions: [(Void) -> ()] = []
+    var soundOn:                     Bool = false
+    var keepDraws:                    Int = 50
+    var lotteries:        [ConfigLottery] = []
+    var saveFunctions:     [(Void) -> ()] = []
     //
-    var firstTime:               Bool = false
-    let userDefaults:    UserDefaults = UserDefaults.standard
+    // the string representation of the JSON
+    //
+    var lotteryJSON:        String = ""
+    //
+    var firstTime:            Bool = false
+    let userDefaults: UserDefaults = UserDefaults.standard
     //
     // JSON string is extracted from the preferences and converted to dictionary from where we extract the setup of the draws
     //
@@ -69,25 +73,63 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
         } else {
             self.soundOn   = self.userDefaults.bool(forKey: "soundOn")
             self.keepDraws = self.userDefaults.integer(forKey: "keepDraws")
-            self.lotteries = []
             //
             // should include all configured lotteries 1-3 default, plus any user defined
             //
-            //self.lotteries.append(contentsOf: self.parseUserConfig(userPrefsJSON: self.userDefaults.string(forKey: "lotteries")!))
+            self.lotteries = []
+            self.lotteries.append(contentsOf: self.parseUserConfig(userPrefsJSON: self.userDefaults.string(forKey: "lotteries")!))
         }
         self.saveFunctions = [ self.savePreferences ]
         return
     }
     
     func savePreferences() -> (Void) {
-        self.userDefaults.set(true,           forKey: "firstTime")
-        self.userDefaults.set(self.soundOn,   forKey: "soundOn")
-        self.userDefaults.set(self.keepDraws, forKey: "keepDraws")
+        self.userDefaults.set(true,             forKey: "firstTime")
+        self.userDefaults.set(self.soundOn,     forKey: "soundOn")
+        self.userDefaults.set(self.keepDraws,   forKey: "keepDraws")
+        self.lotteryJSON = self.buildUserConfig()
+        self.userDefaults.set(self.lotteryJSON, forKey: "lotteries")
         return
     }
     
     //-------------------------------------------------------------------------------
-    // we store setup for the individual lottery draws in a JSON string within a pref
+    // build the JSON into which we'll store the configured lotteries
+    //-------------------------------------------------------------------------------
+    func buildUserConfig() -> String {
+        var lotteryData: [[String: AnyObject]] = [[:]]
+
+        func encodeLotteriesIntoObjectArray() {
+            for lottery: ConfigLottery in self.lotteries {
+                
+                
+                lotteryData.append([:])
+            }
+            return
+        }
+        
+        //
+        // first step we need to translate the configured lottery objects to an array of dictionary objs
+        //
+        encodeLotteriesIntoObjectArray()
+        //
+        // now we can encode the JSON from the dict objs
+        //
+        var JSONData: String = ""
+        if JSONSerialization.isValidJSONObject(lotteryData) {
+            do {
+                let rawData: Data = try JSONSerialization.data(withJSONObject: lotteryData)
+                //Convert NSString to String
+                JSONData = String(data: rawData as Data, encoding: String.Encoding.utf8)! as String
+            } catch {
+                // pass back a blank string if we have a problem (SHOULD NEVER HAPPEN!!)
+                // could display a error dialog??
+            }
+        }
+        return JSONData
+    }
+    
+    //-------------------------------------------------------------------------------
+    // extract details for lottery from the JSON fragment it's stored in
     //-------------------------------------------------------------------------------
     func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [ConfigLottery] {
         var lotteries: [ConfigLottery] = []
@@ -149,8 +191,8 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
         }
         
         do {
-            let fileData: Data  = userPrefsJSON.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-            loadedJSONData = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
+            let stringData: Data  = userPrefsJSON.data(using: String.Encoding.utf8, allowLossyConversion: false)!
+            loadedJSONData = try JSONSerialization.jsonObject(with: stringData, options: .allowFragments) as! Dictionary<String, AnyObject>
             self.loadedConfigs  = []
             return decodeLotteriesFromObjectArray(array: extractJSONValue(keyValue: jsonConfigDictionary.Lottery))
         } catch {
