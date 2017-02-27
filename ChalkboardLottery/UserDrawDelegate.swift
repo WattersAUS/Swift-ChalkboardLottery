@@ -42,72 +42,26 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
     }
     
     //-------------------------------------------------------------------------------
-    // for cell storage, generate the 'text' names for the JSON file
+    // extract from the JSON values, build into
     //-------------------------------------------------------------------------------
-    private func translateDrawFromDictionary(dictDraws: [String: Int]) -> UserDraw {
+    private func translateDrawFromDictionary(dictDraws: [String: AnyObject]) -> UserDraw {
         var draw: UserDraw = UserDraw()
         for (key, value) in dictDraws {
             switch key {
             case jsonHistoryDictionary.DrawDate.rawValue:
-                draw.drawDate = value
+                draw.drawDate = value as! String
                 break
             case jsonHistoryDictionary.Numbers.rawValue:
-                draw.numbers.append(contentsOf: value)
+                draw.numbers.append(value as! Int)
                 break
             case jsonHistoryDictionary.Specials.rawValue:
-                draw.specials.append(contentsOf: value)
+                draw.specials.append(value as! Int)
                 break
             default:
                 break
             }
         }
-        return cell
-    }
-    
-    //-------------------------------------------------------------------------------
-    // for Position storage, generate the 'text' names for the JSON file
-    //-------------------------------------------------------------------------------
-    private func translatePositionFromDictionary(dictCell: [String: Int]) -> Position {
-        var posn: Position = Position(row: -1, column: -1)
-        for (key, value) in dictCell {
-            switch key {
-            case posnDictionary.row.rawValue:
-                posn.posn.row    = value
-                break
-            case posnDictionary.column.rawValue:
-                posn.posn.column = value
-                break
-            default:
-                break
-            }
-        }
-        return posn
-    }
-    
-    //-------------------------------------------------------------------------------
-    // for Coordinate storage, generate the 'text' names for the JSON file
-    //-------------------------------------------------------------------------------
-    private func translateCoordinateFromDictionary(dictCell: [String: Int]) -> Coordinate {
-        var coord: Coordinate = Coordinate(row: -1, column: -1, cell: (row: -1, column: -1))
-        for (key, value) in dictCell {
-            switch key {
-            case cellDictionary.row.rawValue:
-                coord.row         = value
-                break
-            case cellDictionary.col.rawValue:
-                coord.column      = value
-                break
-            case cellDictionary.crow.rawValue:
-                coord.cell.row    = value
-                break
-            case cellDictionary.ccol.rawValue:
-                coord.cell.column = value
-                break
-            default:
-                break
-            }
-        }
-        return coord
+        return draw
     }
     
     //-------------------------------------------------------------------------------
@@ -178,7 +132,7 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         return
     }
     
-    func convertCellEntry(cell: BoardCell) -> [String: Int] {
+    func convertDrawEntry(cell: BoardCell) -> [String: Int] {
         var array: [String: Int] = [:]
         array[cellDictionary.row.rawValue]    = cell.row
         array[cellDictionary.col.rawValue]    = cell.col
@@ -187,22 +141,6 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         array[cellDictionary.value.rawValue]  = cell.value
         array[cellDictionary.image.rawValue]  = self.translateImageStateToInt(state: cell.image)
         array[cellDictionary.active.rawValue] = self.translateActiveStateToInt(state: cell.active)
-        return array
-    }
-    
-    func convertPositionEntry(posn: Position) -> [String: Int] {
-        var array: [String: Int] = [:]
-        array[posnDictionary.row.rawValue]    = posn.posn.row
-        array[posnDictionary.column.rawValue] = posn.posn.column
-        return array
-    }
-    
-    func convertCoordinateEntry(coord: Coordinate) -> [String: Int] {
-        var array: [String: Int] = [:]
-        array[cellDictionary.row.rawValue]  = coord.row
-        array[cellDictionary.col.rawValue]  = coord.column
-        array[cellDictionary.crow.rawValue] = coord.cell.row
-        array[cellDictionary.ccol.rawValue] = coord.cell.column
         return array
     }
     
@@ -326,7 +264,7 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     }
     
-    func loadGame() {
+    func loadDraws() {
         let filename: String = self.getFilename()
         do {
             let fileContents: String = try NSString(contentsOfFile: filename, usedEncoding: nil) as String
