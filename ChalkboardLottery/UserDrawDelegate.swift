@@ -29,10 +29,9 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
     internal var draws: [UserDraw] = []
     internal var saveFunctions: [(Void) -> ()]
     
-    init(applicationVersion: Int) {
+    override init() {
         super.init()
         self.draws = []
-        self.updateUserDrawObjects()
         return
     }
     
@@ -48,13 +47,13 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         var draw: UserDraw = UserDraw()
         for (key, value) in dictDraws {
             switch key {
-            case jsonHistoryDictionary.DrawDate.rawValue:
-                draw.drawDate = value as! String
+            case jsonUser.DrawDate.rawValue:
+                draw.date = value as! String
                 break
-            case jsonHistoryDictionary.Numbers.rawValue:
+            case jsonUser.Numbers.rawValue:
                 draw.numbers.append(value as! Int)
                 break
-            case jsonHistoryDictionary.Specials.rawValue:
+            case jsonUser.Specials.rawValue:
                 draw.specials.append(value as! Int)
                 break
             default:
@@ -64,203 +63,27 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         return draw
     }
     
-    private func translateLotteryFromDictionary(dictLottery: [String: AnyObject]) {
-        
-    }
-    
-    //-------------------------------------------------------------------------------
-    // now for user history scores / moves etc
-    //-------------------------------------------------------------------------------
-    private func translateUserHistoryFromDictionary(dictDiff: [String: Int]) -> GameHistory {
-        var history: GameHistory!
-        //
-        // when we find the difficulty we can init the obj and then start to build it!
-        //
-        for (key, value) in dictDiff {
-            if key == userGameHistory.difficulty.rawValue {
-                history = GameHistory(difficulty: self.translateDifficulty(difficulty: value))
-            }
-        }
-        //
-        // should never happen, but if is does!
-        //
-        if history == nil {
-            history = GameHistory()
-        }
-        //
-        // now we can populate the object
-        //
-        for (key, value) in dictDiff {
-            switch key {
-            case userGameHistory.difficulty.rawValue:
-                // already used this to create the obj so can be ignored
-                break
-            case userGameHistory.gamesStarted.rawValue:
-                history.setStartedGames(games: value)
-                break
-            case userGameHistory.gamesCompleted.rawValue:
-                history.setCompletedGames(games: value)
-                break
-            case userGameHistory.totalTimePlayed.rawValue:
-                history.setTotalGameTimePlayed(time: value)
-                break
-            case userGameHistory.totalMovesMade.rawValue:
-                history.setTotalPlayerMovesMade(moves: value)
-                break
-            case userGameHistory.totalMovesDeleted.rawValue:
-                history.setTotalPlayerMovesDeleted(moves: value)
-                break
-            case userGameHistory.highestScore.rawValue:
-                let _: Bool = history.setHighestScore(score: value)
-                break
-            case userGameHistory.lowestScore.rawValue:
-                let _: Bool = history.setLowestScore(score: value)
-                break
-            case userGameHistory.fastestTime.rawValue:
-                let _: Bool = history.setFastestTime(newTime: value)
-                break
-            case userGameHistory.slowestTime.rawValue:
-                let _: Bool = history.setSlowestTime(newTime: value)
-                break
-            default:
-                break
-            }
-        }
-        return history
+    // placeholder function
+    private func translateLotteryFromDictionary(dictLottery: [String: AnyObject]) -> [String: AnyObject] {
+        return [:]
     }
     
     //-------------------------------------------------------------------------------
     // move between the enum values for image and active states to the Int value
     //-------------------------------------------------------------------------------
-    func updateUserDrawObjects() {
-        return
-    }
-    
-    func convertDrawEntry(draw: UserDraw) -> [String: Int] {
-        var array: [String: AnyObject] = [:]
-        array[jsonHistoryDictionary..row.rawValue]    = cell.row
-        array[cellDictionary.col.rawValue]    = cell.col
-        array[cellDictionary.crow.rawValue]   = cell.crow
-        array[cellDictionary.ccol.rawValue]   = cell.ccol
-        array[cellDictionary.value.rawValue]  = cell.value
-        array[cellDictionary.image.rawValue]  = self.translateImageStateToInt(state: cell.image)
-        array[cellDictionary.active.rawValue] = self.translateActiveStateToInt(state: cell.active)
+    func convertDrawEntry(draw: UserDraw) -> [String: AnyObject] {
+        var array: [String: AnyObject]       = [:]
+        array[jsonUser.DrawDate.rawValue]    = draw.date as AnyObject?
+        array[jsonUser.Numbers.rawValue]     = draw.numbers as AnyObject?
+        array[jsonUser.Specials.rawValue]    = draw.specials as AnyObject?
         return array
     }
-    
-    //-------------------------------------------------------------------------------
-    // load/save to/from internal 'currentgame' state and save dictionary 'gameSave'
-    //-------------------------------------------------------------------------------
-    private func updateGameSaveValue(keyValue: String, value: Int) {
-        self.gameSave[keyValue] = value as? AnyObject
-        return
-    }
-    
-    private func updateGameSaveValue(keyValue: String, value: Bool) {
-        self.gameSave[keyValue] = value as? AnyObject
-        return
-    }
-    
-    private func updateGameSaveValue(keyValue: String, value: AnyObject) {
-        self.gameSave[keyValue] = value as? AnyObject
-        return
-    }
-    
-    private func updateGameSaveValue(keyValue: String, value: [[String: Int]]) {
-        self.gameSave[keyValue] = value as? AnyObject
-        return
-    }
-    
-    private func updateGameSaveValue(keyValue: String, value: [String: Int]) {
-        self.gameSave[keyValue] = value as? AnyObject
-        return
-    }
-    
-    func loadGameSaveObjects() {
-        self.currentGame.applicationVersion    = self.getGameStateValue(keyValue: saveGameDictionary.ApplicationVersion)
-        self.currentGame.gameInPlay            = self.getGameStateValue(keyValue: saveGameDictionary.GameInPlay)
-        self.currentGame.penaltyValue          = self.getGameStateValue(keyValue: saveGameDictionary.PenaltyValue)
-        self.currentGame.penaltyIncrementValue = self.getGameStateValue(keyValue: saveGameDictionary.PenaltyIncrementValue)
-        self.currentGame.currentGameTime       = self.getGameStateValue(keyValue: saveGameDictionary.CurrentGameTime)
-        self.currentGame.gameMovesMade         = self.getGameStateValue(keyValue: saveGameDictionary.GameMovesMade)
-        self.currentGame.gameMovesDeleted      = self.getGameStateValue(keyValue: saveGameDictionary.GameMovesDeleted)
-        self.currentGame.gameCells.removeAll()
-        for cell: [String: Int] in self.getGameStateValue(keyValue: saveGameDictionary.GameBoard) {
-            self.currentGame.gameCells.append(self.translateCellFromDictionary(dictCell: cell))
-        }
-        self.currentGame.originCells.removeAll()
-        for cell: [String: Int] in self.getGameStateValue(keyValue: saveGameDictionary.OriginBoard) {
-            self.currentGame.originCells.append(self.translateCellFromDictionary(dictCell: cell))
-        }
-        self.currentGame.solutionCells.removeAll()
-        for cell: [String: Int] in self.getGameStateValue(keyValue: saveGameDictionary.SolutionBoard) {
-            self.currentGame.solutionCells.append(self.translateCellFromDictionary(dictCell: cell))
-        }
-        self.currentGame.controlPanel.removeAll()
-        for cell: [String: Int] in self.getGameStateValue(keyValue: saveGameDictionary.ControlPanel) {
-            self.currentGame.controlPanel.append(self.translateCellFromDictionary(dictCell: cell))
-        }
-        self.currentGame.controlPosn = self.translatePositionFromDictionary(dictCell: self.getGameStateValue(keyValue: saveGameDictionary.ControlPosition))
-        self.currentGame.boardPosn   = self.translateCoordinateFromDictionary(dictCell: self.getGameStateValue(keyValue: saveGameDictionary.BoardPosition))
-        //
-        // for user history we already have objects in an array waiting, so they just need updating
-        //
-        for history: [String: Int] in self.getGameStateValue(keyValue: saveGameDictionary.UserHistory) {
-            self.updateUserHistoryObject(history: self.translateUserHistoryFromDictionary(dictDiff: history))
-        }
-        return
-    }
-    
-    private func updateUserHistoryObject(history: GameHistory) {
-        for i: GameHistory in self.currentGame.userHistory {
-            if i.getDifficulty() == history.getDifficulty() {
-                i.setStartedGames(games: history.getStartedGames())
-                i.setCompletedGames(games: history.getCompletedGames())
-                i.setTotalGameTimePlayed(time: history.getTotalTimePlayed())
-                i.setTotalPlayerMovesMade(moves: history.getTotalMovesMade())
-                i.setTotalPlayerMovesDeleted(moves: history.getTotalMovedDeleted())
-                let _: Bool = i.setHighestScore(score: history.getHighestScore())
-                let _: Bool = i.setLowestScore(score: history.getLowestScore())
-                let _: Bool = i.setFastestTime(newTime: history.getFastestGame())
-                let _: Bool = i.setSlowestTime(newTime: history.getSlowestGame())
-            }
-        }
-        return
-    }
-    
-    //-------------------------------------------------------------------------------
-    // pick out the dictionary 'keys/value' when we load the game
-    // if we don't yet have a value return a default (when we might add a new entry)
-    //-------------------------------------------------------------------------------
-    private func getGameStateValue(keyValue: saveGameDictionary) -> AnyObject {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? ([] as AnyObject) : self.gameSave[keyValue.rawValue]!
-    }
-    
-    private func getGameStateValue(keyValue: saveGameDictionary) -> Bool {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? false : self.gameSave[keyValue.rawValue] as! Bool
-    }
-    
-    private func getGameStateValue(keyValue: saveGameDictionary) -> Int {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? 0 : self.gameSave[keyValue.rawValue] as! Int
-    }
-    
-    private func getGameStateValue(keyValue: saveGameDictionary) -> String {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? "" : self.gameSave[keyValue.rawValue] as! String
-    }
-    
-    private func getGameStateValue(keyValue: saveGameDictionary) -> [String: Int] {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? ([:]) : self.gameSave[keyValue.rawValue] as! [String : Int]
-    }
-    
-    private func getGameStateValue(keyValue: saveGameDictionary) -> [[String: Int]] {
-        return (self.gameSave.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.gameSave[keyValue.rawValue] as! [[String : Int]]
-    }
-    
+
     //-------------------------------------------------------------------------------
     // load/save the dictionary object
     //-------------------------------------------------------------------------------
     private func getFilename() -> String {
-        let directory: String = getDocumentDirectory() + "/" + "chalkboardsudoku.json"
+        let directory: String = getDocumentDirectory() + "/" + "chalkboardlottery.json"
         return directory
     }
     

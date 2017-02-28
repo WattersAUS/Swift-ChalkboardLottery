@@ -51,6 +51,13 @@ struct UserDraw: Draw {
     var numbers:  [Int]
     var specials: [Int]
     
+    init() {
+        date     = ""
+        numbers  = []
+        specials = []
+        return
+    }
+    
     init(drawDate: String, numberArray: [Int], specialArray: [Int]) {
         date     = drawDate
         numbers  = []
@@ -159,6 +166,14 @@ struct OnlineDraw: Draw {
     var numbers:  [Int]
     var specials: [Int]
     
+    init() {
+        draw     = 0
+        date     = ""
+        numbers  = []
+        specials = []
+        return
+    }
+
     init(drawNumber: Int, drawDate: String, numberArray: [Int], specialArray: [Int]) {
         draw     = drawNumber
         date     = drawDate
@@ -192,6 +207,21 @@ struct OnlineLottery: Lottery {
         return
     }
 
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newStartDate: String) {
+        ident        = newIdent
+        description  = newDescription
+        numbers      = newNumbers
+        upperNumber  = newUpperNumber
+        specials     = newSpecials
+        upperSpecial = newUpperSpecial
+        lastModified = newStartDate
+        draws        = []
+        return
+    }
+    
+
+    
+    
     mutating func clearLotteryDraws() {
         draws = []
         return
