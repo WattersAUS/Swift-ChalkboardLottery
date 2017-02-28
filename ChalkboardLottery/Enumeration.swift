@@ -23,7 +23,8 @@ enum lotteryIdent: Int {
 // JSON supporting draws configured (both original r/o and user generated r/w)
 // This will be stored as a string within UserPreferences
 //
-enum jsonConfigDictionary: String {
+enum jsonConfig: String {
+    case Updated      = "last_update"
     case Lottery      = "lottery"
     case Ident        = "id"
     case Description  = "desc"
@@ -40,9 +41,21 @@ enum jsonConfigDictionary: String {
 }
 
 //
+// JSON containing historic draw information (maybe be too large to store in UserPreferences, so will be stored seperately)
+//
+enum jsonUser: String {
+    case Ident        = "id"
+    case Modified     = "modified"
+    case Draws        = "draws"
+    case DrawDate     = "date"
+    case Numbers      = "nos"
+    case Specials     = "spc"
+}
+
+//
 // JSON downloaded containing Lottery Draw Results
 //
-enum jsonOnlineDictionary: String {
+enum jsonOnline: String {
     case Version      = "version"
     case GenDate      = "generated"
     case Lottery      = "lottery"
@@ -56,18 +69,6 @@ enum jsonOnlineDictionary: String {
     case Draws        = "draws"
     case Draw         = "draw"
     case DrawDate     = "date"
-}
-
-//
-// JSON containing historic draw information (maybe be too large to store in UserPreferences, so will be stored seperately)
-//
-enum jsonHistoryDictionary: String {
-    case Ident        = "id"
-    case Draws        = "draws"
-    case Draw         = "draw"
-    case DrawDate     = "date"
-    case Numbers      = "nos"
-    case Specials     = "spc"
 }
 
 //

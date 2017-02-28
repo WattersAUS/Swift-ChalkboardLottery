@@ -21,6 +21,7 @@ struct Numbers {
             numbers.append(0)
         }
         upper = ((range < number) ? number : range)
+        return
     }
 }
 
@@ -28,7 +29,7 @@ struct Numbers {
 // extend from these base protocols
 //
 protocol Draw {
-    var drawDate: String { get set }
+    var date:     String { get set }
     var numbers:  [Int]  { get set }
     var specials: [Int]  { get set }
 }
@@ -43,17 +44,20 @@ protocol Lottery {
 }
 
 //
-// define default draw struct
+// define default draw structs
 //
 struct UserDraw: Draw {
-    var drawDate: String
+    var date:     String
     var numbers:  [Int]
     var specials: [Int]
     
-    init() {
-        drawDate = ""
+    init(drawDate: String, numberArray: [Int], specialArray: [Int]) {
+        date     = drawDate
         numbers  = []
+        numbers.append(contentsOf: numberArray)
         specials = []
+        specials.append(contentsOf: numberArray)
+        return
     }
 }
 
@@ -67,12 +71,14 @@ struct ConfigLottery: Lottery {
     var upperNumber:  Int
     var specials:     Int
     var upperSpecial: Int
+    
     var bonus:        Bool
     var days:         [Int]
     var limit:        Int
     var start:        String
     var readonly:     Bool
     var active:       Bool
+
     var draws:        [UserDraw]
     
     init() {
@@ -89,6 +95,7 @@ struct ConfigLottery: Lottery {
         readonly     = true
         active       = true
         draws        = []
+        return
     }
 
     init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String) {
@@ -106,6 +113,7 @@ struct ConfigLottery: Lottery {
         readonly     = false
         active       = true
         draws        = []
+        return
     }
 
     init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String, newReadOnly: Bool, newActive: Bool) {
@@ -123,6 +131,7 @@ struct ConfigLottery: Lottery {
         readonly     = newReadOnly
         active       = newActive
         draws        = []
+        return
     }
     
     mutating func clearLotteryDraws() {
@@ -145,17 +154,19 @@ struct ConfigLottery: Lottery {
 // structures to support the 'historic' online lottery/draw storage
 //
 struct OnlineDraw: Draw {
-    var drawDate: String
+    var draw:     Int
+    var date:     String
     var numbers:  [Int]
     var specials: [Int]
-
-    var draw:     Int
     
-    init() {
-        draw     = 0
-        drawDate = ""
+    init(drawNumber: Int, drawDate: String, numberArray: [Int], specialArray: [Int]) {
+        draw     = drawNumber
+        date     = drawDate
         numbers  = []
+        numbers.append(contentsOf: numberArray)
         specials = []
+        specials.append(contentsOf: numberArray)
+        return
     }
 }
 
@@ -178,6 +189,7 @@ struct OnlineLottery: Lottery {
         upperSpecial = 0
         lastModified = ""
         draws        = []
+        return
     }
 
     mutating func clearLotteryDraws() {
@@ -205,6 +217,7 @@ struct OnlineHistory {
         version   = ""
         generated = ""
         lotteries = []
+        return
     }
     
     mutating func clearLotterie() {

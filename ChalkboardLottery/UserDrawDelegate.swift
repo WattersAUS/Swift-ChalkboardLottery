@@ -64,6 +64,10 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         return draw
     }
     
+    private func translateLotteryFromDictionary(dictLottery: [String: AnyObject]) {
+        
+    }
+    
     //-------------------------------------------------------------------------------
     // now for user history scores / moves etc
     //-------------------------------------------------------------------------------
@@ -132,9 +136,9 @@ class UserDrawHandler: NSObject, UserDrawDelegate {
         return
     }
     
-    func convertDrawEntry(cell: BoardCell) -> [String: Int] {
-        var array: [String: Int] = [:]
-        array[cellDictionary.row.rawValue]    = cell.row
+    func convertDrawEntry(draw: UserDraw) -> [String: Int] {
+        var array: [String: AnyObject] = [:]
+        array[jsonHistoryDictionary..row.rawValue]    = cell.row
         array[cellDictionary.col.rawValue]    = cell.col
         array[cellDictionary.crow.rawValue]   = cell.crow
         array[cellDictionary.ccol.rawValue]   = cell.ccol
