@@ -1,0 +1,49 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf810
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw12240\paperh15840\margl1440\margr1440\vieww9000\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 // Checking we are connected to the InterWebs!\
+\
+NSURL *scriptUrl = [NSURL URLWithString:@"http://apps.wegenerlabs.com/hi.html"];\
+NSData *data = [NSData dataWithContentsOfURL:scriptUrl];\
+if (data)\
+NSLog(@"Device is connected to the internet");\
+    else\
+NSLog(@"Device is not connected to the internet");\
+\
+Simple page\
+\
+<HTML><HEAD><TITLE>r2d2</TITLE></HEAD><BODY>rocks</BODY></HTML>\
+\
+if let url = URL(string: "http://www.shiny-ideas.tech/hb/hb.html") \{\
+    do \{\
+        let contents = try String(contentsOf: url)\
+        print(contents)\
+    \} catch \{\
+        print("Cannot access URL")\
+    \}\
+\} else \{\
+    print("Bad URL supplied")\
+\}\
+\
+\
+// send a req to te global q\
+\
+let globalQueue = DispatchQueue.global(qos: .userInitiated)\
+DispatchQueue.main.async \{\
+// Do something\
+\}\
+\
+\
+//\
+\
+1. As majority of screen objects will be dynamic will control via a 'tap' control list, only excluded from this will be prefs/history and forward and back tab traversal\
+    a) capture the 'tap' on a parent UIView and scan through list to determine action\
+    b) store a callback function for appropriate objects to allow processing (ie user number select, or activate hidden tab etc and hide currently active)\
+\
+2. Save date from last json import into config, and use to determine if on reload the json is needed to be downloaded automatically again\
+    a) Allow user override via dialog?\
+}
