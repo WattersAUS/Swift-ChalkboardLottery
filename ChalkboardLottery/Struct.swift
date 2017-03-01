@@ -46,7 +46,7 @@ protocol Lottery {
 //
 // define default draw structs
 //
-struct UserDraw: Draw {
+struct LocalDraw: Draw {
     var date:     String
     var numbers:  [Int]
     var specials: [Int]
@@ -71,7 +71,7 @@ struct UserDraw: Draw {
 //
 // lottery config to support data stored in prefs
 //
-struct ConfigLottery: Lottery {
+struct LocalLottery: Lottery {
     var version:      String
     var ident:        Int
     var description:  String
@@ -79,13 +79,12 @@ struct ConfigLottery: Lottery {
     var upperNumber:  Int
     var specials:     Int
     var upperSpecial: Int
-    
     var bonus:        Bool
     var days:         [Int]
     var readonly:     Bool
     var active:       Bool
 
-    var draws:        [UserDraw]
+    var draws:        [LocalDraw]
     
     init() {
         version      = app.Version.rawValue
@@ -142,13 +141,39 @@ struct ConfigLottery: Lottery {
         return
     }
     
-    mutating func addLotteryDraw(draw: UserDraw) {
+    mutating func addLotteryDraw(draw: LocalDraw) {
         draws.append(draw)
         return
     }
 
-    mutating func addLotteryDraws(drawArray: [UserDraw]) {
+    mutating func addLotteryDraws(drawArray: [LocalDraw]) {
         draws.append(contentsOf: drawArray)
+        return
+    }
+}
+
+struct LocalHistory {
+    var version:   String
+    var lotteries: [LocalLottery]
+    
+    init() {
+        version   = ""
+        lotteries = []
+        return
+    }
+    
+    mutating func clearLotteries() {
+        lotteries = []
+        return
+    }
+    
+    mutating func addLotteryDraw(lottery: LocalLottery) {
+        lotteries.append(lottery)
+        return
+    }
+    
+    mutating func addLotteryDraws(lotteryArray: [LocalLottery]) {
+        lotteries.append(contentsOf: lotteryArray)
         return
     }
 }
@@ -214,10 +239,7 @@ struct OnlineLottery: Lottery {
         draws        = []
         return
     }
-    
 
-    
-    
     mutating func clearLotteryDraws() {
         draws = []
         return

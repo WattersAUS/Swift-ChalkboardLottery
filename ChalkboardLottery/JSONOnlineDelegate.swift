@@ -12,78 +12,94 @@
 import Foundation
 
 protocol JSONOnlineDelegate: class {
-    var loadedDraws: OnlineHistory! { get set }
+    var history: OnlineHistory! { get set }
 }
 
 class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
     
-    private var loadedJSONData: [String: AnyObject]!
-    internal var   loadedDraws: OnlineHistory!
+    private var JSONData: [String: AnyObject]!
+    internal var history: OnlineHistory!
     
     override init() {
         super.init()
-        self.loadedJSONData = [:]
-        self.loadedDraws    = OnlineHistory()
+        self.JSONData = [:]
+        self.history  = OnlineHistory()
         return
     }
     
-    func loadLotteryHistoryFromJSON() {
-        
-        func decodeDrawsFromObjectArray(array: [[String: AnyObject]]) -> [OnlineDraw] {
-            var draws: [OnlineDraw] = []
-            for draw: [String: AnyObject] in array {
-                var instance: OnlineDraw = OnlineDraw()
-                for (key,value) in draw {
-                    switch key {
-                    case jsonOnlineDictionary.Draw.rawValue:
-                        instance.draw = value as! Int
-                        break
-                    case jsonOnlineDictionary.DrawDate.rawValue:
-                        instance.drawDate = value as! String
-                        break
-                    case jsonOnlineDictionary.Numbers.rawValue:
-                        instance.numbers.append(contentsOf: value as! [Int])
-                        break
-                    case jsonOnlineDictionary.Specials.rawValue:
-                        instance.specials.append(contentsOf: value as! [Int])
-                        break
-                    default:
-                        break
-                    }
-                }
-                draws.append(instance)
-            }
-            return draws
-        }
+    //-------------------------------------------------------------------------------
+    // pick out the dictionary 'keys/value' when we load the results
+    // if we don't yet have a value return a default
+    //-------------------------------------------------------------------------------
+    private func extractJSONValue(keyValue: jsonOnline) -> String {
+        return (self.JSONData.index(forKey: keyValue.rawValue) == nil) ? "" : self.JSONData[keyValue.rawValue] as! String
+    }
+    
+    private func extractJSONValue(keyValue: jsonOnline) -> [[String: AnyObject]] {
+        return (self.JSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.JSONData[keyValue.rawValue] as! [[String : AnyObject]]
+    }
+    
+    //-------------------------------------------------------------------------------
+    // parse through the downloaded JSON (in self.loadedJSONData) and extract details
+    //-------------------------------------------------------------------------------
+    private func loadOnlineHistoryFromJSON() {
         
         func decodeLotteriesFromObjectArray(array: [[String: AnyObject]]) -> [OnlineLottery] {
+
+            func decodeDrawsFromObjectArray(array: [[String: AnyObject]]) -> [OnlineDraw] {
+                var draws: [OnlineDraw] = []
+                for draw: [String: AnyObject] in array {
+                    var instance: OnlineDraw = OnlineDraw()
+                    for (key,value) in draw {
+                        switch key {
+                        case jsonOnline.Draw.rawValue:
+                            instance.draw = value as! Int
+                            break
+                        case jsonOnline.DrawDate.rawValue:
+                            instance.date = value as! String
+                            break
+                        case jsonOnline.Numbers.rawValue:
+                            instance.numbers.append(contentsOf: value as! [Int])
+                            break
+                        case jsonOnline.Specials.rawValue:
+                            instance.specials.append(contentsOf: value as! [Int])
+                            break
+                        default:
+                            break
+                        }
+                    }
+                    draws.append(instance)
+                }
+                return draws
+            }
+            
             var lotteries: [OnlineLottery] = []
             for lottery: [String: AnyObject] in array {
                 var instance: OnlineLottery = OnlineLottery()
                 for (key,value) in lottery {
                     switch key {
-                    case jsonOnlineDictionary.Ident.rawValue:
+                    case jsonOnline.Ident.rawValue:
                         instance.ident = value as! Int
                         break
-                    case jsonOnlineDictionary.Description.rawValue:
+                    case jsonOnline.Description.rawValue:
                         instance.description = value as! String
                         break
-                    case jsonOnlineDictionary.Numbers.rawValue:
+                    case jsonOnline.Numbers.rawValue:
                         instance.numbers = value as! Int
                         break
-                    case jsonOnlineDictionary.UpperNumber.rawValue:
+                    case jsonOnline.UpperNumber.rawValue:
                         instance.upperNumber = value as! Int
                         break
-                    case jsonOnlineDictionary.Specials.rawValue:
+                    case jsonOnline.Specials.rawValue:
                         instance.specials = value as! Int
                         break
-                    case jsonOnlineDictionary.UpperSpecial.rawValue:
+                    case jsonOnline.UpperSpecial.rawValue:
                         instance.upperSpecial = value as! Int
                         break
-                    case jsonOnlineDictionary.LastModified.rawValue:
+                    case jsonOnline.LastModified.rawValue:
                         instance.lastModified = value as! String
                         break
-                    case jsonOnlineDictionary.Draws.rawValue:
+                    case jsonOnline.Draws.rawValue:
                         instance.draws = decodeDrawsFromObjectArray(array: value as! [[String: AnyObject]])
                         break
                     default:
@@ -96,9 +112,9 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
             return lotteries
         }
         
-        loadedDraws.generated = self.extractJSONValue(keyValue: jsonOnlineDictionary.GenDate)
-        loadedDraws.version   = self.extractJSONValue(keyValue: jsonOnlineDictionary.Version)
-        loadedDraws.lotteries.append(contentsOf: decodeLotteriesFromObjectArray(array: self.extractJSONValue(keyValue: jsonOnlineDictionary.Lottery)))
+        self.history.generated = self.extractJSONValue(keyValue: jsonOnline.GenDate)
+        self.history.version   = self.extractJSONValue(keyValue: jsonOnline.Version)
+        self.history.lotteries.append(contentsOf: decodeLotteriesFromObjectArray(array: self.extractJSONValue(keyValue: jsonOnline.Lottery)))
         return
     }
     
@@ -106,24 +122,11 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
         do {
             let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/lotteryresults.json")!)
             let fileData: Data = jsonFile.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-            self.loadedJSONData = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
-            self.loadLotteryHistoryFromJSON()
+            self.JSONData = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
+            self.loadOnlineHistoryFromJSON()
         } catch {
             return false
         }
         return true
     }
-    
-    //-------------------------------------------------------------------------------
-    // pick out the dictionary 'keys/value' when we load the results
-    // if we don't yet have a value return a default
-    //-------------------------------------------------------------------------------
-    private func extractJSONValue(keyValue: jsonOnlineDictionary) -> String {
-        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? "" : self.loadedJSONData[keyValue.rawValue] as! String
-    }
-    
-    private func extractJSONValue(keyValue: jsonOnlineDictionary) -> [[String: AnyObject]] {
-        return (self.loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.loadedJSONData[keyValue.rawValue] as! [[String : AnyObject]]
-    }
-    
 }
