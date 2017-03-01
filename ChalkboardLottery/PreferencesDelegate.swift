@@ -67,9 +67,9 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             //
             // for first time load, we need to mock up set for initial draws. Euro = 1, Lotto = 2, ThunderBall = 3
             //
-            self.lotteries.append(ConfigLottery(newIdent: 1, newDescription: "Euro Millions", newNumbers: 5, newUpperNumber: 50, newSpecials: 2, newUpperSpecial: 12, newBonus: false, newDays: [2, 5], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
-            self.lotteries.append(ConfigLottery(newIdent: 2, newDescription: "Lotto", newNumbers: 6, newUpperNumber: 59, newSpecials: 1, newUpperSpecial: 59, newBonus: true, newDays: [3, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
-            self.lotteries.append(ConfigLottery(newIdent: 3, newDescription: "Thunderball", newNumbers: 5, newUpperNumber: 39, newSpecials: 1, newUpperSpecial: 14, newBonus: false, newDays: [3, 5, 6], newLimit: 50, newStart: "TODAYS-DATE", newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 1, newDescription: "Euro Millions", newNumbers: 5, newUpperNumber: 50, newSpecials: 2, newUpperSpecial: 12, newBonus: false, newDays: [2, 5], newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 2, newDescription: "Lotto", newNumbers: 6, newUpperNumber: 59, newSpecials: 1, newUpperSpecial: 59, newBonus: true, newDays: [3, 6], newReadOnly: true, newActive: true))
+            self.lotteries.append(ConfigLottery(newIdent: 3, newDescription: "Thunderball", newNumbers: 5, newUpperNumber: 39, newSpecials: 1, newUpperSpecial: 14, newBonus: false, newDays: [3, 5, 6], newReadOnly: true, newActive: true))
         } else {
             self.soundOn   = self.userDefaults.bool(forKey: "soundOn")
             self.keepDraws = self.userDefaults.integer(forKey: "keepDraws")
@@ -77,7 +77,7 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             // should include all configured lotteries 1-3 default, plus any user defined
             //
             self.lotteries = []
-            self.lotteries.append(contentsOf: self.parseUserConfig(userPrefsJSON: self.userDefaults.string(forKey: "lotteries")!))
+            self.lotteries.append(contentsOf: self.loadUserDrawInformation())
         }
         self.saveFunctions = [ self.savePreferences ]
         return
@@ -137,40 +137,34 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             var instance: ConfigLottery = ConfigLottery()
             for (key,value) in lottery {
                 switch key {
-                case jsonConfigDictionary.Ident.rawValue:
+                case jsonConfig.Version.rawValue:
+                    instance.version = value as! String
+                    break
+                case jsonConfig.Ident.rawValue:
                     instance.ident = value as! Int
                     break
-                case jsonConfigDictionary.Description.rawValue:
+                case jsonConfig.Description.rawValue:
                     instance.description = value as! String
                     break
-                case jsonConfigDictionary.Numbers.rawValue:
+                case jsonConfig.Numbers.rawValue:
                     instance.numbers = value as! Int
                     break
-                case jsonConfigDictionary.UpperNumber.rawValue:
+                case jsonConfig.UpperNumber.rawValue:
                     instance.upperNumber = value as! Int
                     break
-                case jsonConfigDictionary.Specials.rawValue:
+                case jsonConfig.Specials.rawValue:
                     instance.specials = value as! Int
                     break
-                case jsonConfigDictionary.UpperSpecial.rawValue:
+                case jsonConfig.UpperSpecial.rawValue:
                     instance.upperSpecial = value as! Int
                     break
-                case jsonConfigDictionary.Bonus.rawValue:
+                case jsonConfig.Bonus.rawValue:
                     instance.bonus = value as! Bool
                     break
-                case jsonConfigDictionary.Days.rawValue:
+                case jsonConfig.Days.rawValue:
                     instance.days.append(contentsOf: value as! [Int])
                     break
-                case jsonConfigDictionary.Limit.rawValue:
-                    instance.limit = value as! Int
-                    break
-                case jsonConfigDictionary.Start.rawValue:
-                    instance.start = value as! String
-                    break
-                case jsonConfigDictionary.Readonly.rawValue:
-                    instance.readonly = value as! Bool
-                    break
-                case jsonConfigDictionary.Active.rawValue:
+                case jsonConfig.Active.rawValue:
                     instance.active = value as! Bool
                     break
                 default:
@@ -183,10 +177,10 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
         return lotteries
     }
     
-    func parseUserConfig(userPrefsJSON: String) -> [ConfigLottery] {
+    func loadUserDrawInformation() -> [ConfigLottery] {
         var loadedJSONData: [String: AnyObject]!
 
-        func extractJSONValue(keyValue: jsonConfigDictionary) -> [[String: AnyObject]] {
+        func extractJSONValue(keyValue: jsonConfig) -> [[String: AnyObject]] {
             return (loadedJSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : loadedJSONData[keyValue.rawValue] as! [[String : AnyObject]]
         }
         
@@ -194,7 +188,7 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
             let stringData: Data  = userPrefsJSON.data(using: String.Encoding.utf8, allowLossyConversion: false)!
             loadedJSONData = try JSONSerialization.jsonObject(with: stringData, options: .allowFragments) as! Dictionary<String, AnyObject>
             self.loadedConfigs  = []
-            return decodeLotteriesFromObjectArray(array: extractJSONValue(keyValue: jsonConfigDictionary.Lottery))
+            return decodeLotteriesFromObjectArray(array: extractJSONValue(keyValue: jsonConfig.Lottery))
         } catch {
             return []
         }

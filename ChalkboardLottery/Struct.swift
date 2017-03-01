@@ -72,6 +72,7 @@ struct UserDraw: Draw {
 // lottery config to support data stored in prefs
 //
 struct ConfigLottery: Lottery {
+    var version:      String
     var ident:        Int
     var description:  String
     var numbers:      Int
@@ -81,14 +82,13 @@ struct ConfigLottery: Lottery {
     
     var bonus:        Bool
     var days:         [Int]
-    var limit:        Int
-    var start:        String
     var readonly:     Bool
     var active:       Bool
 
     var draws:        [UserDraw]
     
     init() {
+        version      = app.Version.rawValue
         ident        = 0
         description  = ""
         numbers      = 0
@@ -97,15 +97,14 @@ struct ConfigLottery: Lottery {
         upperSpecial = 0
         bonus        = false
         days         = []
-        limit        = 0
-        start        = ""
         readonly     = true
         active       = true
         draws        = []
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String) {
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int]) {
+        version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -115,15 +114,14 @@ struct ConfigLottery: Lottery {
         bonus        = newBonus
         days         = []
         days.append(contentsOf: newDays)
-        limit        = newLimit
-        start        = newStart
         readonly     = false
         active       = true
         draws        = []
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newLimit: Int, newStart: String, newReadOnly: Bool, newActive: Bool) {
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
+        version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -133,8 +131,6 @@ struct ConfigLottery: Lottery {
         bonus        = newBonus
         days         = []
         days.append(contentsOf: newDays)
-        limit        = newLimit
-        start        = newStart
         readonly     = newReadOnly
         active       = newActive
         draws        = []

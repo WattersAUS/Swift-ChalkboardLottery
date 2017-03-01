@@ -1,56 +1,80 @@
 {
-    "last_update": "2017-02-23 07:58:46",
+    "version": "v1.00",
     "lottery": [{
-        "id": 1,
-        "desc": "Euro Millions",
-        "nos": 5,
-        "upper_nos": 50,
-        "spc": 2,
-        "upper_spc": 12,
-        "bonus": 0,
-        "days": [2,5],
-        "limit": 50,
-        "start": "2017-02-07",
-        "readonly": 1,
-        "active": 1
-    },{
-        "id": 2,
-        "desc": "Lotto",
-        "nos": 6,
-        "upper_nos": 59,
-        "spc": 1,
-        "upper_spc": 59,
-        "bonus": 1,
-        "days": [3,6],
-        "limit": 50,
-        "start": "2017-02-01",
-        "readonly": 1,
-        "active": 1
-    },{
-        "id": 3,
-        "desc": "Thunderball",
-        "nos": 5,
-        "upper_nos": 39,
-        "spc": 1,
-        "upper_spc": 14,
-        "bonus": 0,
-        "days": [3,5,6],
-        "limit": 50,
-        "start": "2017-02-01",
-        "readonly": 1,
-        "active": 1
-    },{
-        "id": 4,
-        "desc": "Test 1",
-        "nos": 4,
-        "upper_nos": 39,
-        "spc": 3,
-        "upper_spc": 14,
-        "bonus": 0,
-        "days": [3,5,6],
-        "limit": 50,
-        "start": "2017-02-01",
-        "readonly": 0,
-        "active": 1
-    }]
+                "id": 1,
+                "desc": "Euro Millions",
+                "nos": 5,
+                "upper_nos": 50,
+                "spc": 2,
+                "upper_spc": 12,
+                "modified": "2017-03-01 06:01:00",
+                "bonus": 0,
+                "days": [0,0,1,0,0,1,0],
+                "active": 1,
+                "draws": [{
+                          "draw": 985,
+                          "date": "2017-02-28",
+                          "nos": [10, 20, 31, 35, 42],
+                          "spc": [2, 12]
+                          }, {
+                          "draw": 984,
+                          "date": "2017-02-24",
+                          "nos": [2, 4, 13, 22, 43],
+                          "spc": [8, 9]
+                          }]
+                }, {
+                "id": 2,
+                "desc": "Lotto",
+                "nos": 6,
+                "upper_nos": 59,
+                "spc": 1,
+                "upper_spc": 59,
+                "modified": "2017-02-26 06:00:37",
+                "bonus": 1,
+                "days": [0,0,0,1,0,0,1],
+                "active": 1,
+                "draws": [{
+                          "draw": 2210,
+                          "date": "2017-02-25",
+                          "nos": [18, 24, 34, 38, 41, 49],
+                          "spc": [26]
+                          }, {
+                          "draw": 2209,
+                          "date": "2017-02-22",
+                          "nos": [1, 16, 28, 31, 38, 54],
+                          "spc": [5]
+                          }]
+                }, {
+                "id": 3,
+                "desc": "Thunderball",
+                "nos": 5,
+                "upper_nos": 39,
+                "spc": 1,
+                "upper_spc": 14,
+                "modified": "2017-02-26 06:00:37",
+                "bonus": 0,
+                "days": [0,0,0,1,0,1,1],
+                "active": 1,
+                "draws": [{
+                          "draw": 2029,
+                          "date": "2017-02-25",
+                          "nos": [1, 14, 22, 23, 32],
+                          "spc": [5]
+                          }, {
+                          "draw": 2028,
+                          "date": "2017-02-24",
+                          "nos": [10, 13, 28, 32, 39],
+                          "spc": [3]
+                          }, {
+                          "draw": 2027,
+                          "date": "2017-02-22",
+                          "nos": [8, 29, 30, 33, 39],
+                          "spc": [13]
+                          }, {
+                          "draw": 2026,
+                          "date": "2017-02-18",
+                          "nos": [8, 18, 26, 36, 37],
+                          "spc": [6]
+                          }]
+                }]
 }

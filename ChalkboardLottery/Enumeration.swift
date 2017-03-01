@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum app: String {
+    case Version = "v1.00"
+    
+}
+
 //
 // Draws configured by default in the system, user configured draws will be id => 4
 //
@@ -24,7 +29,7 @@ enum lotteryIdent: Int {
 // This will be stored as a string within UserPreferences
 //
 enum jsonConfig: String {
-    case Updated      = "last_update"
+    case Version      = "version"
     case Lottery      = "lottery"
     case Ident        = "id"
     case Description  = "desc"
@@ -32,24 +37,12 @@ enum jsonConfig: String {
     case UpperNumber  = "upper_nos"
     case Specials     = "spc"
     case UpperSpecial = "upper_spc"
+    case Modified     = "modified"
     case Bonus        = "bonus"
     case Days         = "days"
-    case Limit        = "limit"
-    case Start        = "start"
-    case Readonly     = "readonly"
     case Active       = "active"
-}
-
-//
-// JSON containing historic draw information (maybe be too large to store in UserPreferences, so will be stored seperately)
-//
-enum jsonUser: String {
-    case Ident        = "id"
-    case Modified     = "modified"
     case Draws        = "draws"
     case DrawDate     = "date"
-    case Numbers      = "nos"
-    case Specials     = "spc"
 }
 
 //
