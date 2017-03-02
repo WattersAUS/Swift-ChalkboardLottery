@@ -80,7 +80,7 @@ class ViewController: UIViewController {
             }
             
             while self.jsonOnlineData.online == false {
-                let message: String = "We'd like to download some lottery defaults, but I can't see the data right now! Make sure we can see a network!"
+                let message: String = "We'd like to download some lottery defaults, but I can't see the Interwebs right now! Make sure we can see a network, or are on WiFi!"
                 let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
                 let goAction = UIAlertAction(title: "Try Again!", style: .default) { (action:UIAlertAction!) in
                     self.jsonOnlineData.loadOnlineResults()
@@ -111,6 +111,7 @@ class ViewController: UIViewController {
     // default lottery setup
     //----------------------------------------------------------------------------
     func setupLotteryDefaults() {
+        self.jsonLocalData.history.lotteries = []
         for i: OnlineLottery in self.jsonOnlineData.history.lotteries {
             var local: LocalLottery = LocalLottery()
             local.ident        = i.ident
@@ -120,9 +121,61 @@ class ViewController: UIViewController {
             local.specials     = i.specials
             local.upperSpecial = i.upperSpecial
             local.active       = true
-            
+            self.jsonLocalData.history.lotteries.append(local)
         }
         return
+    }
+    
+    func checkLotteryDefaults() -> Bool {
+        
+        func isLotteryEqual(online: Int, local: Int) -> Bool {
+            if self.jsonOnlineData.history.lotteries[online].numbers == self.jsonLocalData.history.lotteries[local].numbers &&
+                self.jsonOnlineData.history.lotteries[online].upperNumber == self.jsonLocalData.history.lotteries[local].upperNumber &&
+                self.jsonOnlineData.history.lotteries[online].specials == self.jsonLocalData.history.lotteries[local].specials &&
+                self.jsonOnlineData.history.lotteries[online].upperSpecial == self.jsonLocalData.history.lotteries[local].upperSpecial {
+                    return true
+            }
+            return false
+        }
+        
+        func findMatchingLocalLottery(online: Int) -> Int {
+            for i: Int in 0 ..< self.jsonLocalData.history.lotteries.count {
+                if self.jsonOnlineData.history.lotteries[online].ident == self.jsonLocalData.history.lotteries[i].ident {
+                    return i
+                }
+            }
+            return -1
+        }
+
+        func updateLocalLotteryDefaults(online: Int, local: Int) {
+            return
+        }
+        
+        func addLocalLotteryDefaults(online: Int) {
+            return
+        }
+        
+
+        for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
+            
+            
+            let j: Int = findMatchingLocalLottery(online: i)
+            if j > -1 {
+                if isLotteryEqual(online: i, local: j) == false {
+                    updateLocalLotteryDefaults(online: i, local: j)
+                }
+            } else {
+                addLocalLotteryDefaults(online: i)
+            }
+            
+            
+            
+        }
+
+        
+        
+        
+        return true
     }
     
     //----------------------------------------------------------------------------
