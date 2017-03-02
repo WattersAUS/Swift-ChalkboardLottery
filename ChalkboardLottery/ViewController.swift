@@ -14,8 +14,8 @@ class ViewController: UIViewController {
     //
     // onlne lottery history retrieval
     //
-    var jsonOnline:        JSONOnlineDelegateHandler!
-    var useOnlineResults:  Bool = false
+    var jsonOnlineData:    JSONOnlineDelegateHandler!
+    var jsonLocalData:     JSONLocalDelegateHandler!
     
     //
     // sounds
@@ -38,21 +38,20 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.userPrefs  = PreferencesHandler()
         //
-        // load the user selected draws etc
+        // load the local user data / lotteries and draws
         //
-        
+        self.jsonLocalData = JSONLocalDelegateHandler()
         //
-        // get the online JSON file with Lottery Results (if we can)
-        // and store whether we were able to or not
+        // setup online JSON object we'll try access later
         //
-        self.jsonOnline       = JSONOnlineDelegateHandler()
-        self.useOnlineResults = self.jsonOnline.loadOnlineResults()
+        self.jsonOnlineData = JSONOnlineDelegateHandler()
+        self.jsonOnlineData.loadOnlineResults()
         //
         // load sounds
         //
-        self.drawSound        = self.loadSound(soundName: "DrawNumbers_001")
+        self.drawSound = self.loadSound(soundName: "DrawNumbers_001")
         //
-        // register routines for app transiting to b/g (used in saving game state etc)
+        // register routines for app transiting to b/g (used in saving state etc)
         //
         self.setupApplicationNotifications()
     }
@@ -60,6 +59,70 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    //----------------------------------------------------------------------------
+    // 1. On the first run, need to sync up lottery defaults
+    // 2. If we didn't connect keep reminding the user until we do
+    //----------------------------------------------------------------------------
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.userPrefs.firstTime || self.jsonLocalData.history.lotteries.count == 0 {
+            if self.jsonOnlineData.online {
+                let message: String = "Wow! We need to sychronise some lottery draw details!"
+                let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
+                let goAction = UIAlertAction(title: "Go!", style: .default) { (action:UIAlertAction!) in
+                    self.setupLotteryDefaults()
+                }
+                alertController.addAction(goAction)
+                self.present(alertController, animated: true, completion:nil)
+                return
+            }
+            
+            while self.jsonOnlineData.online == false {
+                let message: String = "We'd like to download some lottery defaults, but I can't see the data right now! Make sure we can see a network!"
+                let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
+                let goAction = UIAlertAction(title: "Try Again!", style: .default) { (action:UIAlertAction!) in
+                    self.jsonOnlineData.loadOnlineResults()
+                    if self.jsonOnlineData.online {
+                        self.setupLotteryDefaults()
+                    }
+                }
+                alertController.addAction(goAction)
+                self.present(alertController, animated: true, completion:nil)
+            }
+            return
+        }
+
+        if self.jsonOnlineData.online == false {
+            let message: String = "Warning! We haven't access to the online results, so we can't check the draw numbers!"
+            let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
+            let goAction = UIAlertAction(title: "Oh!", style: .default) { (action:UIAlertAction!) in
+                //
+            }
+            alertController.addAction(goAction)
+            self.present(alertController, animated: true, completion:nil)
+            return
+        }
+        
+    }
+
+    //----------------------------------------------------------------------------
+    // default lottery setup
+    //----------------------------------------------------------------------------
+    func setupLotteryDefaults() {
+        for i: OnlineLottery in self.jsonOnlineData.history.lotteries {
+            var local: LocalLottery = LocalLottery()
+            local.ident        = i.ident
+            local.description  = i.description
+            local.numbers      = i.numbers
+            local.upperNumber  = i.upperNumber
+            local.specials     = i.specials
+            local.upperSpecial = i.upperSpecial
+            local.active       = true
+            
+        }
+        return
     }
     
     //----------------------------------------------------------------------------

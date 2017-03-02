@@ -55,7 +55,7 @@ class PreferencesHandler: NSObject, PreferencesDelegate {
 
     override init() {
         super.init()
-        self.firstTime   = self.userDefaults.bool(forKey: "firstTime")
+        self.firstTime = self.userDefaults.bool(forKey: "firstTime")
         if self.firstTime == true {
             self.soundOn   = true
             self.keepDraws = 50

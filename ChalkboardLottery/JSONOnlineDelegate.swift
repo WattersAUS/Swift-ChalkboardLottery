@@ -19,11 +19,13 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
     
     private var JSONData: [String: AnyObject]!
     internal var history: OnlineHistory!
+    internal var online:  Bool = false
     
     override init() {
         super.init()
         self.JSONData = [:]
         self.history  = OnlineHistory()
+        self.online   = false
         return
     }
     
@@ -118,15 +120,16 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
         return
     }
     
-    func loadOnlineResults() -> Bool {
+    func loadOnlineResults() {
         do {
-            let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/lotteryresults.json")!)
+            let jsonFile = try String(contentsOf: URL(string: "https://www.shiny-ideas.tech/lottery/getLotteryResults.php?key=GJWKEY001")!)
             let fileData: Data = jsonFile.data(using: String.Encoding.utf8, allowLossyConversion: false)!
             self.JSONData = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
             self.loadOnlineHistoryFromJSON()
+            self.online = true
         } catch {
-            return false
+            self.online = false
         }
-        return true
+        return
     }
 }
