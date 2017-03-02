@@ -79,6 +79,7 @@ struct LocalLottery: Lottery {
     var upperNumber:  Int
     var specials:     Int
     var upperSpecial: Int
+    var lastModified: String
     var bonus:        Bool
     var days:         [Int]
     var readonly:     Bool
@@ -94,6 +95,7 @@ struct LocalLottery: Lottery {
         upperNumber  = 0
         specials     = 0
         upperSpecial = 0
+        lastModified = ""
         bonus        = false
         days         = []
         readonly     = true
@@ -102,7 +104,7 @@ struct LocalLottery: Lottery {
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int]) {
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int]) {
         version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
@@ -110,6 +112,7 @@ struct LocalLottery: Lottery {
         upperNumber  = newUpperNumber
         specials     = newSpecials
         upperSpecial = newUpperSpecial
+        lastModified = newModified
         bonus        = newBonus
         days         = []
         days.append(contentsOf: newDays)
@@ -119,7 +122,7 @@ struct LocalLottery: Lottery {
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
         version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
@@ -127,6 +130,7 @@ struct LocalLottery: Lottery {
         upperNumber  = newUpperNumber
         specials     = newSpecials
         upperSpecial = newUpperSpecial
+        lastModified = newModified
         bonus        = newBonus
         days         = []
         days.append(contentsOf: newDays)

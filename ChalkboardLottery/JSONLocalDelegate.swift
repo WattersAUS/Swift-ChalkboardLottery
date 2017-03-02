@@ -101,6 +101,19 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
                     case jsonLocal.UpperSpecial.rawValue:
                         instance.upperSpecial = value as! Int
                         break
+                    case jsonLocal.Modified.rawValue:
+                        instance.lastModified = value as! String
+                        break
+                    case jsonLocal.Bonus.rawValue:
+                        instance.bonus = value as! Bool
+                        break
+                    case jsonLocal.Days.rawValue:
+                        instance.days = []
+                        instance.days.append(contentsOf: value as! [Int])
+                        break
+                    case jsonLocal.Active.rawValue:
+                        instance.active = value as! Bool
+                        break
                     case jsonLocal.Draws.rawValue:
                         instance.draws = decodeDrawsFromObjectArray(array: value as! [[String: AnyObject]])
                         break
@@ -136,8 +149,41 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
     // build the JSON format file for our results and save it!
     //-------------------------------------------------------------------------------
     private func buildLocalHistoryDictionary() {
+
+        func buildLotteryArray() -> [[String: AnyObject]] {
+            
+            func buildDrawsArray(lotteryDraws: [LocalDraw]) -> [[String: AnyObject]] {
+                var draws: [[String: AnyObject]] = [[:]]
+                for i: LocalDraw in lotteryDraws {
+                    var draw: [String: AnyObject] = [:]
+                    draw[jsonLocal.DrawDate.rawValue] = i.date as AnyObject?
+                    draw[jsonLocal.Numbers.rawValue]  = i.numbers as AnyObject?
+                    draw[jsonLocal.Specials.rawValue] = i.specials as AnyObject?
+                    draws.append(draw)
+                }
+                return draws
+            }
+            
+            var lotteries: [[String: AnyObject]] = [[:]]
+            for i: LocalLottery in self.history.lotteries {
+                var lottery: [String: AnyObject] = [:]
+                lottery[jsonLocal.Ident.rawValue]       = i.ident as AnyObject?
+                lottery[jsonLocal.Description.rawValue] = i.description as AnyObject?
+                lottery[jsonLocal.Numbers.rawValue]     = i.numbers as AnyObject?
+                lottery[jsonLocal.UpperNumber.rawValue] = i.upperNumber as AnyObject?
+                lottery[jsonLocal.Modified.rawValue]    = i.lastModified as AnyObject?
+                lottery[jsonLocal.Bonus.rawValue]       = i.bonus as AnyObject?
+                lottery[jsonLocal.Days.rawValue]        = i.days as AnyObject?
+                lottery[jsonLocal.Active.rawValue]      = i.active as AnyObject?
+                lottery[jsonLocal.Draws.rawValue]       = buildDrawsArray(lotteryDraws: i.draws) as AnyObject?
+                lotteries.append(lottery)
+            }
+            return lotteries
+        }
+        
         self.JSONData = [:]
         self.JSONData[jsonLocal.Version.rawValue] = self.history.version as AnyObject?
+        self.JSONData[jsonLocal.Lottery.rawValue] = buildLotteryArray() as AnyObject?
         return
     }
     
