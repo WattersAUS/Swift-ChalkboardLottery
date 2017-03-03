@@ -41,6 +41,7 @@ protocol Lottery {
     var upperNumber:  Int     { get set }
     var specials:     Int     { get set }
     var upperSpecial: Int     { get set }
+    var bonus:        Bool    { get set }
 }
 
 //
@@ -217,6 +218,7 @@ struct OnlineLottery: Lottery {
     var upperNumber:  Int
     var specials:     Int
     var upperSpecial: Int
+    var bonus:        Bool
     var lastModified: String
     var draws:        [OnlineDraw]
     
@@ -227,18 +229,20 @@ struct OnlineLottery: Lottery {
         upperNumber  = 0
         specials     = 0
         upperSpecial = 0
+        bonus        = false
         lastModified = ""
         draws        = []
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newStartDate: String) {
+    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newStartDate: String) {
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
         upperNumber  = newUpperNumber
         specials     = newSpecials
         upperSpecial = newUpperSpecial
+        bonus        = newBonus
         lastModified = newStartDate
         draws        = []
         return

@@ -58,6 +58,7 @@ enum jsonOnline: String {
     case UpperNumber  = "upper_nos"
     case Specials     = "spc"
     case UpperSpecial = "upper_spc"
+    case Bonus        = "bonus"
     case LastModified = "modified"
     case Draws        = "draws"
     case Draw         = "draw"
