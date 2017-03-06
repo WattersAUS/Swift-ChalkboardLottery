@@ -33,6 +33,21 @@ class ViewController: UIViewController {
     //
     var userPrefs: PreferencesHandler!
     
+    //
+    // scaling factors
+    //
+    
+    //
+    // views
+    //
+    var viewTabPanel:    UIView!
+    var viewMainPanel:   UIView!
+    var viewCtrlPanel:   UIView!
+    var viewOrientation: UIDeviceOrientation = .unknown
+    
+    //----------------------------------------------------------------------------
+    // Here we go!
+    //----------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -54,6 +69,10 @@ class ViewController: UIViewController {
         // register routines for app transiting to b/g (used in saving state etc)
         //
         self.setupApplicationNotifications()
+        //
+        // detect scrren size, orientation and setup default views
+        //
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,6 +80,56 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //----------------------------------------------------------------------------
+    // orientation handling
+    //----------------------------------------------------------------------------
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: Selector(("deviceDidRotate:")), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        
+        //
+        // Initial device orientation
+        //
+        self.viewOrientation = UIDevice.current.orientation
+        // Do what you want here
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
+        if UIDevice.current.isGeneratingDeviceOrientationNotifications {
+            UIDevice.current.endGeneratingDeviceOrientationNotifications()
+        }
+    }
+
+    func deviceDidRotate(notification: NSNotification) {
+        let currentOrientation = UIDevice.current.orientation
+        
+        //
+        // Ignore changes in device orientation if unknown, face up, or face down.
+        //
+        if !UIDeviceOrientationIsValidInterfaceOrientation(currentOrientation) {
+            return
+        }
+        
+        let isLandscape: Bool = UIDeviceOrientationIsLandscape(currentOrientation);
+        let isPortrait:  Bool = UIDeviceOrientationIsPortrait(currentOrientation);
+        //
+        // setup view positions
+        //
+        if isPortrait {
+            return
+        }
+        
+        //
+        // landscape
+        //
+        return
+    }
+
     //----------------------------------------------------------------------------
     // 1. On the first run, need to sync up lottery defaults
     // 2. If we didn't connect keep reminding the user until we do
@@ -106,6 +175,29 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    //----------------------------------------------------------------------------
+    // app transition events
+    //----------------------------------------------------------------------------
+    func setupApplicationNotifications() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(applicationToClose),            name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        return
+    }
+    
+    func applicationToClose() {
+        return
+    }
+    
+    func applicationMovingToForeground() {
+        return
+    }
+    
+    func applicationMovingToBackground() {
+        return
+    }
 
     //----------------------------------------------------------------------------
     // default lottery setup
@@ -145,7 +237,6 @@ class ViewController: UIViewController {
             local.bonus        = self.jsonOnlineData.history.lotteries[i].bonus
             local.days         = []
             local.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: i))
-
             local.active       = true
             self.jsonLocalData.history.lotteries.append(local)
         }
@@ -243,30 +334,7 @@ class ViewController: UIViewController {
         }
         return true
     }
-    
-    //----------------------------------------------------------------------------
-    // app transition events
-    //----------------------------------------------------------------------------
-    func setupApplicationNotifications() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationToClose),            name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
-        return
-    }
-    
-    func applicationToClose() {
-        return
-    }
-    
-    func applicationMovingToForeground() {
-        return
-    }
-    
-    func applicationMovingToBackground() {
-        return
-    }
-    
+
     //----------------------------------------------------------------------------
     // Sound handling
     //----------------------------------------------------------------------------
@@ -291,8 +359,12 @@ class ViewController: UIViewController {
     }
     
     //----------------------------------------------------------------------------
-    // View placement
+    // View handling
     //----------------------------------------------------------------------------
+    func setInitialViewSizeAndPosition() {
+        return
+    }
+    
     func placementOfNumberLabels() {
         return
     }
