@@ -98,6 +98,9 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
                     case jsonOnline.UpperSpecial.rawValue:
                         instance.upperSpecial = value as! Int
                         break
+                    case jsonOnline.Bonus.rawValue:
+                        instance.bonus = value as! Bool
+                        break
                     case jsonOnline.LastModified.rawValue:
                         instance.lastModified = value as! String
                         break

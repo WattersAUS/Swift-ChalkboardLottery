@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         if self.userPrefs.firstTime || self.jsonLocalData.history.lotteries.count == 0 {
             if self.jsonOnlineData.online {
-                let message: String = "Wow! We need to sychronise some lottery draw details!"
+                let message: String = "We need to sychronise some lottery draw details!"
                 let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
                 let goAction = UIAlertAction(title: "Go!", style: .default) { (action:UIAlertAction!) in
                     self.setupLotteryDefaults()
@@ -110,16 +110,42 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // default lottery setup
     //----------------------------------------------------------------------------
+    // parse through draws extracting the date played (YYYY-MM-DD) to give 'day number' game was played (0 - 6)
+    //
+    func getDaysOnlineLotteryPlayed(online: Int) -> [Int] {
+        
+        func getDayNumberGamePlayed(draw: String) -> Int {
+            let dateFormat        = DateFormatter()
+            dateFormat.dateFormat = "yyyy-MM-dd"
+            let drawDate          = dateFormat.date(from: draw)!
+            let calendar          = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+            return calendar.components(.weekday, from: drawDate).weekday!
+        }
+        
+        var daysPlayed: [Int] = []
+        for i: OnlineDraw in self.jsonOnlineData.history.lotteries[online].draws {
+            let day: Int = getDayNumberGamePlayed(draw: i.date) - 1
+            if !daysPlayed.contains(day) {
+                daysPlayed.append(day)
+            }
+        }
+        return daysPlayed.sorted()
+    }
+    
     func setupLotteryDefaults() {
         self.jsonLocalData.history.lotteries = []
-        for i: OnlineLottery in self.jsonOnlineData.history.lotteries {
+        for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
             var local: LocalLottery = LocalLottery()
-            local.ident        = i.ident
-            local.description  = i.description
-            local.numbers      = i.numbers
-            local.upperNumber  = i.upperNumber
-            local.specials     = i.specials
-            local.upperSpecial = i.upperSpecial
+            local.ident        = self.jsonOnlineData.history.lotteries[i].ident
+            local.description  = self.jsonOnlineData.history.lotteries[i].description
+            local.numbers      = self.jsonOnlineData.history.lotteries[i].numbers
+            local.upperNumber  = self.jsonOnlineData.history.lotteries[i].upperNumber
+            local.specials     = self.jsonOnlineData.history.lotteries[i].specials
+            local.upperSpecial = self.jsonOnlineData.history.lotteries[i].upperSpecial
+            local.bonus        = self.jsonOnlineData.history.lotteries[i].bonus
+            local.days         = []
+            local.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: i))
+
             local.active       = true
             self.jsonLocalData.history.lotteries.append(local)
         }
