@@ -39,17 +39,17 @@ class ViewController: UIViewController {
     var appViews:        [UIImageView]!
     var viewOrientation: UIDeviceOrientation = .unknown
     
-    //
-    // images used for drawing top tab and main area
-    //
-    var tabViewImage: [UIImage] = [
-        UIImage(named:"Image_Tab_001.png")!,
-        UIImage(named:"Image_Tab_002.png")!,
-        UIImage(named:"Image_Tab_003.png")!
-    ]
-    
-    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
-    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
+//    //
+//    // images used for drawing top tab and main area
+//    //
+//    var tabViewImage: [UIImage] = [
+//        UIImage(named:"Image_Tab_001.png")!,
+//        UIImage(named:"Image_Tab_002.png")!,
+//        UIImage(named:"Image_Tab_003.png")!
+//    ]
+//    
+//    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
+//    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
     
     //----------------------------------------------------------------------------
     // Here we go!
@@ -58,23 +58,28 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.userPrefs  = PreferencesHandler()
+        
         //
         // load the local user data / lotteries and draws
         //
         self.jsonLocalData = JSONLocalDelegateHandler()
+        
         //
         // setup online JSON object we'll try access later
         //
         self.jsonOnlineData = JSONOnlineDelegateHandler()
         self.jsonOnlineData.loadOnlineResults()
+        
         //
         // load sounds
         //
         self.drawSound = self.loadSound(soundName: "DrawNumbers_001")
+        
         //
         // register routines for app transiting to b/g (used in saving state etc)
         //
         self.setupApplicationNotifications()
+        
         //
         // setup view holders for tab. main and control (we'll set size and position later)
         //
@@ -82,12 +87,14 @@ class ViewController: UIViewController {
         self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 0,   width: 100, height: 100)))
         self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 200, width: 100, height: 100)))
         self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 400, width: 100, height: 100)))
+        
         //
         // setup dummy bg colours for debug
         //
         self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
         self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
         self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
+        
         //
         // add to the main view
         //
