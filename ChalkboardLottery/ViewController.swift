@@ -39,17 +39,17 @@ class ViewController: UIViewController {
     var appViews:        [UIImageView]!
     var viewOrientation: UIDeviceOrientation = .unknown
     
-//    //
-//    // images used for drawing top tab and main area
-//    //
-//    var tabViewImage: [UIImage] = [
-//        UIImage(named:"Image_Tab_001.png")!,
-//        UIImage(named:"Image_Tab_002.png")!,
-//        UIImage(named:"Image_Tab_003.png")!
-//    ]
-//    
-//    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
-//    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
+    //
+    // images used for drawing top tab and main area
+    //
+    var tabViewImage: [UIImage] = [
+        UIImage(named:"Image_Tab_001.png")!,
+        UIImage(named:"Image_Tab_002.png")!,
+        UIImage(named:"Image_Tab_003.png")!
+    ]
+    
+    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
+    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
     
     //----------------------------------------------------------------------------
     // Here we go!
@@ -91,9 +91,17 @@ class ViewController: UIViewController {
         //
         // setup dummy bg colours for debug
         //
-        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
-        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
-        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
+//        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
+//        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
+//        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
+        
+        //
+        // add images to views
+        //
+        self.view.backgroundColor = UIColor.blue
+        self.appViews[viewType.tab.rawValue].image  = self.tabViewImage[0]
+        self.appViews[viewType.main.rawValue].image = self.mainViewImage
+        self.appViews[viewType.ctrl.rawValue].image = self.ctrlViewImage
         
         //
         // add to the main view
