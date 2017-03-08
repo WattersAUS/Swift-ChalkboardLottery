@@ -336,6 +336,35 @@ struct ControlList {
     }
 }
 
+struct ViewList {
+    var uiView: UIView
+
+    init(viewToAdd: UIView) {
+        uiView = viewToAdd
+        return
+    }
+}
+
+struct ViewBounds {
+    var x:      CGFloat
+    var y:      CGFloat
+    var w:      CGFloat
+    var h:      CGFloat
+    
+    var xScale: CGFloat
+    var yScale: CGFloat
+    
+    init(screenWidth: CGFloat, screenHeight: CGFloat) {
+        xScale = screenWidth  / 40
+        yScale = screenHeight / 40
+        x      = xScale
+        y      = yScale
+        w      = screenWidth -  (xScale * 2)
+        h      = screenHeight - (yScale * 2)
+        return
+    }
+}
+
 //
 // eol
 //

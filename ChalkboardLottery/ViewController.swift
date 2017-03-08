@@ -34,16 +34,22 @@ class ViewController: UIViewController {
     var userPrefs: PreferencesHandler!
     
     //
-    // scaling factors
+    // views / scaling / orientation
     //
+    var appViews:        [UIImageView]!
+    var viewOrientation: UIDeviceOrientation = .unknown
     
     //
-    // views
+    // images used for drawing top tab and main area
     //
-    var viewTabPanel:    UIView!
-    var viewMainPanel:   UIView!
-    var viewCtrlPanel:   UIView!
-    var viewOrientation: UIDeviceOrientation = .unknown
+    var tabViewImage: [UIImage] = [
+        UIImage(named:"Image_Tab_001.png")!,
+        UIImage(named:"Image_Tab_002.png")!,
+        UIImage(named:"Image_Tab_003.png")!
+    ]
+    
+    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
+    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
     
     //----------------------------------------------------------------------------
     // Here we go!
@@ -70,9 +76,24 @@ class ViewController: UIViewController {
         //
         self.setupApplicationNotifications()
         //
-        // detect scrren size, orientation and setup default views
+        // setup view holders for tab. main and control (we'll set size and position later)
         //
-        
+        self.appViews = []
+        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 0,   width: 100, height: 100)))
+        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 200, width: 100, height: 100)))
+        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 400, width: 100, height: 100)))
+        //
+        // setup dummy bg colours for debug
+        //
+        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
+        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
+        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
+        //
+        // add to the main view
+        //
+        self.view.addSubview(self.appViews[viewType.tab.rawValue])
+        self.view.addSubview(self.appViews[viewType.main.rawValue])
+        self.view.addSubview(self.appViews[viewType.ctrl.rawValue])
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,49 +108,82 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: Selector(("deviceDidRotate:")), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         //
         // Initial device orientation
         //
         self.viewOrientation = UIDevice.current.orientation
-        // Do what you want here
+        self.setInitialViewsOrientation()
+        return
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         NotificationCenter.default.removeObserver(self)
         if UIDevice.current.isGeneratingDeviceOrientationNotifications {
             UIDevice.current.endGeneratingDeviceOrientationNotifications()
         }
-    }
-
-    func deviceDidRotate(notification: NSNotification) {
-        let currentOrientation = UIDevice.current.orientation
-        
-        //
-        // Ignore changes in device orientation if unknown, face up, or face down.
-        //
-        if !UIDeviceOrientationIsValidInterfaceOrientation(currentOrientation) {
-            return
-        }
-        
-        let isLandscape: Bool = UIDeviceOrientationIsLandscape(currentOrientation);
-        let isPortrait:  Bool = UIDeviceOrientationIsPortrait(currentOrientation);
-        //
-        // setup view positions
-        //
-        if isPortrait {
-            return
-        }
-        
-        //
-        // landscape
-        //
         return
     }
 
+    func deviceDidRotate(notification: NSNotification) {
+        self.viewOrientation = UIDevice.current.orientation
+        //
+        // Ignore changes in device orientation if unknown, face up, or face down.
+        //
+        if !UIDeviceOrientationIsValidInterfaceOrientation(self.viewOrientation) {
+            return
+        }
+        self.setViewsOrientation()
+        return
+    }
+    
+    //----------------------------------------------------------------------------
+    // Set main views positioning and size
+    //----------------------------------------------------------------------------
+    // first time in *need* to set an orientation, so choose port or land
+    //
+    func setInitialViewsOrientation() {
+        if UIDeviceOrientationIsLandscape(self.viewOrientation) {
+            self.setViewsInLandscapeOrientation()
+        } else {
+            self.setViewsInPortraitOrientation()
+        }
+        return
+    }
+    
+    func setViewsOrientation() {
+        if UIDeviceOrientationIsPortrait(self.viewOrientation) {
+            self.setViewsInPortraitOrientation()
+        } else {
+            if UIDeviceOrientationIsLandscape(self.viewOrientation) {
+                self.setViewsInLandscapeOrientation()
+            }
+        }
+        return
+    }
+    
+    func setViewsInPortraitOrientation() {
+        let bounds: ViewBounds  = ViewBounds(screenWidth: self.view.frame.width, screenHeight: self.view.frame.height)
+        let tabHeight: CGFloat  = bounds.yScale * 4
+        let ctrlHeight: CGFloat = bounds.yScale * 4
+        self.appViews[viewType.tab.rawValue].frame  = CGRect(x: bounds.x, y: bounds.y,              width: bounds.w, height: tabHeight)
+        self.appViews[viewType.main.rawValue].frame = CGRect(x: bounds.x, y: bounds.y + tabHeight,  width: bounds.w, height: bounds.h - (tabHeight + ctrlHeight))
+        self.appViews[viewType.ctrl.rawValue].frame = CGRect(x: bounds.x, y: bounds.h - ctrlHeight, width: bounds.w, height: ctrlHeight)
+        return
+    }
+
+    func setViewsInLandscapeOrientation() {
+        let bounds: ViewBounds = ViewBounds(screenWidth: self.view.frame.width, screenHeight: self.view.frame.height)
+        let tabHeight: CGFloat = bounds.yScale * 4
+        let ctrlWidth: CGFloat = bounds.xScale * 4
+        self.appViews[viewType.tab.rawValue].frame  = CGRect(x: bounds.x,             y: bounds.y,             width: bounds.w - ctrlWidth, height: tabHeight)
+        self.appViews[viewType.main.rawValue].frame = CGRect(x: bounds.x,             y: bounds.y + tabHeight, width: bounds.w - ctrlWidth, height: bounds.h - tabHeight)
+        self.appViews[viewType.ctrl.rawValue].frame = CGRect(x: bounds.w - ctrlWidth, y: bounds.y,             width: ctrlWidth,            height: bounds.h)
+        return
+    }
+    
     //----------------------------------------------------------------------------
     // 1. On the first run, need to sync up lottery defaults
     // 2. If we didn't connect keep reminding the user until we do
@@ -180,10 +234,9 @@ class ViewController: UIViewController {
     // app transition events
     //----------------------------------------------------------------------------
     func setupApplicationNotifications() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(applicationToClose),            name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationToClose),            name: NSNotification.Name.UIApplicationWillTerminate, object: nil)
         return
     }
     

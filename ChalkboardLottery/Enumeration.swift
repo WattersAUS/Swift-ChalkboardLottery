@@ -83,3 +83,11 @@ enum tapObject: Int {
     case image = 3
 }
 
+//
+// UIView hierarchy (we'll traverse the array of UIViews to detect touches etc)
+//
+enum viewType: Int {
+    case tab  = 0
+    case main = 1
+    case ctrl = 2
+}
