@@ -51,6 +51,10 @@ class ViewController: UIViewController {
     var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
     var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
     
+    //
+    // active Tab (to be loaded yet from save state)
+    //
+    
     //----------------------------------------------------------------------------
     // Here we go!
     //----------------------------------------------------------------------------
@@ -91,14 +95,14 @@ class ViewController: UIViewController {
         //
         // setup dummy bg colours for debug
         //
+        self.view.backgroundColor = UIColor.blue
 //        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
 //        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
 //        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
         
         //
-        // add images to views
+        // add images to views (using 0 is placeholder until we get save state work done)
         //
-        self.view.backgroundColor = UIColor.blue
         self.appViews[viewType.tab.rawValue].image  = self.tabViewImage[0]
         self.appViews[viewType.main.rawValue].image = self.mainViewImage
         self.appViews[viewType.ctrl.rawValue].image = self.ctrlViewImage
@@ -210,11 +214,11 @@ class ViewController: UIViewController {
                 let message: String = "We need to sychronise some lottery draw details!"
                 let alertController = UIAlertController(title: "Setup Lotteries", message: message, preferredStyle: .alert)
                 let goAction = UIAlertAction(title: "Go!", style: .default) { (action:UIAlertAction!) in
-                    self.setupLotteryDefaults()
+                    self.setupLocalLotteryDefaults()
                 }
                 alertController.addAction(goAction)
                 self.present(alertController, animated: true, completion:nil)
-                return
+                //return
             }
             
             while self.jsonOnlineData.online == false {
@@ -223,13 +227,13 @@ class ViewController: UIViewController {
                 let goAction = UIAlertAction(title: "Try Again!", style: .default) { (action:UIAlertAction!) in
                     self.jsonOnlineData.loadOnlineResults()
                     if self.jsonOnlineData.online {
-                        self.setupLotteryDefaults()
+                        self.setupLocalLotteryDefaults()
                     }
                 }
                 alertController.addAction(goAction)
                 self.present(alertController, animated: true, completion:nil)
             }
-            return
+            //return
         }
 
         if self.jsonOnlineData.online == false {
@@ -242,6 +246,15 @@ class ViewController: UIViewController {
             self.present(alertController, animated: true, completion:nil)
             return
         }
+        
+        //
+        // if we got here then we need to check the setup of the local lotteries we've loaded against those we've got from online
+        // and force a save to local storage, if they've been updated
+        //
+        if self.checkLotteryDefaults() {
+            self.jsonLocalData.saveLocalResults()
+        }
+        self.setupLotteryDisplays()
         
     }
     
@@ -292,7 +305,10 @@ class ViewController: UIViewController {
         return daysPlayed.sorted()
     }
     
-    func setupLotteryDefaults() {
+    //
+    // only used we've saved local results before
+    //
+    func setupLocalLotteryDefaults() {
         self.jsonLocalData.history.lotteries = []
         for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
             var local: LocalLottery = LocalLottery()
@@ -311,6 +327,9 @@ class ViewController: UIViewController {
         return
     }
     
+    //
+    // if we've had a save, need to compare online settings and see they haven't changed since the last save
+    //
     func checkLotteryDefaults() -> Bool {
         
         func isLotteryChanged(online: Int, local: Int) -> Bool {
@@ -333,29 +352,6 @@ class ViewController: UIViewController {
             return -1
         }
 
-        //
-        // parse through draws extracting the date played (YYYY-MM-DD) to give 'day number' game was played (0 - 6)
-        //
-        func getDaysOnlineLotteryPlayed(online: Int) -> [Int] {
-            
-            func getDayNumberGamePlayed(draw: String) -> Int {
-                let dateFormat        = DateFormatter()
-                dateFormat.dateFormat = "yyyy-MM-dd"
-                let drawDate          = dateFormat.date(from: draw)!
-                let calendar          = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
-                return calendar.components(.weekday, from: drawDate).weekday!
-            }
-            
-            var daysPlayed: [Int] = []
-            for i: OnlineDraw in self.jsonOnlineData.history.lotteries[online].draws {
-                let day: Int = getDayNumberGamePlayed(draw: i.date) - 1
-                if !daysPlayed.contains(day) {
-                    daysPlayed.append(day)
-                }
-            }
-            return daysPlayed.sorted()
-        }
-        
         func updateLocalLotteryDefaults(online: Int, local: Int) {
             self.jsonLocalData.history.lotteries[local].description  = self.jsonOnlineData.history.lotteries[online].description
             self.jsonLocalData.history.lotteries[local].numbers      = self.jsonOnlineData.history.lotteries[online].numbers
@@ -387,20 +383,24 @@ class ViewController: UIViewController {
         //
         // need to check if the lotteries downloaded are recognised
         //
-        // 1. if so have they changed, update if needed
+        // 1. if so have they changed, update if needed and let's tell the caller
         // 2. if not add it!
         //
+        var changed: Bool = false
+        
         for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
             let j: Int = findMatchingLocalLottery(online: i)
             if j > -1 {
                 if isLotteryChanged(online: i, local: j) {
                     updateLocalLotteryDefaults(online: i, local: j)
+                    changed = true
                 }
             } else {
                 addLocalLotteryDefaults(online: i)
+                changed = true
             }
         }
-        return true
+        return changed
     }
 
     //----------------------------------------------------------------------------
@@ -429,8 +429,8 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // View handling
     //----------------------------------------------------------------------------
-    func setInitialViewSizeAndPosition() {
-        return
+    func setupLotteryDisplays() {
+        
     }
     
     func placementOfNumberLabels() {
