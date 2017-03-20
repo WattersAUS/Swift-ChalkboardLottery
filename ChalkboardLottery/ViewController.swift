@@ -433,8 +433,25 @@ class ViewController: UIViewController {
     // View handling
     //----------------------------------------------------------------------------
     func setupLotteryDisplays() {
+        
+        func allocateNumberPositionsOnlyAroundMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
+            let midHeight: CGFloat = parentView.height / 2
+            let increment: CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+            var startx:    CGFloat = increment
+            var positions: [CGRect] = []
+            for i: Int in 0 ..< draw.numbers {
+                if (i % 2) == 1 {
+                    positions.append(CGRect(x: startx, y: midHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
+                } else {
+                    positions.append(CGRect(x: startx, y: midHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
+                }
+                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
+            }
+            return positions
+        }
+        
         //
-        // first up holders for the labels (with no positioning or values set)
+        // first up allocate the labels (with no positioning or values set)
         //
         self.displayDraws = []
         for draw: LocalLottery in self.jsonLocalData.history.lotteries {
@@ -444,17 +461,30 @@ class ViewController: UIViewController {
         //
         // for portrait / landscape build up positions for each
         //
-        let viewToUse: CGRect  = self.appViews[viewType.main.rawValue].bounds
+        let mainView: CGRect  = self.appViews[viewType.main.rawValue].bounds
         for _: Int in 0 ..< 2 {
+            
+            
             for draw: LocalLottery in self.jsonLocalData.history.lotteries {
-                let stepWidth: CGFloat = viewToUse.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+
+                
+                
                 let lablWidth: CGFloat = stepWidth * 2
-                if draw.specials > 0 {
-                    
+                if draw.specials == 0 {
+                    for _: Int in 0 ..< draw.numbers {
+                        
+                    }
                 } else {
                     
                 }
+
+            
+            
             }
+            
+            
+            
+            
         }
     }
     
