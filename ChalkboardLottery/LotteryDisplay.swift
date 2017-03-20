@@ -28,42 +28,39 @@ struct LabelContent {
 }
 
 class LotteryDisplay {
-    var ident:    lotteryIdent
+    var ident:    Int
     var numbers:  [LabelContent] = []
     var specials: [LabelContent] = []
-    var bonuses:  [LabelContent] = []
+    var bonus:    Bool
     var active:   Bool
 
     //----------------------------------------------------------------------------
     // Class: Constructors
     //----------------------------------------------------------------------------
     init () {
-        self.ident    = lotteryIdent.Undefined
+        self.ident    = 0
         self.numbers  = []
         self.specials = []
-        self.bonuses  = []
+        self.bonus    = false
         self.active   = false
         return
     }
     
-    init (ident: lotteryIdent, numbers: [Int], specials: [Int], bonus: [Int], active: Bool) {
+    init (ident: Int, numbers: Int, specials: Int, bonus: Bool, active: Bool) {
         self.ident  = ident
         self.numbers = []
-        for no: Int in numbers {
-            self.numbers.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Number))
+        for _: Int in 0 ..< numbers {
+            self.numbers.append(LabelContent(displayNumber: 0, displayType: numberDisplayType.Number))
         }
         self.specials = []
-        for no: Int in specials {
-            self.specials.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Special))
+        for _: Int in 0 ..< specials {
+            self.specials.append(LabelContent(displayNumber: 0, displayType: numberDisplayType.Special))
         }
-        self.bonuses = []
-        for no: Int in bonus {
-            self.bonuses.append(LabelContent(displayNumber: no, displayType: numberDisplayType.Bonus))
-        }
+        self.bonus  = bonus
         self.active = active
         return
     }
-
+    
     //----------------------------------------------------------------------------
     // Class: Public functions to clear all numbers in the array
     //----------------------------------------------------------------------------
@@ -81,13 +78,6 @@ class LotteryDisplay {
         return
     }
 
-    func clearBonuses() {
-        for no: Int in 0 ..< self.bonuses.count {
-            self.bonuses[no].displayNumber = 0
-        }
-        return
-    }
-    
     //----------------------------------------------------------------------------
     // Class: Public functions to enable number array population in one go
     //----------------------------------------------------------------------------
@@ -113,17 +103,6 @@ class LotteryDisplay {
         return
     }
     
-    func populateBonuses(bonuses: [Int]) {
-        guard bonuses.count == self.bonuses.count else {
-            return
-        }
-        self.clearBonuses()
-        for no: Int in 0 ..< bonuses.count {
-            self.bonuses[no].displayNumber = bonuses[no]
-        }
-        return
-    }
-    
     //----------------------------------------------------------------------------
     // Class: Public functions to enable individual number population by position
     //----------------------------------------------------------------------------
@@ -143,12 +122,4 @@ class LotteryDisplay {
         return
     }
     
-    func populateBonus(bonus: Int, position: Int) {
-        guard self.bonuses.count <= position else {
-            return
-        }
-        self.bonuses[position].displayNumber = bonus
-        return
-    }
-
 }

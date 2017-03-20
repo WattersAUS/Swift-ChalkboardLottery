@@ -10,6 +10,7 @@
 		BF0C79251E4DDF2A00FAD3C1 /* Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0C79241E4DDF2A00FAD3C1 /* Generator.swift */; };
 		BF151B871E54A458007A6182 /* chalkboardlottery_config.json in Resources */ = {isa = PBXBuildFile; fileRef = BF151B861E54A458007A6182 /* chalkboardlottery_config.json */; };
 		BF38F83E1E4DFB7300DC1F28 /* PreferencesDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF38F83D1E4DFB7300DC1F28 /* PreferencesDelegate.swift */; };
+		BF41546E1E7FFBFB001DF22C /* Positioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF41546D1E7FFBFB001DF22C /* Positioning.swift */; };
 		BF48A9F61D88B3A100E3EA28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */; };
 		BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF48A9F71D88B3A100E3EA28 /* ViewController.swift */; };
 		BF48A9FB1D88B3A100E3EA28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF48A9F91D88B3A100E3EA28 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 		BF0C79241E4DDF2A00FAD3C1 /* Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Generator.swift; sourceTree = "<group>"; };
 		BF151B861E54A458007A6182 /* chalkboardlottery_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery_config.json; sourceTree = "<group>"; };
 		BF38F83D1E4DFB7300DC1F28 /* PreferencesDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesDelegate.swift; sourceTree = "<group>"; };
+		BF41546D1E7FFBFB001DF22C /* Positioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Positioning.swift; sourceTree = "<group>"; };
 		BF48A9F21D88B3A100E3EA28 /* ChalkboardLottery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChalkboardLottery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF48A9F51D88B3A100E3EA28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BF48A9F71D88B3A100E3EA28 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				BF0C79241E4DDF2A00FAD3C1 /* Generator.swift */,
 				BF6A52101E5C907E00305755 /* LotteryDisplay.swift */,
+				BF41546D1E7FFBFB001DF22C /* Positioning.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF41546E1E7FFBFB001DF22C /* Positioning.swift in Sources */,
 				BF6A52111E5C907E00305755 /* LotteryDisplay.swift in Sources */,
 				BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */,
 				BF48A9F81D88B3A100E3EA28 /* ViewController.swift in Sources */,

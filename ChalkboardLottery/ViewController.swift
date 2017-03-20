@@ -23,10 +23,11 @@ class ViewController: UIViewController {
     var drawSound: AVAudioPlayer!
     
     //
-    // place holders for the UILabels we'll use for the display (made up of 'numbers' and 'specials' arrays)
+    // place holders for the UILabels we'll use for the display
+    //  and positioning info we'll save for transitioning portrait / landscape for the draws
     //
-    
-    // ** needs a class to hold then???? **
+    var displayDraws: [LotteryDisplay]!
+    var displayPosns: [[Positioning]]!
     
     //
     // prefs
@@ -254,8 +255,10 @@ class ViewController: UIViewController {
         if self.checkLotteryDefaults() {
             self.jsonLocalData.saveLocalResults()
         }
+        //
+        // now we have the 'loaded' lotteries we can build displays and positioning
+        //
         self.setupLotteryDisplays()
-        
     }
     
     //----------------------------------------------------------------------------
@@ -430,7 +433,29 @@ class ViewController: UIViewController {
     // View handling
     //----------------------------------------------------------------------------
     func setupLotteryDisplays() {
-        
+        //
+        // first up holders for the labels (with no positioning or values set)
+        //
+        self.displayDraws = []
+        for draw: LocalLottery in self.jsonLocalData.history.lotteries {
+            self.displayDraws.append(LotteryDisplay(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
+            
+        }
+        //
+        // for portrait / landscape build up positions for each
+        //
+        let viewToUse: CGRect  = self.appViews[viewType.main.rawValue].bounds
+        for _: Int in 0 ..< 2 {
+            for draw: LocalLottery in self.jsonLocalData.history.lotteries {
+                let stepWidth: CGFloat = viewToUse.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+                let lablWidth: CGFloat = stepWidth * 2
+                if draw.specials > 0 {
+                    
+                } else {
+                    
+                }
+            }
+        }
     }
     
     func placementOfNumberLabels() {

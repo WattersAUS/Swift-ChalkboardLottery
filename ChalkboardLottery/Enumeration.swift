@@ -91,3 +91,11 @@ enum viewType: Int {
     case main = 1
     case ctrl = 2
 }
+
+//
+// for labels positioning and orientation usage
+//
+enum screenOrientation: Int {
+    case Portrait  = 0
+    case Landscape = 1
+}
