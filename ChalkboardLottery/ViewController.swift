@@ -434,7 +434,38 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     func setupLotteryDisplays() {
         
-        func allocateNumberPositionsOnlyAroundMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
+        func allocateNumberPositions(startHeight: CGFloat, parentView: CGRect, draw: LocalLottery) -> [CGRect] {
+            let increment:   CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+            var startx:      CGFloat = increment
+            var positions:  [CGRect] = []
+            for i: Int in 0 ..< draw.numbers {
+                if (i % 2) == 1 {
+                    positions.append(CGRect(x: startx, y: startHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
+                } else {
+                    positions.append(CGRect(x: startx, y: startHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
+                }
+                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
+            }
+            return positions
+        }
+        
+        func allocateNumberPositionsAtMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
+            let startHeight: CGFloat = parentView.height / 2
+            let increment:   CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+            var startx:      CGFloat = increment
+            var positions:  [CGRect] = []
+            for i: Int in 0 ..< draw.numbers {
+                if (i % 2) == 1 {
+                    positions.append(CGRect(x: startx, y: startHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
+                } else {
+                    positions.append(CGRect(x: startx, y: startHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
+                }
+                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
+            }
+            return positions
+        }
+        
+        func allocateNumberPositionsAboveMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
             let midHeight: CGFloat = parentView.height / 2
             let increment: CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
             var startx:    CGFloat = increment
@@ -465,15 +496,12 @@ class ViewController: UIViewController {
         for _: Int in 0 ..< 2 {
             
             
-            for draw: LocalLottery in self.jsonLocalData.history.lotteries {
+            for lottery: LocalLottery in self.jsonLocalData.history.lotteries {
 
                 
                 
-                let lablWidth: CGFloat = stepWidth * 2
-                if draw.specials == 0 {
-                    for _: Int in 0 ..< draw.numbers {
-                        
-                    }
+                if lottery.specials == 0 {
+                    allocateNumberPositionsAtMidPoint(parentView: mainView, draw: lottery)
                 } else {
                     
                 }
@@ -486,6 +514,12 @@ class ViewController: UIViewController {
             
             
         }
+        
+        //
+        // finally set the coords for the labels dependant on the initial orientation
+        //
+        
+        //** GOES HERE **
     }
     
     func placementOfNumberLabels() {
