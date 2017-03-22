@@ -46,6 +46,10 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
         return (self.JSONData.index(forKey: keyValue.rawValue) == nil) ? "" : self.JSONData[keyValue.rawValue] as! String
     }
     
+    private func extractJSONValue(keyValue: jsonLocal) -> Int {
+        return (self.JSONData.index(forKey: keyValue.rawValue) == nil) ? 0 : self.JSONData[keyValue.rawValue] as! Int
+    }
+    
     private func extractJSONValue(keyValue: jsonLocal) -> [[String: AnyObject]] {
         return (self.JSONData.index(forKey: keyValue.rawValue) == nil) ? ([[:]]) : self.JSONData[keyValue.rawValue] as! [[String : AnyObject]]
     }
@@ -128,6 +132,7 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
         }
         
         self.history.version   = self.extractJSONValue(keyValue: jsonLocal.Version)
+        self.history.activetab = self.extractJSONValue(keyValue: jsonLocal.ActiveTab)
         self.history.lotteries.append(contentsOf: decodeLotteriesFromObjectArray(array: self.extractJSONValue(keyValue: jsonLocal.Lottery)))
         return
     }

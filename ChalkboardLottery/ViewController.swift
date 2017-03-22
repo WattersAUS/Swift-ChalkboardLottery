@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     //
     var appViews:        [UIImageView]!
     var viewOrientation: UIDeviceOrientation = .unknown
-    
+
     //
     // images used for drawing top tab and main area
     //
@@ -433,9 +433,10 @@ class ViewController: UIViewController {
     // View handling
     //----------------------------------------------------------------------------
     func setupLotteryDisplays() {
-        
-        func allocateNumberPositions(startHeight: CGFloat, parentView: CGRect, draw: LocalLottery) -> [CGRect] {
-            let increment:   CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
+        //
+        // needs to deal with possible starting positions for 'numbers' with and without specials
+        //
+        func allocateNumberPositions(parentView: CGRect, startHeight: CGFloat, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
             var startx:      CGFloat = increment
             var positions:  [CGRect] = []
             for i: Int in 0 ..< draw.numbers {
@@ -449,92 +450,69 @@ class ViewController: UIViewController {
             return positions
         }
         
-        func allocateNumberPositionsAtMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
+        func allocateNumberPositionsAtMidPoint(parentView: CGRect, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
             let startHeight: CGFloat = parentView.height / 2
-            let increment:   CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
-            var startx:      CGFloat = increment
-            var positions:  [CGRect] = []
-            for i: Int in 0 ..< draw.numbers {
-                if (i % 2) == 1 {
-                    positions.append(CGRect(x: startx, y: startHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
-                } else {
-                    positions.append(CGRect(x: startx, y: startHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
-                }
-                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
-            }
-            return positions
+            return allocateNumberPositions(parentView: parentView, startHeight: startHeight, increment: increment, draw: draw)
         }
         
-        func allocateNumberPositionsAboveMidPoint(parentView: CGRect, draw: LocalLottery) -> [CGRect] {
-            let midHeight: CGFloat = parentView.height / 2
-            let increment: CGFloat = parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1))
-            var startx:    CGFloat = increment
-            var positions: [CGRect] = []
-            for i: Int in 0 ..< draw.numbers {
-                if (i % 2) == 1 {
-                    positions.append(CGRect(x: startx, y: midHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
-                } else {
-                    positions.append(CGRect(x: startx, y: midHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
-                }
-                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
-            }
-            return positions
+        func allocateNumberPositionsAboveMidPoint(parentView: CGRect, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
+            let startHeight: CGFloat = (parentView.height / 2) - (increment * 2)
+            return allocateNumberPositions(parentView: parentView, startHeight: startHeight, increment: increment, draw: draw)
         }
         
         //
-        // first up allocate the labels (with no positioning or values set)
+        // place the specials
+        //
+        func allocateSpecialPositions(parentView: CGRect, startHeight: CGFloat, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
+            var startx:      CGFloat = increment
+            var positions:  [CGRect] = []
+            for _: Int in 0 ..< draw.specials {
+                positions.append(CGRect(x: startx, y: startHeight, width: (increment * 2), height: (increment * 2)))
+                startx = startx + (parentView.width / CGFloat((draw.numbers * 2) + (draw.numbers + 1)) * 3)
+            }
+            return positions
+        }
+        
+        func allocateSpecialPositionsBelowMidPoint(parentView: CGRect, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
+            let startHeight: CGFloat = (parentView.height / 2) + (increment * 2)
+            return allocateSpecialPositions(parentView: parentView, startHeight: startHeight, increment: increment, draw: draw)
+        }
+        
+        //
+        // now the specials / bonusese
         //
         self.displayDraws = []
         for draw: LocalLottery in self.jsonLocalData.history.lotteries {
             self.displayDraws.append(LotteryDisplay(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
-            
         }
+
         //
         // for portrait / landscape build up positions for each
         //
+        self.displayPosns = []
         let mainView: CGRect  = self.appViews[viewType.main.rawValue].bounds
         for _: Int in 0 ..< 2 {
-            
-            
+            var forOrientation: [Positioning] = []
             for lottery: LocalLottery in self.jsonLocalData.history.lotteries {
-
-                
-                
+                var numbersPositions: [CGRect] = []
+                var specialPositions: [CGRect] = []
+                let incrementPosition: CGFloat = mainView.width / CGFloat((lottery.numbers * 2) + (lottery.numbers + 1))
                 if lottery.specials == 0 {
-                    allocateNumberPositionsAtMidPoint(parentView: mainView, draw: lottery)
+                    numbersPositions.append(contentsOf: allocateNumberPositionsAtMidPoint(parentView: mainView, increment: incrementPosition, draw: lottery))
                 } else {
-                    
+                    numbersPositions.append(contentsOf: allocateNumberPositionsAboveMidPoint(parentView: mainView, increment: incrementPosition, draw: lottery))
+                    specialPositions.append(contentsOf: allocateSpecialPositionsBelowMidPoint(parentView: mainView, increment: incrementPosition, draw: lottery))
                 }
-
-            
+                forOrientation.append(Positioning(ident: lottery.ident, numberPositions: numbersPositions, specialPositions: specialPositions, active: true))
             
             }
-            
-            
-            
-            
+            self.displayPosns.append(forOrientation)
         }
         
         //
         // finally set the coords for the labels dependant on the initial orientation
         //
         
-        //** GOES HERE **
-    }
-    
-    func placementOfNumberLabels() {
-        return
-    }
-    
-    func placementOfSpecialsLabels() {
-        return
-    }
-    
-    func placementOfOptionsImages() {
-        
-    }
-    
-    func placemenOfTabLabels() {
         return
     }
     

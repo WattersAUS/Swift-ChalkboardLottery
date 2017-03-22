@@ -159,10 +159,12 @@ struct LocalLottery: Lottery {
 
 struct LocalHistory {
     var version:   String
+    var activetab: Int
     var lotteries: [LocalLottery]
     
     init() {
         version   = ""
+        activetab = 0
         lotteries = []
         return
     }

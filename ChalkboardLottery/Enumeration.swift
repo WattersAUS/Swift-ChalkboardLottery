@@ -26,10 +26,10 @@ enum lotteryIdent: Int {
 
 //
 // JSON supporting draws configured (both original r/o and user generated r/w)
-// This will be stored as a string within UserPreferences
 //
 enum jsonLocal: String {
     case Version      = "version"
+    case ActiveTab    = "activetab"
     case Lottery      = "lottery"
     case Ident        = "id"
     case Description  = "desc"
