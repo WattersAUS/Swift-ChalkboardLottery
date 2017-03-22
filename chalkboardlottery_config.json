@@ -1,5 +1,6 @@
 {
-    "version": "v1.00",
+    "version": "v1.01",
+    "activetab": 0,
     "lottery": [{
                 "id": 1,
                 "desc": "Euro Millions",
