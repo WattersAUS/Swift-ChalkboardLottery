@@ -81,7 +81,7 @@ class LotteryDisplay {
     //----------------------------------------------------------------------------
     // Class: Public functions to enable number array population in one go
     //----------------------------------------------------------------------------
-    func populateNumbers(numbers: [Int]) {
+    func populateNumberArray(numbers: [Int]) {
         guard numbers.count == self.numbers.count else {
             return
         }
@@ -92,7 +92,7 @@ class LotteryDisplay {
         return
     }
     
-    func populateSpecials(specials: [Int]) {
+    func populateSpecialArray(specials: [Int]) {
         guard specials.count == self.specials.count else {
             return
         }

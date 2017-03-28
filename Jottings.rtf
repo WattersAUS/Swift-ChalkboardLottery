@@ -5,7 +5,14 @@
 \paperw12240\paperh15840\margl1440\margr1440\vieww9000\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 // Checking we are connected to the InterWebs!\
+\f0\fs24 \cf0 // update messages\
+\
+1. Update function names for 'array' setting in LotteryDisplay class\
+2. Split Lottery Display Label setup from Positioning\
+3. Setup Positioning via separate function\
+\
+\
+// Checking we are connected to the InterWebs!\
 \
 NSURL *scriptUrl = [NSURL URLWithString:@"http://apps.wegenerlabs.com/hi.html"];\
 NSData *data = [NSData dataWithContentsOfURL:scriptUrl];\
@@ -50,4 +57,5 @@ DispatchQueue.main.async \{\
 //\
 \
 store current active tab in config\
+\
 }

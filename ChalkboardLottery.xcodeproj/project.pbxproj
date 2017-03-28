@@ -21,6 +21,7 @@
 		BF6A52111E5C907E00305755 /* LotteryDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6A52101E5C907E00305755 /* LotteryDisplay.swift */; };
 		BF9C7D581E6715B00064865F /* JSONLocalDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9C7D571E6715B00064865F /* JSONLocalDelegate.swift */; };
 		BF9C7D5A1E672CD50064865F /* Jottings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = BF9C7D591E672CD50064865F /* Jottings.rtf */; };
+		BFC79D511E85414D0066C6AB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFC79D501E85414D0066C6AB /* Preferences.xib */; };
 		BFDB3A981DCF8B0D00B71F3F /* Struct.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDB3A971DCF8B0D00B71F3F /* Struct.swift */; };
 		BFFA05B71E15512100AC4E68 /* Enumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFA05B61E15512100AC4E68 /* Enumeration.swift */; };
 		BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */ = {isa = PBXBuildFile; fileRef = BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */; };
@@ -56,6 +57,7 @@
 		BF6A52101E5C907E00305755 /* LotteryDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LotteryDisplay.swift; sourceTree = "<group>"; };
 		BF9C7D571E6715B00064865F /* JSONLocalDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONLocalDelegate.swift; sourceTree = "<group>"; };
 		BF9C7D591E672CD50064865F /* Jottings.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Jottings.rtf; sourceTree = "<group>"; };
+		BFC79D501E85414D0066C6AB /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		BFDB3A971DCF8B0D00B71F3F /* Struct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Struct.swift; sourceTree = "<group>"; };
 		BFFA05B61E15512100AC4E68 /* Enumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enumeration.swift; sourceTree = "<group>"; };
 		BFFA05B81E15525000AC4E68 /* chalkboardlottery.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chalkboardlottery.json; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				BF48A9FE1D88B3A100E3EA28 /* LaunchScreen.storyboard */,
 				BF48AA011D88B3A100E3EA28 /* Info.plist */,
 				BFFF6DDD1DD0D15B00D41175 /* Notes */,
+				BFC79D501E85414D0066C6AB /* Preferences.xib */,
 			);
 			path = ChalkboardLottery;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			files = (
 				BF9C7D5A1E672CD50064865F /* Jottings.rtf in Resources */,
 				BF48AA001D88B3A100E3EA28 /* LaunchScreen.storyboard in Resources */,
+				BFC79D511E85414D0066C6AB /* Preferences.xib in Resources */,
 				BFFA05B91E15525000AC4E68 /* chalkboardlottery.json in Resources */,
 				BF48A9FD1D88B3A100E3EA28 /* Assets.xcassets in Resources */,
 				BF151B871E54A458007A6182 /* chalkboardlottery_config.json in Resources */,
