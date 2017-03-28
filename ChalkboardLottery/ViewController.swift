@@ -261,6 +261,8 @@ class ViewController: UIViewController {
         // now we have the 'loaded' lotteries we can build displays and positioning
         //
         self.setupLotteryDisplays()
+        self.setDisplayPositioning()
+        
     }
     
     //----------------------------------------------------------------------------
@@ -524,7 +526,14 @@ class ViewController: UIViewController {
         return
     }
     
-    func setInitialPositioningForDisplay() {
+    //
+    // depending on the initial orientation, we need to attach the labels to the view where they are displayed
+    // keep in mind the active tab, as nonactive are not to be displayed
+    //
+    func setInitialPositioningForDisplays() {
+        for draw: Lottery in self.jsonLocalData.history.lotteries {
+            
+        }
         return
     }
     
