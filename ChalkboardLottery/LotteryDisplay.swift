@@ -19,9 +19,22 @@ struct LabelContent {
         // DEBUG FOR POSNING HERE!!!! FONT SIZE MAY NEED CHANGING ON DIFFERENT SCREENS
         //
         self.displayLabel                 = UILabel()
+        self.displayLabel.textColor       = UIColor.white
         self.displayLabel.font            = UIFont(name: "Chalkboard", size: 10)
-        self.displayLabel.backgroundColor = UIColor.red
         //
+        // use different bg colours for number types
+        //
+        switch displayType {
+        case numberDisplayType.Number:
+            self.displayLabel.backgroundColor = UIColor.blue
+            break
+        case numberDisplayType.Special:
+            self.displayLabel.backgroundColor = UIColor.red
+            break
+        case numberDisplayType.Bonus:
+            self.displayLabel.backgroundColor = UIColor.yellow
+            break
+        }
         self.displayNumber = displayNumber
         self.displayType   = displayType
     }
