@@ -135,4 +135,52 @@ class LotteryDisplay {
         return
     }
     
+    //----------------------------------------------------------------------------
+    // Class: Private functions to hide / unhide number and special display
+    //----------------------------------------------------------------------------
+    private func hideNumberDisplay() {
+        for i: LabelContent in self.numbers {
+            i.displayLabel.isHidden  = false
+            i.displayLabel.isEnabled = true
+        }
+        return
+    }
+    
+    private func unHideNumberDisplay() {
+        for i: LabelContent in self.numbers {
+            i.displayLabel.isHidden  = true
+            i.displayLabel.isEnabled = false
+        }
+        return
+    }
+
+    private func hideSpecialDisplay() {
+        for i: LabelContent in self.specials {
+            i.displayLabel.isHidden  = false
+            i.displayLabel.isEnabled = true
+        }
+        return
+    }
+    
+    private func unHideSpecialDisplay() {
+        for i: LabelContent in self.specials {
+            i.displayLabel.isHidden  = true
+            i.displayLabel.isEnabled = false
+        }
+        return
+    }
+    //----------------------------------------------------------------------------
+    // Class: Public functions to hide / unhide number and special display
+    //----------------------------------------------------------------------------
+    func hideDisplay() {
+        self.hideNumberDisplay()
+        self.hideSpecialDisplay()
+        return
+    }
+    
+    func unHideDisplay() {
+        self.unHideNumberDisplay()
+        self.unHideSpecialDisplay()
+        return
+    }
 }

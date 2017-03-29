@@ -206,6 +206,10 @@ class ViewController: UIViewController {
         return
     }
     
+    func setLabelsDisplay() {
+        return
+    }
+    
     //----------------------------------------------------------------------------
     // 1. On the first run, need to sync up lottery defaults
     // 2. If we didn't connect keep reminding the user until we do
@@ -262,7 +266,7 @@ class ViewController: UIViewController {
         //
         self.setupLotteryDisplays()
         self.setDisplayPositioning()
-        
+        self.addDisplayLabelsToMainView()
     }
     
     //----------------------------------------------------------------------------
@@ -527,12 +531,28 @@ class ViewController: UIViewController {
     }
     
     //
-    // depending on the initial orientation, we need to attach the labels to the view where they are displayed
-    // keep in mind the active tab, as nonactive are not to be displayed
+    // we need to attach the labels to the view where they are to be displayed
+    // then depending on the initial orientation use the right Positioning
+    // also keep in mind the active tab, as nonactive are not to be displayed
     //
-    func setInitialPositioningForDisplays() {
+    func addDisplayLabelsToMainView() {
+        
+        for i: Int in 0 ..< self.jsonLocalData.history.lotteries.count {
+            if i == self.jsonLocalData.history.activetab {
+                
+            } else {
+
+            }
+        }
+        
+        
+        
         for draw: Lottery in self.jsonLocalData.history.lotteries {
-            
+            if UIDeviceOrientationIsLandscape(self.viewOrientation) {
+                
+            } else {
+                
+            }
         }
         return
     }
