@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     // place holders for the UILabels we'll use for the display
     //
     var displayDraws: [LotteryDisplay]!
+    
     //
     // Positioning info we'll save for transitioning portrait / landscape for the draws
     //
@@ -54,10 +55,6 @@ class ViewController: UIViewController {
     var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
     var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
     
-    //
-    // active Tab (to be loaded yet from save state)
-    //
-    
     //----------------------------------------------------------------------------
     // Here we go!
     //----------------------------------------------------------------------------
@@ -67,13 +64,10 @@ class ViewController: UIViewController {
         self.userPrefs  = PreferencesHandler()
         
         //
-        // load the local user data / lotteries and draws
+        // load the local user data / lotteries and draws, then go get the online
         //
         self.jsonLocalData = JSONLocalDelegateHandler()
-        
-        //
-        // setup online JSON object we'll try access later
-        //
+        //self.jsonLocalData.loadLocalResults()
         self.jsonOnlineData = JSONOnlineDelegateHandler()
         self.jsonOnlineData.loadOnlineResults()
         
@@ -98,10 +92,10 @@ class ViewController: UIViewController {
         //
         // setup dummy bg colours for debug
         //
-        self.view.backgroundColor = UIColor.blue
-//        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
-//        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
-//        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
+        self.view.backgroundColor = UIColor.brown
+        self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
+        self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
+        self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
         
         //
         // add images to views (using 0 is placeholder until we get save state work done)
@@ -116,6 +110,11 @@ class ViewController: UIViewController {
         self.view.addSubview(self.appViews[viewType.tab.rawValue])
         self.view.addSubview(self.appViews[viewType.main.rawValue])
         self.view.addSubview(self.appViews[viewType.ctrl.rawValue])
+        //
+        // override active tab (for testing)
+        //
+        self.jsonLocalData.history.activetab = 0
+        return
     }
 
     override func didReceiveMemoryWarning() {
@@ -267,6 +266,7 @@ class ViewController: UIViewController {
         self.setupLotteryDisplays()
         self.setDisplayPositioning()
         self.addDisplayLabelsToMainView()
+        return
     }
     
     //----------------------------------------------------------------------------
@@ -296,7 +296,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // parse through draws extracting the date played (YYYY-MM-DD) to give 'day number' game was played (0 - 6)
     //
-    func getDaysOnlineLotteryPlayed(online: Int) -> [Int] {
+    func getDaysOnlineLotteryPlayed(online: OnlineLottery) -> [Int] {
         
         func getDayNumberGamePlayed(draw: String) -> Int {
             let dateFormat        = DateFormatter()
@@ -307,7 +307,7 @@ class ViewController: UIViewController {
         }
         
         var daysPlayed: [Int] = []
-        for i: OnlineDraw in self.jsonOnlineData.history.lotteries[online].draws {
+        for i: OnlineDraw in online.draws {
             let day: Int = getDayNumberGamePlayed(draw: i.date) - 1
             if !daysPlayed.contains(day) {
                 daysPlayed.append(day)
@@ -317,21 +317,21 @@ class ViewController: UIViewController {
     }
     
     //
-    // only used we've saved local results before
+    // only used if we've saved local results before
     //
     func setupLocalLotteryDefaults() {
         self.jsonLocalData.history.lotteries = []
-        for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
+        for online: OnlineLottery in self.jsonOnlineData.history.lotteries {
             var local: LocalLottery = LocalLottery()
-            local.ident        = self.jsonOnlineData.history.lotteries[i].ident
-            local.description  = self.jsonOnlineData.history.lotteries[i].description
-            local.numbers      = self.jsonOnlineData.history.lotteries[i].numbers
-            local.upperNumber  = self.jsonOnlineData.history.lotteries[i].upperNumber
-            local.specials     = self.jsonOnlineData.history.lotteries[i].specials
-            local.upperSpecial = self.jsonOnlineData.history.lotteries[i].upperSpecial
-            local.bonus        = self.jsonOnlineData.history.lotteries[i].bonus
+            local.ident        = online.ident
+            local.description  = online.description
+            local.numbers      = online.numbers
+            local.upperNumber  = online.upperNumber
+            local.specials     = online.specials
+            local.upperSpecial = online.upperSpecial
+            local.bonus        = online.bonus
             local.days         = []
-            local.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: i))
+            local.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: online))
             local.active       = true
             self.jsonLocalData.history.lotteries.append(local)
         }
@@ -343,52 +343,52 @@ class ViewController: UIViewController {
     //
     func checkLotteryDefaults() -> Bool {
         
-        func isLotteryChanged(online: Int, local: Int) -> Bool {
-            if self.jsonOnlineData.history.lotteries[online].numbers == self.jsonLocalData.history.lotteries[local].numbers &&
-                self.jsonOnlineData.history.lotteries[online].upperNumber == self.jsonLocalData.history.lotteries[local].upperNumber &&
-                self.jsonOnlineData.history.lotteries[online].specials == self.jsonLocalData.history.lotteries[local].specials &&
-                self.jsonOnlineData.history.lotteries[online].upperSpecial == self.jsonLocalData.history.lotteries[local].upperSpecial &&
-                self.jsonOnlineData.history.lotteries[online].bonus == self.jsonLocalData.history.lotteries[local].bonus {
+        func isLotteryChanged(local: LocalLottery, online: OnlineLottery) -> Bool {
+            if local.numbers       == online.numbers &&
+                local.upperNumber  == online.upperNumber &&
+                local.specials     == online.specials &&
+                local.upperSpecial == online.upperSpecial &&
+                local.bonus        == online.bonus {
                     return true
             }
             return false
         }
         
-        func findMatchingLocalLottery(online: Int) -> Int {
-            for i: Int in 0 ..< self.jsonLocalData.history.lotteries.count {
-                if self.jsonOnlineData.history.lotteries[online].ident == self.jsonLocalData.history.lotteries[i].ident {
-                    return i
+        func findMatchingLocalLottery(online: OnlineLottery) -> Int {
+            for local: LocalLottery in self.jsonLocalData.history.lotteries {
+                if local.ident == online.ident {
+                    return local.ident
                 }
             }
             return -1
         }
 
-        func updateLocalLotteryDefaults(online: Int, local: Int) {
-            self.jsonLocalData.history.lotteries[local].description  = self.jsonOnlineData.history.lotteries[online].description
-            self.jsonLocalData.history.lotteries[local].numbers      = self.jsonOnlineData.history.lotteries[online].numbers
-            self.jsonLocalData.history.lotteries[local].upperNumber  = self.jsonOnlineData.history.lotteries[online].upperNumber
-            self.jsonLocalData.history.lotteries[local].specials     = self.jsonOnlineData.history.lotteries[online].specials
-            self.jsonLocalData.history.lotteries[local].upperSpecial = self.jsonOnlineData.history.lotteries[online].upperSpecial
-            self.jsonLocalData.history.lotteries[local].bonus        = self.jsonOnlineData.history.lotteries[online].bonus
-            self.jsonLocalData.history.lotteries[local].days         = []
-            self.jsonLocalData.history.lotteries[local].days.append(contentsOf: getDaysOnlineLotteryPlayed(online: online))
-            self.jsonLocalData.history.lotteries[local].active       = true
+        func updateLocalLotteryDefaults(local: inout LocalLottery, online: OnlineLottery) {
+            local.description  = online.description
+            local.numbers      = online.numbers
+            local.upperNumber  = online.upperNumber
+            local.specials     = online.specials
+            local.upperSpecial = online.upperSpecial
+            local.bonus        = online.bonus
+            local.days         = []
+            local.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: online))
+            local.active       = true
             return
         }
         
-        func addLocalLotteryDefaults(online: Int) {
+        func addLocalLotteryDefaults(online: OnlineLottery) -> LocalLottery {
             var newLottery: LocalLottery = LocalLottery()
-            newLottery.description       = self.jsonOnlineData.history.lotteries[online].description
-            newLottery.numbers           = self.jsonOnlineData.history.lotteries[online].numbers
-            newLottery.upperNumber       = self.jsonOnlineData.history.lotteries[online].upperNumber
-            newLottery.specials          = self.jsonOnlineData.history.lotteries[online].specials
-            newLottery.upperSpecial      = self.jsonOnlineData.history.lotteries[online].upperSpecial
-            newLottery.bonus             = self.jsonOnlineData.history.lotteries[online].bonus
+            newLottery.ident             = online.ident
+            newLottery.description       = online.description
+            newLottery.numbers           = online.numbers
+            newLottery.upperNumber       = online.upperNumber
+            newLottery.specials          = online.specials
+            newLottery.upperSpecial      = online.upperSpecial
+            newLottery.bonus             = online.bonus
             newLottery.days              = []
             newLottery.days.append(contentsOf: getDaysOnlineLotteryPlayed(online: online))
             newLottery.active            = true
-            self.jsonLocalData.history.lotteries.append(newLottery)
-            return
+            return newLottery
         }
         
         //
@@ -398,19 +398,21 @@ class ViewController: UIViewController {
         // 2. if not add it!
         //
         var changed: Bool = false
-        
-        for i: Int in 0 ..< self.jsonOnlineData.history.lotteries.count {
-            let j: Int = findMatchingLocalLottery(online: i)
-            if j > -1 {
-                if isLotteryChanged(online: i, local: j) {
-                    updateLocalLotteryDefaults(online: i, local: j)
+        for online: OnlineLottery in self.jsonOnlineData.history.lotteries {
+            let local: Int = findMatchingLocalLottery(online: online)
+            if local == -1 {
+                self.jsonLocalData.history.lotteries.append(addLocalLotteryDefaults(online: online))
+                changed = true
+            } else {
+                if isLotteryChanged(local: self.jsonLocalData.history.lotteries[local], online: online) {
+                    updateLocalLotteryDefaults(local: &self.jsonLocalData.history.lotteries[local], online: online)
                     changed = true
                 }
-            } else {
-                addLocalLotteryDefaults(online: i)
-                changed = true
             }
         }
+        
+        
+        
         return changed
     }
 
@@ -536,22 +538,11 @@ class ViewController: UIViewController {
     // also keep in mind the active tab, as nonactive are not to be displayed
     //
     func addDisplayLabelsToMainView() {
-        
         for i: Int in 0 ..< self.jsonLocalData.history.lotteries.count {
             if i == self.jsonLocalData.history.activetab {
                 
             } else {
 
-            }
-        }
-        
-        
-        
-        for draw: Lottery in self.jsonLocalData.history.lotteries {
-            if UIDeviceOrientationIsLandscape(self.viewOrientation) {
-                
-            } else {
-                
             }
         }
         return

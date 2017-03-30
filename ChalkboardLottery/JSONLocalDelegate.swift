@@ -145,7 +145,7 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
             self.JSONData            = try JSONSerialization.jsonObject(with: fileData, options: .allowFragments) as! Dictionary<String, AnyObject>
             self.loadLocalHistoryFromJSON()
         } catch {
-            print("Failed to read to file: \(filename)")
+            print("Failed to read Local JSON file: \(filename)")
         }
         return
     }
@@ -158,7 +158,7 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
         func buildLotteryArray() -> [[String: AnyObject]] {
             
             func buildDrawsArray(lotteryDraws: [LocalDraw]) -> [[String: AnyObject]] {
-                var draws: [[String: AnyObject]] = [[:]]
+                var draws: [[String: AnyObject]] = []
                 for i: LocalDraw in lotteryDraws {
                     var draw: [String: AnyObject] = [:]
                     draw[jsonLocal.DrawDate.rawValue] = i.date as AnyObject?
@@ -169,26 +169,29 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
                 return draws
             }
             
-            var lotteries: [[String: AnyObject]] = [[:]]
+            var lotteries: [[String: AnyObject]] = []
             for i: LocalLottery in self.history.lotteries {
                 var lottery: [String: AnyObject] = [:]
-                lottery[jsonLocal.Ident.rawValue]       = i.ident as AnyObject?
-                lottery[jsonLocal.Description.rawValue] = i.description as AnyObject?
-                lottery[jsonLocal.Numbers.rawValue]     = i.numbers as AnyObject?
-                lottery[jsonLocal.UpperNumber.rawValue] = i.upperNumber as AnyObject?
-                lottery[jsonLocal.Modified.rawValue]    = i.lastModified as AnyObject?
-                lottery[jsonLocal.Bonus.rawValue]       = i.bonus as AnyObject?
-                lottery[jsonLocal.Days.rawValue]        = i.days as AnyObject?
-                lottery[jsonLocal.Active.rawValue]      = i.active as AnyObject?
-                lottery[jsonLocal.Draws.rawValue]       = buildDrawsArray(lotteryDraws: i.draws) as AnyObject?
+                lottery[jsonLocal.Ident.rawValue]        = i.ident as AnyObject?
+                lottery[jsonLocal.Description.rawValue]  = i.description as AnyObject?
+                lottery[jsonLocal.Numbers.rawValue]      = i.numbers as AnyObject?
+                lottery[jsonLocal.UpperNumber.rawValue]  = i.upperNumber as AnyObject?
+                lottery[jsonLocal.Specials.rawValue]     = i.specials as AnyObject?
+                lottery[jsonLocal.UpperSpecial.rawValue] = i.upperSpecial as AnyObject?
+                lottery[jsonLocal.Modified.rawValue]     = i.lastModified as AnyObject?
+                lottery[jsonLocal.Bonus.rawValue]        = i.bonus as AnyObject?
+                lottery[jsonLocal.Days.rawValue]         = i.days as AnyObject?
+                lottery[jsonLocal.Active.rawValue]       = i.active as AnyObject?
+                lottery[jsonLocal.Draws.rawValue]        = buildDrawsArray(lotteryDraws: i.draws) as AnyObject?
                 lotteries.append(lottery)
             }
             return lotteries
         }
         
         self.JSONData = [:]
-        self.JSONData[jsonLocal.Version.rawValue] = self.history.version as AnyObject?
-        self.JSONData[jsonLocal.Lottery.rawValue] = buildLotteryArray() as AnyObject?
+        self.JSONData[jsonLocal.Version.rawValue]   = self.history.version as AnyObject?
+        self.JSONData[jsonLocal.ActiveTab.rawValue] = self.history.activetab as AnyObject?
+        self.JSONData[jsonLocal.Lottery.rawValue]   = buildLotteryArray() as AnyObject?
         return
     }
     

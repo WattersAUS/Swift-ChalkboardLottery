@@ -73,7 +73,6 @@ struct LocalDraw: Draw {
 // lottery config to support data stored in prefs
 //
 struct LocalLottery: Lottery {
-    var version:      String
     var ident:        Int
     var description:  String
     var numbers:      Int
@@ -89,7 +88,6 @@ struct LocalLottery: Lottery {
     var draws:        [LocalDraw]
     
     init() {
-        version      = app.Version.rawValue
         ident        = 0
         description  = ""
         numbers      = 0
@@ -106,7 +104,6 @@ struct LocalLottery: Lottery {
     }
 
     init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int]) {
-        version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -124,7 +121,6 @@ struct LocalLottery: Lottery {
     }
 
     init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
-        version      = app.Version.rawValue
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -163,7 +159,7 @@ struct LocalHistory {
     var lotteries: [LocalLottery]
     
     init() {
-        version   = ""
+        version   = app.Version.rawValue
         activetab = 0
         lotteries = []
         return
