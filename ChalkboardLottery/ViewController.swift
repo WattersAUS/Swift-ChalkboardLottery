@@ -52,8 +52,8 @@ class ViewController: UIViewController {
         UIImage(named:"Image_Tab_003.png")!
     ]
     
-    var mainViewImage: UIImage = UIImage(named:"Image_Main.png")!
-    var ctrlViewImage: UIImage = UIImage(named:"Image_Control.png")!
+    var mainViewImage: UIImage = UIImage(named:"main-body.png")!
+    var ctrlViewImage: UIImage = UIImage(named:"control-panel.png")!
     
     //----------------------------------------------------------------------------
     // Here we go!
