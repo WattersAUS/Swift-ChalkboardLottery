@@ -100,9 +100,10 @@ class ViewController: UIViewController {
         //
         // add images to views (using 0 is placeholder until we get save state work done)
         //
-        self.appViews[viewType.tab.rawValue].image  = self.tabViewImage[0]
-        self.appViews[viewType.main.rawValue].image = self.mainViewImage
-        self.appViews[viewType.ctrl.rawValue].image = self.ctrlViewImage
+        self.appViews[viewType.tab.rawValue].image        = self.tabViewImage[0]
+        self.appViews[viewType.main.rawValue].image       = self.mainViewImage
+        self.appViews[viewType.main.rawValue].contentMode = UIViewContentMode.scaleToFill
+        self.appViews[viewType.ctrl.rawValue].image       = self.ctrlViewImage
         
         //
         // add to the main view
@@ -128,8 +129,8 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        //UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        //NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         //
         // Initial device orientation
@@ -147,18 +148,51 @@ class ViewController: UIViewController {
         }
         return
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
 
-    func deviceDidRotate(notification: NSNotification) {
-        self.viewOrientation = UIDevice.current.orientation
-        //
-        // Ignore changes in device orientation if unknown, face up, or face down.
-        //
-        if !UIDeviceOrientationIsValidInterfaceOrientation(self.viewOrientation) {
-            return
+        func sizeClassText(sizeClass: UIUserInterfaceSizeClass) -> String {
+            switch sizeClass {
+            case .compact:
+                return "Compact"
+            case .regular:
+                return "Regular"
+            default:
+                return "Unspecified"
+            }
         }
-        self.setViewsOrientation()
+        
+        func deviceText(deviceType: UIUserInterfaceIdiom ) -> String {
+            switch deviceType {
+            case .phone:
+                return "iPhone"
+            case .pad:
+                return "iPad"
+            case .tv:
+                return "Apple TV"
+            default:
+                return "Unspecified"
+            }
+        }
+        
+        let deviceLabel: String = deviceText(deviceType: traitCollection.userInterfaceIdiom)
+        let heightLabel: String = sizeClassText(sizeClass: traitCollection.verticalSizeClass)
+        let widthLabel:  String = sizeClassText(sizeClass: traitCollection.horizontalSizeClass)
         return
     }
+
+//    func deviceDidRotate(notification: NSNotification) {
+//        self.viewOrientation = UIDevice.current.orientation
+//        //
+//        // Ignore changes in device orientation if unknown, face up, or face down.
+//        //
+//        if !UIDeviceOrientationIsValidInterfaceOrientation(self.viewOrientation) {
+//            return
+//        }
+//        self.setViewsOrientation()
+//        return
+//    }
     
     //----------------------------------------------------------------------------
     // Set main views positioning and size
@@ -186,22 +220,28 @@ class ViewController: UIViewController {
     }
     
     func setViewsInPortraitOrientation() {
-        let bounds: ViewBounds  = ViewBounds(screenWidth: self.view.frame.width, screenHeight: self.view.frame.height)
-        let tabHeight: CGFloat  = bounds.yScale * 4
+        let bounds: ViewBounds  = ViewBounds(screenWidth: self.view.bounds.width, screenHeight: self.view.bounds.height)
+        let tabHeight:  CGFloat = bounds.yScale * 4
         let ctrlHeight: CGFloat = bounds.yScale * 4
-        self.appViews[viewType.tab.rawValue].frame  = CGRect(x: bounds.x, y: bounds.y,              width: bounds.w, height: tabHeight)
-        self.appViews[viewType.main.rawValue].frame = CGRect(x: bounds.x, y: bounds.y + tabHeight,  width: bounds.w, height: bounds.h - (tabHeight + ctrlHeight))
-        self.appViews[viewType.ctrl.rawValue].frame = CGRect(x: bounds.x, y: bounds.h - ctrlHeight, width: bounds.w, height: ctrlHeight)
+        let tabRect:    CGRect  = CGRect(x: bounds.x, y: bounds.y,                                    width: bounds.w, height: tabHeight)
+        let mainRect:   CGRect  = CGRect(x: bounds.x, y: bounds.y + tabRect.height,                   width: bounds.w, height: bounds.h - bounds.x - tabHeight - ctrlHeight)
+        let ctrlRect:   CGRect  = CGRect(x: bounds.x, y: bounds.y + tabRect.height + mainRect.height, width: bounds.w, height: ctrlHeight)
+        self.appViews[viewType.tab.rawValue].frame  = tabRect
+        self.appViews[viewType.main.rawValue].frame = mainRect
+        self.appViews[viewType.ctrl.rawValue].frame = ctrlRect
         return
     }
 
     func setViewsInLandscapeOrientation() {
-        let bounds: ViewBounds = ViewBounds(screenWidth: self.view.frame.width, screenHeight: self.view.frame.height)
+        let bounds: ViewBounds = ViewBounds(screenWidth: self.view.bounds.height, screenHeight: self.view.bounds.width)
         let tabHeight: CGFloat = bounds.yScale * 4
         let ctrlWidth: CGFloat = bounds.xScale * 4
-        self.appViews[viewType.tab.rawValue].frame  = CGRect(x: bounds.x,             y: bounds.y,             width: bounds.w - ctrlWidth, height: tabHeight)
-        self.appViews[viewType.main.rawValue].frame = CGRect(x: bounds.x,             y: bounds.y + tabHeight, width: bounds.w - ctrlWidth, height: bounds.h - tabHeight)
-        self.appViews[viewType.ctrl.rawValue].frame = CGRect(x: bounds.w - ctrlWidth, y: bounds.y,             width: ctrlWidth,            height: bounds.h)
+        let tabRect:   CGRect  = CGRect(x: bounds.x,                 y: bounds.y,                  width: bounds.w - bounds.x - ctrlWidth, height: tabHeight)
+        let mainRect:  CGRect  = CGRect(x: bounds.x,                 y: bounds.y + tabRect.height, width: bounds.w - bounds.x - ctrlWidth, height: bounds.h - bounds.y - tabHeight)
+        let ctrlRect:  CGRect  = CGRect(x: bounds.x + tabRect.width, y: bounds.y,                  width: ctrlWidth,                       height: bounds.h - bounds.y)
+        self.appViews[viewType.tab.rawValue].frame  = tabRect
+        self.appViews[viewType.main.rawValue].frame = mainRect
+        self.appViews[viewType.ctrl.rawValue].frame = ctrlRect
         return
     }
     
