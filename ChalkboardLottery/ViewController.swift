@@ -40,6 +40,7 @@ class ViewController: UIViewController {
     //
     // views / scaling / orientation
     //
+    var useLandscape:    Bool = false
     var appViews:        [UIImageView]!
     var viewOrientation: UIDeviceOrientation = .unknown
 
@@ -58,6 +59,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // Here we go!
     //----------------------------------------------------------------------------
+    //
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -111,6 +113,7 @@ class ViewController: UIViewController {
         self.view.addSubview(self.appViews[viewType.tab.rawValue])
         self.view.addSubview(self.appViews[viewType.main.rawValue])
         self.view.addSubview(self.appViews[viewType.ctrl.rawValue])
+        
         //
         // override active tab (for testing)
         //
@@ -124,97 +127,19 @@ class ViewController: UIViewController {
     }
     
     //----------------------------------------------------------------------------
-    // orientation handling
-    //----------------------------------------------------------------------------
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        //NotificationCenter.default.addObserver(self, selector: #selector(deviceDidRotate), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
-        //
-        // Initial device orientation
-        //
-        self.viewOrientation = UIDevice.current.orientation
-        self.setInitialViewsOrientation()
-        return
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-        if UIDevice.current.isGeneratingDeviceOrientationNotifications {
-            UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        }
-        return
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-
-        func sizeClassText(sizeClass: UIUserInterfaceSizeClass) -> String {
-            switch sizeClass {
-            case .compact:
-                return "Compact"
-            case .regular:
-                return "Regular"
-            default:
-                return "Unspecified"
-            }
-        }
-        
-        func deviceText(deviceType: UIUserInterfaceIdiom ) -> String {
-            switch deviceType {
-            case .phone:
-                return "iPhone"
-            case .pad:
-                return "iPad"
-            case .tv:
-                return "Apple TV"
-            default:
-                return "Unspecified"
-            }
-        }
-        
-        let deviceLabel: String = deviceText(deviceType: traitCollection.userInterfaceIdiom)
-        let heightLabel: String = sizeClassText(sizeClass: traitCollection.verticalSizeClass)
-        let widthLabel:  String = sizeClassText(sizeClass: traitCollection.horizontalSizeClass)
-        return
-    }
-
-//    func deviceDidRotate(notification: NSNotification) {
-//        self.viewOrientation = UIDevice.current.orientation
-//        //
-//        // Ignore changes in device orientation if unknown, face up, or face down.
-//        //
-//        if !UIDeviceOrientationIsValidInterfaceOrientation(self.viewOrientation) {
-//            return
-//        }
-//        self.setViewsOrientation()
-//        return
-//    }
-    
-    //----------------------------------------------------------------------------
     // Set main views positioning and size
     //----------------------------------------------------------------------------
-    // first time in *need* to set an orientation, so choose port or land
     //
-    func setInitialViewsOrientation() {
-        if UIDeviceOrientationIsLandscape(self.viewOrientation) {
+    override func viewWillLayoutSubviews() {
+        self.useLandscape  = (view.bounds.size.width >= view.bounds.size.height)
+        self.setViewOrientation()
+    }
+    
+    func setViewOrientation() {
+        if self.useLandscape {
             self.setViewsInLandscapeOrientation()
         } else {
             self.setViewsInPortraitOrientation()
-        }
-        return
-    }
-    
-    func setViewsOrientation() {
-        if UIDeviceOrientationIsPortrait(self.viewOrientation) {
-            self.setViewsInPortraitOrientation()
-        } else {
-            if UIDeviceOrientationIsLandscape(self.viewOrientation) {
-                self.setViewsInLandscapeOrientation()
-            }
         }
         return
     }
@@ -233,7 +158,7 @@ class ViewController: UIViewController {
     }
 
     func setViewsInLandscapeOrientation() {
-        let bounds: ViewBounds = ViewBounds(screenWidth: self.view.bounds.height, screenHeight: self.view.bounds.width)
+        let bounds: ViewBounds = ViewBounds(screenWidth: self.view.bounds.width, screenHeight: self.view.bounds.height)
         let tabHeight: CGFloat = bounds.yScale * 4
         let ctrlWidth: CGFloat = bounds.xScale * 4
         let tabRect:   CGRect  = CGRect(x: bounds.x,                 y: bounds.y,                  width: bounds.w - bounds.x - ctrlWidth, height: tabHeight)
@@ -253,6 +178,7 @@ class ViewController: UIViewController {
     // 1. On the first run, need to sync up lottery defaults
     // 2. If we didn't connect keep reminding the user until we do
     //----------------------------------------------------------------------------
+    //
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if self.userPrefs.firstTime || self.jsonLocalData.history.lotteries.count == 0 {
@@ -312,6 +238,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // app transition events
     //----------------------------------------------------------------------------
+    //
     func setupApplicationNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(applicationMovingToBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationMovingToForeground), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
@@ -394,13 +321,13 @@ class ViewController: UIViewController {
             return false
         }
         
-        func findMatchingLocalLottery(online: OnlineLottery) -> Int {
+        func findMatchingLocalLottery(online: OnlineLottery) -> lotteryIdent {
             for local: LocalLottery in self.jsonLocalData.history.lotteries {
                 if local.ident == online.ident {
                     return local.ident
                 }
             }
-            return -1
+            return lotteryIdent.Undefined
         }
 
         func updateLocalLotteryDefaults(local: inout LocalLottery, online: OnlineLottery) {
@@ -439,13 +366,13 @@ class ViewController: UIViewController {
         //
         var changed: Bool = false
         for online: OnlineLottery in self.jsonOnlineData.history.lotteries {
-            let local: Int = findMatchingLocalLottery(online: online)
-            if local == -1 {
+            let local: lotteryIdent = findMatchingLocalLottery(online: online)
+            if local == lotteryIdent.Undefined {
                 self.jsonLocalData.history.lotteries.append(addLocalLotteryDefaults(online: online))
                 changed = true
             } else {
-                if isLotteryChanged(local: self.jsonLocalData.history.lotteries[local], online: online) {
-                    updateLocalLotteryDefaults(local: &self.jsonLocalData.history.lotteries[local], online: online)
+                if isLotteryChanged(local: self.jsonLocalData.history.lotteries[local.rawValue], online: online) {
+                    updateLocalLotteryDefaults(local: &self.jsonLocalData.history.lotteries[local.rawValue], online: online)
                     changed = true
                 }
             }
@@ -459,6 +386,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // Sound handling
     //----------------------------------------------------------------------------
+    //
     func loadSound(soundName: String) -> AVAudioPlayer! {
         var value: AVAudioPlayer! = nil
         if let loadAsset: NSDataAsset = NSDataAsset(name: soundName) {
@@ -482,6 +410,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // View handling
     //----------------------------------------------------------------------------
+    //
     func setupLotteryDisplays() {
         self.displayDraws = []
         for draw: LocalLottery in self.jsonLocalData.history.lotteries {
@@ -591,6 +520,7 @@ class ViewController: UIViewController {
     //----------------------------------------------------------------------------
     // Touch Setup / detection
     //----------------------------------------------------------------------------
+    //
     func processUserTapOnMainScreen(location: CGPoint) -> (row: Int, column: Int) {
 //        for y: Int in 0 ..< self.controlPanelImages.getRows() {
 //            for x: Int in 0 ..< self.controlPanelImages.getColumns() {

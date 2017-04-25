@@ -88,7 +88,7 @@ class JSONLocalDelegateHandler: NSObject, JSONLocalDelegate {
                 for (key,value) in lottery {
                     switch key {
                     case jsonLocal.Ident.rawValue:
-                        instance.ident = value as! Int
+                        instance.ident = lotteryIdent(rawValue: value as! Int)!
                         break
                     case jsonLocal.Description.rawValue:
                         instance.description = value as! String

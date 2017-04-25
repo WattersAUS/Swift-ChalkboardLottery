@@ -81,7 +81,7 @@ class JSONOnlineDelegateHandler: NSObject, JSONOnlineDelegate {
                 for (key,value) in lottery {
                     switch key {
                     case jsonOnline.Ident.rawValue:
-                        instance.ident = value as! Int
+                        instance.ident = lotteryIdent(rawValue: value as! Int)!
                         break
                     case jsonOnline.Description.rawValue:
                         instance.description = value as! String

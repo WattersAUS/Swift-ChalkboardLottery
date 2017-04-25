@@ -41,7 +41,7 @@ struct LabelContent {
 }
 
 class LotteryDisplay {
-    var ident:    Int
+    var ident:    lotteryIdent
     var numbers:  [LabelContent] = []
     var specials: [LabelContent] = []
     var bonus:    Bool
@@ -51,7 +51,7 @@ class LotteryDisplay {
     // Class: Constructors
     //----------------------------------------------------------------------------
     init () {
-        self.ident    = 0
+        self.ident    = lotteryIdent.Undefined
         self.numbers  = []
         self.specials = []
         self.bonus    = false
@@ -59,8 +59,27 @@ class LotteryDisplay {
         return
     }
     
-    init (ident: Int, numbers: Int, specials: Int, bonus: Bool, active: Bool) {
-        self.ident  = ident
+    init (ident: lotteryIdent, numbers: Int, specials: Int, bonus: Bool, active: Bool) {
+        
+//        func mapIdent(i: Int) -> lotteryIdent {
+//            switch i {
+//            case 0:
+//                return lotteryIdent.Undefined
+//            case 1:
+//                return lotteryIdent.EuroMillions
+//            case 2:
+//                return lotteryIdent.Lotto
+//            case 3:
+//                return lotteryIdent.Thunderball
+//            case 3:
+//                return lotteryIdent.UserDefined
+//            default:
+//                return lotteryIdent.Undefined
+//            }
+//        }
+        
+//        self.ident  = mapIdent(i: ident)
+        self.ident   = ident
         self.numbers = []
         for _: Int in 0 ..< numbers {
             self.numbers.append(LabelContent(displayNumber: 0, displayType: numberDisplayType.Number))

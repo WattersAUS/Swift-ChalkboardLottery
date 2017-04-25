@@ -35,13 +35,13 @@ protocol Draw {
 }
 
 protocol Lottery {
-    var ident:        Int     { get set }
-    var description:  String  { get set }
-    var numbers:      Int     { get set }
-    var upperNumber:  Int     { get set }
-    var specials:     Int     { get set }
-    var upperSpecial: Int     { get set }
-    var bonus:        Bool    { get set }
+    var ident:        lotteryIdent { get set }
+    var description:  String       { get set }
+    var numbers:      Int          { get set }
+    var upperNumber:  Int          { get set }
+    var specials:     Int          { get set }
+    var upperSpecial: Int          { get set }
+    var bonus:        Bool         { get set }
 }
 
 //
@@ -73,7 +73,7 @@ struct LocalDraw: Draw {
 // lottery config to support data stored in prefs
 //
 struct LocalLottery: Lottery {
-    var ident:        Int
+    var ident:        lotteryIdent
     var description:  String
     var numbers:      Int
     var upperNumber:  Int
@@ -88,7 +88,7 @@ struct LocalLottery: Lottery {
     var draws:        [LocalDraw]
     
     init() {
-        ident        = 0
+        ident        = lotteryIdent.Undefined
         description  = ""
         numbers      = 0
         upperNumber  = 0
@@ -103,7 +103,7 @@ struct LocalLottery: Lottery {
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int]) {
+    init(newIdent: lotteryIdent, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int]) {
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -120,7 +120,7 @@ struct LocalLottery: Lottery {
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
+    init(newIdent: lotteryIdent, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newModified: String, newBonus: Bool, newDays: [Int], newReadOnly: Bool, newActive: Bool) {
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers
@@ -210,7 +210,7 @@ struct OnlineDraw: Draw {
 }
 
 struct OnlineLottery: Lottery {
-    var ident:        Int
+    var ident:        lotteryIdent
     var description:  String
     var numbers:      Int
     var upperNumber:  Int
@@ -221,7 +221,7 @@ struct OnlineLottery: Lottery {
     var draws:        [OnlineDraw]
     
     init() {
-        ident        = 0
+        ident        = lotteryIdent.Undefined
         description  = ""
         numbers      = 0
         upperNumber  = 0
@@ -233,7 +233,7 @@ struct OnlineLottery: Lottery {
         return
     }
 
-    init(newIdent: Int, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newStartDate: String) {
+    init(newIdent: lotteryIdent, newDescription: String, newNumbers: Int, newUpperNumber: Int, newSpecials: Int, newUpperSpecial: Int, newBonus: Bool, newStartDate: String) {
         ident        = newIdent
         description  = newDescription
         numbers      = newNumbers

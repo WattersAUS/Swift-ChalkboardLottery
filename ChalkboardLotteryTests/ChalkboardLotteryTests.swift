@@ -163,21 +163,23 @@ class ChalkboardLotteryTests: XCTestCase {
     //----------------------------------------------------------------------------
     func testLotteryDisplayConstructor_1() {
         let ldg: LotteryDisplay = LotteryDisplay()
-        XCTAssertEqual(ldg.ident, lotteryIdent.Undefined, "Incorrect ident default initialisation value reported!")
-        XCTAssertEqual(ldg.numbers.count,              0, "Incorrect initial number array size reported!")
-        XCTAssertEqual(ldg.specials.count,             0, "Incorrect initial specials array size reported!")
-        XCTAssertEqual(ldg.bonuses.count,              0, "Incorrect initial bonuses array size reported!")
-        XCTAssertEqual(ldg.active,                 false, "Incorrect initial active flag reported!")
+        XCTAssertEqual(ldg.ident.hashValue, lotteryIdent.Undefined.rawValue, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,                                 0, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,                                0, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonus,                                     false, "Incorrect initial bonus flag reported!")
+        XCTAssertEqual(ldg.active,                                    false, "Incorrect initial active flag reported!")
         return
     }
 
     func testLotteryDisplayConstructor_2() {
-        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12], specials: [2, 14], bonus: [43], active: true)
-        XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
-        XCTAssertEqual(ldg.numbers.count,              5, "Incorrect initial number array size reported!")
-        XCTAssertEqual(ldg.specials.count,             2, "Incorrect initial specials array size reported!")
-        XCTAssertEqual(ldg.bonuses.count,              1, "Incorrect initial bonuses array size reported!")
-        XCTAssertEqual(ldg.active,                  true, "Incorrect initial active flag reported!")
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: 5, specials: 2, bonus: true, active: true)
+        XCTAssertEqual(ldg.ident.hashValue, lotteryIdent.Lotto.rawValue, "Incorrect ident default initialisation value reported!")
+        XCTAssertEqual(ldg.numbers.count,                             5, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,                            2, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonus,                                  true, "Incorrect initial bonus flag reported!")
+        XCTAssertEqual(ldg.active,                                 true, "Incorrect initial active flag reported!")
+        //
+        ldg.populateNumberArray(numbers: [1,4,7,8,12])
         //
         XCTAssertEqual(ldg.numbers[0].displayNumber,   1, "Incorrect number reported for array position!")
         XCTAssertEqual(ldg.numbers[1].displayNumber,   4, "Incorrect number reported for array position!")
@@ -185,20 +187,20 @@ class ChalkboardLotteryTests: XCTestCase {
         XCTAssertEqual(ldg.numbers[3].displayNumber,   8, "Incorrect number reported for array position!")
         XCTAssertEqual(ldg.numbers[4].displayNumber,  12, "Incorrect number reported for array position!")
         //
+        ldg.populateSpecialArray(specials: [2,14])
+        //
         XCTAssertEqual(ldg.specials[0].displayNumber,  2, "Incorrect special reported for array position!")
         XCTAssertEqual(ldg.specials[1].displayNumber, 14, "Incorrect special reported for array position!")
-        //
-        XCTAssertEqual(ldg.bonuses[0].displayNumber,  43, "Incorrect bonus reported for array position!")
         return
     }
     
     func testLotteryDisplayClearFunctions() {
-        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12], specials: [2, 14], bonus: [43], active: true)
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: 5, specials: 2, bonus: true, active: true)
         XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
-        XCTAssertEqual(ldg.numbers.count,              5, "Incorrect initial number array size reported!")
-        XCTAssertEqual(ldg.specials.count,             2, "Incorrect initial specials array size reported!")
-        XCTAssertEqual(ldg.bonuses.count,              1, "Incorrect initial bonuses array size reported!")
-        XCTAssertEqual(ldg.active,                  true, "Incorrect initial active flag reported!")
+        XCTAssertEqual(ldg.numbers.count,          5, "Incorrect initial number array size reported!")
+        XCTAssertEqual(ldg.specials.count,         2, "Incorrect initial specials array size reported!")
+        XCTAssertEqual(ldg.bonuses.count,          1, "Incorrect initial bonuses array size reported!")
+        XCTAssertEqual(ldg.active,              true, "Incorrect initial active flag reported!")
         //
         XCTAssertEqual(ldg.numbers[0].displayNumber,   1, "Incorrect number reported for array position!")
         XCTAssertEqual(ldg.numbers[1].displayNumber,   4, "Incorrect number reported for array position!")
@@ -231,7 +233,7 @@ class ChalkboardLotteryTests: XCTestCase {
     }
     
     func testLotteryDisplayPopulateFunctions() {
-        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: [1, 4, 7, 8, 12, 34], specials: [2, 14, 33], bonus: [43, 50], active: true)
+        let ldg: LotteryDisplay = LotteryDisplay(ident: lotteryIdent.Lotto, numbers: 6, specials: [2, 14, 33], bonus: [43, 50], active: true)
         XCTAssertEqual(ldg.ident, lotteryIdent.Lotto, "Incorrect ident default initialisation value reported!")
         XCTAssertEqual(ldg.numbers.count,              6, "Incorrect initial number array size reported!")
         XCTAssertEqual(ldg.specials.count,             3, "Incorrect initial specials array size reported!")

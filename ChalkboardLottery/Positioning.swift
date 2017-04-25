@@ -1,5 +1,5 @@
 //
-//  LabelPositioning.swift
+//  Positioning.swift
 //  ChalkboardLottery
 //
 //  Created by Graham on 20/03/2017.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class Positioning {
-    var ident:                Int
+    var ident:                lotteryIdent
     var numbers:              [CGRect] = []
     var specials:             [CGRect] = []
     var active:                Bool
@@ -18,7 +18,7 @@ class Positioning {
     //----------------------------------------------------------------------------
     // Class: Constructors
     //----------------------------------------------------------------------------
-    init (ident: Int, numberPositions: [CGRect], specialPositions: [CGRect], active: Bool) {
+    init (ident: lotteryIdent, numberPositions: [CGRect], specialPositions: [CGRect], active: Bool) {
         self.ident  = ident
         self.numbers.append(contentsOf: numberPositions)
         self.specials.append(contentsOf: specialPositions)
