@@ -25,12 +25,12 @@ class ViewController: UIViewController {
     //
     // place holders for the UILabels we'll use for the display
     //
-    var displayDraws: [LotteryDisplay]!
+    var labelCollection: [LotteryDisplay]!
     
     //
     // Positioning info we'll save for transitioning portrait / landscape for the draws
     //
-    var displayPosns: [[Positioning]]!
+    var displayPosns: [Positioning]!
     
     //
     // prefs
@@ -41,20 +41,9 @@ class ViewController: UIViewController {
     // views / scaling / orientation
     //
     var useLandscape:    Bool = false
-    var appViews:        [UIImageView]!
+    var appViews:        [UIView]!
+    var mainViews:       [UIView]!
     var viewOrientation: UIDeviceOrientation = .unknown
-
-    //
-    // images used for drawing top tab and main area
-    //
-    var tabViewImage: [UIImage] = [
-        UIImage(named:"Image_Tab_001.png")!,
-        UIImage(named:"Image_Tab_002.png")!,
-        UIImage(named:"Image_Tab_003.png")!
-    ]
-    
-    var mainViewImage: UIImage = UIImage(named:"main-body.png")!
-    var ctrlViewImage: UIImage = UIImage(named:"control-panel.png")!
     
     //----------------------------------------------------------------------------
     // Here we go!
@@ -69,6 +58,9 @@ class ViewController: UIViewController {
         // load the local user data / lotteries and draws, then go get the online
         //
         self.jsonLocalData = JSONLocalDelegateHandler()
+        //
+        // ** NEEDS WORK **
+        //
         //self.jsonLocalData.loadLocalResults()
         self.jsonOnlineData = JSONOnlineDelegateHandler()
         self.jsonOnlineData.loadOnlineResults()
@@ -87,25 +79,34 @@ class ViewController: UIViewController {
         // setup view holders for tab. main and control (we'll set size and position later)
         //
         self.appViews = []
-        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 0,   width: 100, height: 100)))
-        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 200, width: 100, height: 100)))
-        self.appViews.append(UIImageView(frame: CGRect(x: 0, y: 400, width: 100, height: 100)))
+        self.appViews.append(UIView(frame: CGRect(x: 0, y: 0,   width: 100, height: 100)))
+        self.appViews.append(UIView(frame: CGRect(x: 0, y: 200, width: 100, height: 100)))
+        self.appViews.append(UIView(frame: CGRect(x: 0, y: 400, width: 100, height: 100)))
         
         //
-        // setup dummy bg colours for debug
+        // setup dummy bg colours for debug on the view holders
         //
-        self.view.backgroundColor = UIColor.brown
         self.appViews[viewType.tab.rawValue].backgroundColor  = UIColor.blue
         self.appViews[viewType.main.rawValue].backgroundColor = UIColor.red
         self.appViews[viewType.ctrl.rawValue].backgroundColor = UIColor.green
         
         //
-        // add images to views (using 0 is placeholder until we get save state work done)
+        // views for the default lotteries (only one will be visible at a time), show the first only for now
         //
-        self.appViews[viewType.tab.rawValue].image        = self.tabViewImage[0]
-        self.appViews[viewType.main.rawValue].image       = self.mainViewImage
-        self.appViews[viewType.main.rawValue].contentMode = UIViewContentMode.scaleToFill
-        self.appViews[viewType.ctrl.rawValue].image       = self.ctrlViewImage
+        self.mainViews = []
+        self.mainViews.append(UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100)))
+        self.mainViews.append(UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100)))
+        self.mainViews.append(UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 100)))
+        self.mainViews[0].isHidden = false
+        self.mainViews[1].isHidden = true
+        self.mainViews[2].isHidden = true
+        
+        //
+        // attach to the 'main' view holder
+        //
+        self.appViews[viewType.main.rawValue].addSubview(self.mainViews[0])
+        self.appViews[viewType.main.rawValue].addSubview(self.mainViews[1])
+        self.appViews[viewType.main.rawValue].addSubview(self.mainViews[2])
         
         //
         // add to the main view
@@ -118,6 +119,10 @@ class ViewController: UIViewController {
         // override active tab (for testing)
         //
         self.jsonLocalData.history.activetab = 0
+        
+        //
+        // hide all but the active tab (UIView)
+        //
         return
     }
 
@@ -133,6 +138,8 @@ class ViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         self.useLandscape  = (view.bounds.size.width >= view.bounds.size.height)
         self.setViewOrientation()
+        self.setLabelPositioning()
+        //self.updateLabelPositioning()
     }
     
     func setViewOrientation() {
@@ -169,11 +176,7 @@ class ViewController: UIViewController {
         self.appViews[viewType.ctrl.rawValue].frame = ctrlRect
         return
     }
-    
-    func setLabelsDisplay() {
-        return
-    }
-    
+
     //----------------------------------------------------------------------------
     // 1. On the first run, need to sync up lottery defaults
     // 2. If we didn't connect keep reminding the user until we do
@@ -229,9 +232,9 @@ class ViewController: UIViewController {
         //
         // now we have the 'loaded' lotteries we can build displays and positioning
         //
-        self.setupLotteryDisplays()
-        self.setDisplayPositioning()
-        self.addDisplayLabelsToMainView()
+        self.allocateLotteryDisplays()
+        self.setLabelPositioning()
+        self.addLabelsToMainViews()
         return
     }
     
@@ -411,15 +414,15 @@ class ViewController: UIViewController {
     // View handling
     //----------------------------------------------------------------------------
     //
-    func setupLotteryDisplays() {
-        self.displayDraws = []
+    func allocateLotteryDisplays() {
+        self.labelCollection = []
         for draw: LocalLottery in self.jsonLocalData.history.lotteries {
-            self.displayDraws.append(LotteryDisplay(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
+            self.labelCollection.append(LotteryDisplay(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
         }
         return
     }
     
-    func setDisplayPositioning() {
+    func setLabelPositioning() {
 
         //
         // needs to deal with possible starting positions for 'numbers' with and without specials
@@ -428,7 +431,7 @@ class ViewController: UIViewController {
             var startx:      CGFloat = increment
             var positions:  [CGRect] = []
             for i: Int in 0 ..< draw.numbers {
-                if (i % 2) == 1 {
+                if (i % 2) == 0 {
                     positions.append(CGRect(x: startx, y: startHeight - (increment * 2), width: (increment * 2), height: (increment * 2)))
                 } else {
                     positions.append(CGRect(x: startx, y: startHeight + (increment * 2), width: (increment * 2), height: (increment * 2)))
@@ -449,7 +452,7 @@ class ViewController: UIViewController {
         }
         
         //
-        // place the specials
+        // place the specials (if any)
         //
         func allocateSpecialPositions(dimension: CGFloat, startHeight: CGFloat, increment: CGFloat, draw: LocalLottery) -> [CGRect] {
             var startx:      CGFloat = increment
@@ -467,9 +470,9 @@ class ViewController: UIViewController {
         }
         
         //
-        // need to iterate thro lottery list to buold the Positioning objects
+        // need to iterate thro lottery list to build the Positioning objects
         //
-        func processLotteries(dimension: CGFloat) -> [Positioning] {
+        func positionLotteries(dimension: CGFloat) -> [Positioning] {
             var forOrientation: [Positioning]  = []
             for lottery: LocalLottery in self.jsonLocalData.history.lotteries {
                 var numbersPositions: [CGRect] = []
@@ -491,27 +494,36 @@ class ViewController: UIViewController {
         //
         self.displayPosns = []
         let mainView: CGRect  = self.appViews[viewType.main.rawValue].bounds
-        if UIDeviceOrientationIsLandscape(self.viewOrientation) {
-            self.displayPosns.append(processLotteries(dimension: mainView.width))
-            self.displayPosns.append(processLotteries(dimension: mainView.height))
-        } else {
-            self.displayPosns.append(processLotteries(dimension: mainView.height))
-            self.displayPosns.append(processLotteries(dimension: mainView.width))
-        }
+        self.displayPosns = positionLotteries(dimension: mainView.width)
         return
     }
     
     //
-    // we need to attach the labels to the view where they are to be displayed
-    // then depending on the initial orientation use the right Positioning
-    // also keep in mind the active tab, as nonactive are not to be displayed
+    // we need to attach each set of labels (for a lottery) to the corresponding 'main' view
+    // where they may be displayed
     //
-    func addDisplayLabelsToMainView() {
-        for i: Int in 0 ..< self.jsonLocalData.history.lotteries.count {
-            if i == self.jsonLocalData.history.activetab {
-                
-            } else {
-
+    // using the positioning of initial orientation ofc
+    //
+    func addLabelsToMainViews() {
+        for lottery: LocalLottery in self.jsonLocalData.history.lotteries {
+            if self.mainViews.count > lottery.ident.rawValue {
+                for i: Int in 0 ..< self.labelCollection[lottery.ident.rawValue].numbers.count {
+                    self.labelCollection[lottery.ident.rawValue].numbers[i].displayLabel.frame.origin.x = self.displayPosns[lottery.ident.rawValue].numbers[i].minX
+                    self.labelCollection[lottery.ident.rawValue].numbers[i].displayLabel.frame.origin.y = self.displayPosns[lottery.ident.rawValue].numbers[i].minY
+                    self.mainViews[lottery.ident.rawValue].addSubview(self.labelCollection[lottery.ident.rawValue].numbers[i].displayLabel)
+                }
+            }
+        }
+        return
+    }
+    
+    func updateLabelPositioning() {
+        for lottery: LocalLottery in self.jsonLocalData.history.lotteries {
+            if self.mainViews.count > lottery.ident.rawValue {
+                for i: Int in 0 ..< self.labelCollection[lottery.ident.rawValue].numbers.count {
+                    self.labelCollection[lottery.ident.rawValue].numbers[i].displayLabel.frame.origin.x = self.displayPosns[lottery.ident.rawValue].numbers[i].minX
+                    self.labelCollection[lottery.ident.rawValue].numbers[i].displayLabel.frame.origin.y = self.displayPosns[lottery.ident.rawValue].numbers[i].minY
+                }
             }
         }
         return

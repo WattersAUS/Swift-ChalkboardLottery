@@ -10,33 +10,21 @@ import Foundation
 import UIKit
 
 struct LabelContent {
-    var displayLabel:  UILabel!
-    var displayNumber: Int
-    var displayType:   numberDisplayType
+    var displayNumber: Int = 0
+    var displayLabel:  CircleLabel!
     
     init (displayNumber: Int, displayType: numberDisplayType) {
         //
         // DEBUG FOR POSNING HERE!!!! FONT SIZE MAY NEED CHANGING ON DIFFERENT SCREENS
         //
-        self.displayLabel                 = UILabel()
-        self.displayLabel.textColor       = UIColor.white
-        self.displayLabel.font            = UIFont(name: "Chalkboard", size: 10)
-        //
-        // use different bg colours for number types
-        //
-        switch displayType {
-        case numberDisplayType.Number:
-            self.displayLabel.backgroundColor = UIColor.blue
-            break
-        case numberDisplayType.Special:
-            self.displayLabel.backgroundColor = UIColor.red
-            break
-        case numberDisplayType.Bonus:
-            self.displayLabel.backgroundColor = UIColor.yellow
-            break
-        }
-        self.displayNumber = displayNumber
-        self.displayType   = displayType
+        self.displayLabel                 = CircleLabel()
+        self.displayLabel.frame           = CGRect(x: 0, y: 0, width: 100, height: 100)
+        self.displayLabel.borderWidth     = 5
+        self.displayLabel.font            = UIFont(name: "Chalkboard", size: 48)
+        self.displayLabel.textAlignment   = .center
+
+        self.displayLabel.text          = String(self.displayNumber)
+        self.displayLabel.displayType   = displayType
     }
 }
 
@@ -60,25 +48,6 @@ class LotteryDisplay {
     }
     
     init (ident: lotteryIdent, numbers: Int, specials: Int, bonus: Bool, active: Bool) {
-        
-//        func mapIdent(i: Int) -> lotteryIdent {
-//            switch i {
-//            case 0:
-//                return lotteryIdent.Undefined
-//            case 1:
-//                return lotteryIdent.EuroMillions
-//            case 2:
-//                return lotteryIdent.Lotto
-//            case 3:
-//                return lotteryIdent.Thunderball
-//            case 3:
-//                return lotteryIdent.UserDefined
-//            default:
-//                return lotteryIdent.Undefined
-//            }
-//        }
-        
-//        self.ident  = mapIdent(i: ident)
         self.ident   = ident
         self.numbers = []
         for _: Int in 0 ..< numbers {

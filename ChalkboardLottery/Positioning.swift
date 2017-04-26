@@ -13,7 +13,7 @@ class Positioning {
     var ident:                lotteryIdent
     var numbers:              [CGRect] = []
     var specials:             [CGRect] = []
-    var active:                Bool
+    var visible:               Bool
     
     //----------------------------------------------------------------------------
     // Class: Constructors
@@ -22,7 +22,7 @@ class Positioning {
         self.ident  = ident
         self.numbers.append(contentsOf: numberPositions)
         self.specials.append(contentsOf: specialPositions)
-        self.active = active
+        self.visible = active
         return
     }
 }

@@ -17,11 +17,11 @@ enum app: String {
 // Draws configured by default in the system, user configured draws will be id => 4
 //
 enum lotteryIdent: Int {
-    case Undefined    = 0
-    case EuroMillions = 1
-    case Lotto        = 2
-    case Thunderball  = 3
-    case UserDefined  = 4
+    case Undefined    = -1
+    case EuroMillions = 0
+    case Lotto        = 1
+    case Thunderball  = 2
+    case UserDefined  = 3
 }
 
 //
@@ -69,6 +69,7 @@ enum jsonOnline: String {
 // types of numbers we will display on the interface
 //
 enum numberDisplayType: Int {
+    case Default = 0
     case Number  = 1
     case Special = 2
     case Bonus   = 3
