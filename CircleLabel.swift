@@ -20,6 +20,7 @@ class CircleLabel: UILabel {
                 break
             case numberDisplayType.Number:
                 self.displayColour = UIColor.cyan
+                self.displayColour = UIColor.clear
                 break
             case numberDisplayType.Special:
                 self.displayColour = UIColor.brown

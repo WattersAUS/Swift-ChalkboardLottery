@@ -23,9 +23,9 @@ class ViewController: UIViewController {
     var drawSound: AVAudioPlayer!
     
     //
-    // place holders for the UILabels we'll use for the display
+    // collection of number, specials etc that make up a lottery
     //
-    var labelCollection: [LotteryDisplay] = []
+    var collection: [LotteryCollection] = []
     
     //
     // Positioning info we'll save for transitioning portrait / landscape for the draws
@@ -72,7 +72,6 @@ class ViewController: UIViewController {
         // register routines for app transiting to b/g (used in saving state etc)
         //
         self.setupApplicationNotifications()
-        
         return
     }
 
@@ -198,10 +197,10 @@ class ViewController: UIViewController {
     //
     func addLabelsToMainViews() {
         for j: Int in 0 ..< self.mainViews.count {
-            for i: Int in 0 ..< self.labelCollection[j].numbers.count {
-                self.labelCollection[j].numbers[i].displayLabel.frame.origin.x = self.displayPosns[j].numbers[i].minX
-                self.labelCollection[j].numbers[i].displayLabel.frame.origin.y = self.displayPosns[j].numbers[i].minY
-                self.mainViews[j].addSubview(self.labelCollection[j].numbers[i].displayLabel)
+            for i: Int in 0 ..< self.collection[j].numbers.count {
+                self.collection[j].numbers[i].displayLabel.frame.origin.x = self.displayPosns[j].numbers[i].minX
+                self.collection[j].numbers[i].displayLabel.frame.origin.y = self.displayPosns[j].numbers[i].minY
+                self.mainViews[j].addSubview(self.collection[j].numbers[i].displayLabel)
             }
         }
         return
@@ -209,9 +208,9 @@ class ViewController: UIViewController {
     
     func updateLabelsPositioning() {
         for j: Int in 0 ..< self.mainViews.count {
-            for i: Int in 0 ..< self.labelCollection[j].numbers.count {
-                self.labelCollection[j].numbers[i].displayLabel.frame.origin.x = self.displayPosns[j].numbers[i].minX
-                self.labelCollection[j].numbers[i].displayLabel.frame.origin.y = self.displayPosns[j].numbers[i].minY
+            for i: Int in 0 ..< self.collection[j].numbers.count {
+                self.collection[j].numbers[i].displayLabel.frame.origin.x = self.displayPosns[j].numbers[i].minX
+                self.collection[j].numbers[i].displayLabel.frame.origin.y = self.displayPosns[j].numbers[i].minY
             }
         }
         return
@@ -329,7 +328,7 @@ class ViewController: UIViewController {
         self.appViews[viewType.main.rawValue].addSubview(self.mainViews[2])
         
         //
-        // add to the main view
+        // add to the super view
         //
         self.view.addSubview(self.appViews[viewType.tab.rawValue])
         self.view.addSubview(self.appViews[viewType.main.rawValue])
@@ -338,12 +337,53 @@ class ViewController: UIViewController {
     }
     
     func setupLabelsForLotteries() {
-        self.labelCollection = []
-        for draw: LocalLottery in self.jsonLocalData.history.lotteries {
-            self.labelCollection.append(LotteryDisplay(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
+        
+        func initialiseLabels() {
+            self.collection = []
+            for draw: LocalLottery in self.jsonLocalData.history.lotteries {
+                self.collection.append(LotteryCollection(ident: draw.ident, numbers: draw.numbers, specials: draw.specials, bonus: draw.bonus, active: draw.active))
+            }
+            return
         }
+        
+        func getMaximumNumbersToSupport() -> Int {
+            var max: Int = 0
+            for lottery: LotteryCollection in collection {
+                if lottery.numbers.count > max {
+                    max = lottery.numbers.count
+                }
+            }
+            return max
+        }
+        
+        func getDimensionForScaling() -> CGFloat {
+            return (view.bounds.size.width >= view.bounds.size.height) ? view.bounds.size.width : view.bounds.size.height
+        }
+        
+        func updateLabelsWithNewWidth(width: CGFloat) {
+            for lottery: LotteryCollection in collection {
+                for number: LabelContent in lottery.numbers {
+                    number.displayLabel.frame = CGRect(x: 0, y: 0, width: width, height: width)
+                }
+                for number: LabelContent in lottery.specials {
+                    number.displayLabel.frame = CGRect(x: 0, y: 0, width: width, height: width)
+                }
+            }
+            return
+        }
+        
+        //
+        // from the max numbers in a lottery we can work out the labels size and initial positioning
+        //
+        initialiseLabels()
+        let segments: Int    = (getMaximumNumbersToSupport() * 3) + 1
+        let section: CGFloat = getDimensionForScaling() / CGFloat(segments)
+        updateLabelsWithNewWidth(width: section * 2)
+        
         return
     }
+    
+    // ** NEEDS A CHANGE TO THE SCALING FOR THE SETTING TO INCREMENT TO MATCH THE CODE THAT INITIALLY SETS THE LABEL WIDTH IN 'setupLabelsForLotteries'
     
     func setLabelPositioning() {
 

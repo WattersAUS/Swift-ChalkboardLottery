@@ -1,8 +1,8 @@
 //
-//  LotteryDisplay.swift
+//  LotteryCollection.swift
 //  ChalkboardLottery
 //
-//  Created by Graham on 21/02/2017.
+//  Created by Graham Watson on 27/04/2017.
 //  Copyright © 2017 Graham Watson. All rights reserved.
 //
 
@@ -19,22 +19,23 @@ struct LabelContent {
         //
         self.displayLabel                 = CircleLabel()
         self.displayLabel.frame           = CGRect(x: 0, y: 0, width: 100, height: 100)
-        self.displayLabel.borderWidth     = 5
-        self.displayLabel.font            = UIFont(name: "Chalkboard", size: 48)
+        self.displayLabel.borderWidth     = 2
+        self.displayLabel.font            = UIFont(name: "CourierNewPS-BoldItalicMT",size: 52.0)
+        self.displayLabel.textColor       = UIColor.white
         self.displayLabel.textAlignment   = .center
-
+        
         self.displayLabel.text          = String(self.displayNumber)
         self.displayLabel.displayType   = displayType
     }
 }
 
-class LotteryDisplay {
+class LotteryCollection {
     var ident:    lotteryIdent
     var numbers:  [LabelContent] = []
     var specials: [LabelContent] = []
     var bonus:    Bool
     var active:   Bool
-
+    
     //----------------------------------------------------------------------------
     // Class: Constructors
     //----------------------------------------------------------------------------
@@ -78,7 +79,7 @@ class LotteryDisplay {
         }
         return
     }
-
+    
     //----------------------------------------------------------------------------
     // Class: Public functions to enable number array population in one go
     //----------------------------------------------------------------------------
@@ -141,7 +142,7 @@ class LotteryDisplay {
         }
         return
     }
-
+    
     private func hideSpecialDisplay() {
         for i: LabelContent in self.specials {
             i.displayLabel.isHidden  = false
